@@ -1,0 +1,150 @@
+@import '../../../../../sass/abstracts/variables';
+
+.borrar {
+  cursor: pointer;
+  &:hover {
+    color: $color-enfasis;
+  }
+}
+
+.columna-borrar {
+  width: 3em;
+}
+
+.campos{
+  display: flex;
+}
+
+.campo-peso{
+  margin-left: 2%;
+}
+
+.opcion-container {
+  display: flex;
+  width: 100%;
+}
+
+.img-opcion {    
+  width: 5%;
+  cursor: pointer;
+}
+
+
+.subtitulo {    
+  margin-left: 1%;
+  font-size: 15pt;
+  width: 20%;
+  color: #0033a0;    
+  margin-top: 1.5%;
+}
+
+.texto{
+  margin-top: 2%;
+  margin-bottom: 2%;
+  font-weight: bold;
+}
+
+.linea-espacio {
+  border: 0.5px solid #D5D5D5;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+}
+
+.boton {
+  text-align: center;
+}
+
+.flex-contenedor {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  .contenedor, peso {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+      .campos{
+        display: block;
+      }
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      .campos{
+        display: block;
+      }
+      width: 60%;
+    }
+    @media (min-width: 641px) {
+
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+    .diagnostico {
+      width: 100%;
+    }
+  }
+}
+
+.separador {
+  height: 1em;
+}
+
+.centro {
+  text-align: center;
+}
+
+.texto-tabla {
+  font-size: 10pt;
+  text-align: center;
+}
+
+.total-registros {
+  text-align: right;
+  margin-right: 1%;
+  margin-top: 1%;
+}
+
+.total-registros-texto {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #0033a0;
+}
+
+.total-registros-valor {
+  font-size: 10pt;
+  font-weight: bold;
+} 
+
+@media only screen and (max-width: 600px) {
+  .campos{
+    display: block;
+  }
+}
+
+@media (max-width: 800px) { 
+
+  .subtitulo {
+      margin-left: 3%;
+      width: 50%;
+  }
+
+  .texto-volver {
+      font-size: 7pt;
+  }
+
+  .texto-titulo {
+      font-size: 18pt;
+  }
+
+  .img-opcion {
+      width: 10%;        
+  }
+
+}
+
+

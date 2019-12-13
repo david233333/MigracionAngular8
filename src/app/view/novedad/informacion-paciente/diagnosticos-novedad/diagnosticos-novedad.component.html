@@ -1,0 +1,104 @@
+<mat-progress-bar [hidden]="!diagnosticosViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+
+<div class="novedad-diagnosticos">
+    <hr class="linea-espacio">
+    <div class="opcion-container">
+        <div class="img-opcion">
+            <img src="./assets/img/diagnostico.svg" alt="diagnosticos">
+        </div>
+        <div class="subtitulo">
+            <strong>{{ diagnosticosViewModel.mensajes.titulos.diagnosticos }}</strong>
+        </div>
+    </div>
+    <hr class="linea-espacio">
+    <form [formGroup]="formulario">
+
+        <div class="separador"></div>
+
+        <div class="flex-contenedor">
+
+
+            <div class="contenedor">
+                <mat-form-field class="diagnostico">
+                    <input matInput placeholder="{{ diagnosticosViewModel.mensajes.campos.diagnostico }}"
+                        [matAutocomplete]="auto" (keyup)="traerDiagnosticos()" formControlName="diagnosticoSeleccionado">
+
+                    <button mat-button *ngIf="formulario.controls['diagnosticoSeleccionado'].value" matSuffix
+                        mat-icon-button (click)="formulario.controls['diagnosticoSeleccionado'].setValue(null)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                    <mat-hint>{{ diagnosticosViewModel.mensajes.campos.buscar }}</mat-hint>
+
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarInformacion" (optionSelected)="opcionSeleccionada($event)">
+                        <mat-option *ngFor="let opcion of diagnosticosViewModel.respuestaDiagnosticos " [value]="opcion">
+                            {{ opcion.codigo }} {{ opcion.nombre }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <div class="separador"></div>
+
+        <div>
+
+            <p-table [value]="diagnosticosViewModel.diagnosticosAGuardar" dataKey="codigo" [scrollable]="true"
+                scrollHeight="175px">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="texto-tabla">
+                            {{ this.diagnosticosViewModel.mensajes.tabla.codigo }}
+                        </th>
+                        <th class="texto-tabla">
+                            {{ this.diagnosticosViewModel.mensajes.tabla.nombre }}
+                        </th>
+                        <th style="width: 3em"></th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td *ngFor="let columna of columnas" class="texto-tabla">
+                            <span class="ui-column-title">{{ rowData[columna.header] }}</span>
+                            {{ rowData[columna.field] }}
+                        </td>
+                        <td class="columna-borrar texto-tabla">
+                            <mat-icon class="borrar" (click)="eliminarDiagnostico(rowData)" matTooltip="{{ diagnosticosViewModel.mensajes.campos.eliminar }}"
+                                [matTooltipPosition]="'above'">
+                                delete
+                            </mat-icon>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+
+                        <td class="centro" [attr.colspan]="columnas.length">
+                            {{ diagnosticosViewModel.mensajes.tabla.noDiagnosticos }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-footer>
+                <div class="total-registros">
+                    <span class="total-registros-texto"> {{
+                        diagnosticosViewModel.mensajes.tabla.totalRegistros }}</span>
+                    <span class="total-registros-valor">{{ diagnosticosViewModel.diagnosticosAGuardar.length }}</span>
+                </div>
+            </p-footer>
+        </div>
+        <div class="separador"></div>
+
+        <div class="boton">
+            <button mat-raised-button id="guardar" color="primary" (click)="cambiarDiagnosticos()" [disabled]="habilitarGuardar()">
+                {{ diagnosticosViewModel.mensajes.botones.guardar }}
+            </button>
+        </div>
+
+    </form>
+    <div class="separador"></div>
+</div>

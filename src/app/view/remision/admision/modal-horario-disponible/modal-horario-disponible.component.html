@@ -1,0 +1,30 @@
+<h2 mat-dialog-title> Seleccione Horario </h2>
+<mat-dialog-content>
+  
+  <p-table [value]="rangos">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>IdProfesional</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Selectotor</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rango>
+        <tr>  
+            <td>{{rango.idprofesional }}</td>
+            <td>{{rango.start |date:"medium"}}</td>
+            <td>{{rango.finish |date:"medium"}}</td>    
+            <td> <button mat-button color="primary" (click)="save(rango)"> <mat-icon>save</mat-icon> Agendar</button></td>
+        </tr>
+    </ng-template>
+</p-table>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+   
+    <button mat-button color="primary" (click)="dismiss()">
+        <mat-icon>cancel</mat-icon> Cancelar
+    </button>
+</mat-dialog-actions>

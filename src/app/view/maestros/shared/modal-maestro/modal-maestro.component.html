@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="titulo-ventana">
+    <h4 *ngIf="data.requestMaestro.actualizar"
+        mat-dialog-title>{{ modalMaestroViewModel.mensajes.editar }}{{data.requestMaestro.nombreMaestro}}</h4>
+    <h4 *ngIf="data.requestMaestro.crear" mat-dialog-title>{{ modalMaestroViewModel.mensajes.crear }}</h4>
+  </div>
+  <div class="flex-contenedor-busqueda">
+    <form [formGroup]="formulario" class="contenedor-formulario">
+      <mat-dialog-content class="dialog">
+
+        <div class="seccion">
+
+          <div *ngFor="let cols of data.columns" class="campo">
+            <mat-form-field>
+              <input formControlName="{{cols['field']}}" id="{{cols['field']}}"
+                     matInput
+                     placeholder="{{cols['header']}}"
+                     required />
+              <mat-error *ngIf="formulario.controls[cols['field']].hasError('required')">
+                {{modalMaestroViewModel.mensajes.errores.requerido}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </mat-dialog-content>
+    </form>
+
+  </div>
+  <mat-dialog-actions align="end">
+    <button (click)="cerrarModal()" id="cancelar" mat-raised-button>
+      {{ modalMaestroViewModel.mensajes.botones.cancelar }}
+    </button>
+
+    <button (click)="guardar()" [disabled]="!this.formulario.valid" color="primary" id="guardar" mat-raised-button>
+      {{ modalMaestroViewModel.mensajes.botones.guardar }}
+    </button>
+
+  </mat-dialog-actions>
+</div>

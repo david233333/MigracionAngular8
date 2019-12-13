@@ -1,0 +1,142 @@
+$centrar_texto: center;
+$color_texto:   #0033a0;
+$texto_font_10: 15pt;
+$ancho_100: 100%;
+$tamaño_letra: 10pt;
+@mixin margen($top){
+  margin-top: $top;
+}
+
+
+@mixin tamanos_div($tamano_ancho, $tamano_alto) {
+  width: $tamano_ancho;
+  height: $tamano_alto;
+}
+
+.campos_titulo{
+  text-align: $centrar_texto;
+  @include margen(3%);
+  h6 {
+    font-size: $texto_font_10;
+    color: $color_texto ;
+  }
+}
+.citas_tabla {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  @include margen(3%);
+
+  p-table {
+    text-align: $centrar_texto;
+  }
+ }
+
+.campo_alerta {
+  width: 57%;
+  margin-left: 15%;
+  mat-form-field {
+    width: 86%;
+  }
+
+
+}
+.botton {
+
+    text-align: $centrar_texto;
+
+}
+.tamaño_area{
+  height: 5.5em;
+}
+
+.contenedor_campos {
+  display: flex;
+  margin-bottom: 3%;
+  margin-top: 2%;
+  width: 100%;
+}
+
+.campo_minutos {
+  margin-top: 6%;
+  width: 52%;
+  mat-form-field {
+    width: 100%;
+  }
+}
+.check_tiempo {
+  margin-top: 6%;
+  width: 14%;
+}
+.contenedor_tiempo{
+  display: block;
+  width: 27%;
+}
+
+.texto-tabla {
+  font-size: 10pt;
+  text-align: center;
+}
+
+.total-registros {
+  text-align: right;
+  margin-right: 1%;
+  margin-top: 1%;
+}
+
+.total-registros-texto {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #0033a0;
+}
+
+.total-registros-valor {
+  font-size: 10pt;
+  font-weight: bold;
+} 
+
+.separador {
+  height: 2em;;
+}
+
+@media (max-width: 800px) {
+  .contenedor_campos {
+    display: block;
+  }
+
+  .citas_tabla{
+    margin-top: 6%;
+    width: $ancho_100;
+    text-align: $centrar_texto;
+  }
+  .campo_minutos {
+    width: $ancho_100;
+    text-align: $centrar_texto;
+    mat-form-field {
+      width: 86%;
+    }
+  }
+
+  .check_tiempo{ width: $ancho_100; text-align: $centrar_texto;}
+
+  .campo_alerta {
+    width: $ancho_100;
+    text-align: $centrar_texto;
+    margin-left: 0%;
+    mat-form-field {
+      width: 86%;
+    }
+  }
+  .contenedor_tiempo {
+    width: 100%;
+  }
+}
+
+.tabla_header {
+  text-align: $centrar_texto;
+  @include tamanos_div(25%,none);
+  font-size: $tamaño_letra ;
+  mat-icon {
+    cursor: pointer;
+  }
+}

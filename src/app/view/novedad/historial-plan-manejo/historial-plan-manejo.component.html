@@ -1,0 +1,1189 @@
+<mat-progress-bar [hidden]="!historialPlanManejoViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+
+<div class="container">
+
+    <hr class="linea-espacio">
+    <div class="opcion-container">
+        <div class="img-opcion" [hidden]="historialPlanManejoViewModel.verFiltroPaciente">
+            <img src="./assets/img/atras-icon.svg" alt="plan-manejo" (click)="volver()">
+        </div>
+        <div class="texto-volver" [hidden]="historialPlanManejoViewModel.verFiltroPaciente" (click)="volver()">
+            <strong>{{ historialPlanManejoViewModel.mensajesHistorial.botones.volverAtras }}</strong>
+        </div>
+        <div [ngClass]="{'texto-titulo': historialPlanManejoViewModel.verFiltroPaciente, 'texto-titulo-no-filtro': !historialPlanManejoViewModel.verFiltroPaciente }">{{
+            historialPlanManejoViewModel.mensajesHistorial.titulos.historialPlanManejo }}</div>
+    </div>
+    <hr class="linea-espacio">
+
+    <div class="info-paciente" *ngIf="historialPlanManejoViewModel.infoRemision !== null">
+
+        <div class="menu-superior">
+            <div class="info-paciente-encabezado">
+                <div class="grupo">
+                    <div class="campo-largo" *ngIf="historialPlanManejoViewModel.infoRemision.nombre">
+                        <span class="texto-info-paciente"> {{
+                            historialPlanManejoViewModel.mensajesHistorial.titulos.nombre}}
+                        </span>
+                        <span>{{historialPlanManejoViewModel.infoRemision.nombre}}
+                            {{historialPlanManejoViewModel.infoRemision.apellido}}</span>
+                    </div>
+
+                    <div class="campo-corto" *ngIf="historialPlanManejoViewModel.infoRemision.tipoAfiliacion">
+                        <span class="texto-info-paciente"> {{
+                            historialPlanManejoViewModel.mensajesHistorial.titulos.tipoAfiliacion}}</span>
+                        <span>{{historialPlanManejoViewModel.infoRemision.tipoAfiliacion}}</span>
+                    </div>
+                </div>
+                <div class="espacio-encabezado"></div>
+                <div class="grupo">
+                    <div class="campo-corto" *ngIf="historialPlanManejoViewModel.infoRemision.edad">
+                        <span class="texto-info-paciente"> {{
+                            historialPlanManejoViewModel.mensajesHistorial.titulos.edad}}
+                        </span>
+                        <span>{{historialPlanManejoViewModel.infoRemision.edad}}</span>
+                    </div>
+
+                    <div class="campo-corto" *ngIf="historialPlanManejoViewModel.infoRemision.sexo">
+                        <span class="texto-info-paciente"> {{
+                            historialPlanManejoViewModel.mensajesHistorial.titulos.sexo}}
+                        </span>
+                        <span>{{historialPlanManejoViewModel.infoRemision.sexo}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-contenedor-busqueda" *ngIf="historialPlanManejoViewModel.verFiltroPaciente">
+        <form class="contenedor" [formGroup]="formularioPrincipal">
+            <div class="campo identificacion">
+                <mat-form-field (click)="getTiposIdentificacion()">
+                    <mat-select id="tipoDocumentoPaciente" placeholder="{{ historialPlanManejoViewModel.mensajesHistorial.campos.tipoDocumentoPaciente }}"
+                    (selectionChange)="validadores(true)" formControlName="tipoDocumentoPaciente" required>
+                        <mat-option *ngFor="let tipo of historialPlanManejoViewModel.respuestaTiposIdentificacion"
+                            [value]="tipo.idTipo">
+                            {{ tipo.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formularioPrincipal.controls['tipoDocumentoPaciente'].hasError('required')">
+                        {{ historialPlanManejoViewModel.mensajesHistorial.errores.tipoDocumentoPacienteRequerido }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="">
+                    <input id="numeroDocumentoPaciente" matInput placeholder="{{ historialPlanManejoViewModel.mensajesHistorial.campos.numeroDocumentoPaciente }}"
+                    (keyup)="validadores(true)" formControlName="numeroDocumentoPaciente" required (keydown.enter)="consultarRemision(true)" maxlength="20">
+
+                    <mat-error *ngIf="formularioPrincipal.controls['numeroDocumentoPaciente'].hasError('required')">
+                        {{ historialPlanManejoViewModel.mensajesHistorial.errores.numeroDocumentoPacienteRequerido
+                        }}
+                    </mat-error>
+
+                    <mat-error *ngIf="formularioPrincipal.controls['numeroDocumentoPaciente'].hasError('maxlength')">
+                        {{
+                        historialPlanManejoViewModel.mensajesHistorial.errores.numeroDocumentoPacienteMaximaLongitud
+                        }}
+                    </mat-error>
+
+                    <mat-error *ngIf="formularioPrincipal.controls['numeroDocumentoPaciente'].hasError('pattern')">
+                        {{ historialPlanManejoViewModel.mensajesHistorial.errores.numeroDocumentoPacienteInvalido }}
+                    </mat-error>
+                </mat-form-field>
+                <button (click)="consultarRemision(true)" [disabled]="habilitarBuscadorPorIdentificacion()" matTooltip="{{ historialPlanManejoViewModel.mensajesHistorial.botones.buscarPaciente }}"
+                    [matTooltipPosition]="'right'" mat-icon-button>
+                    <mat-icon>
+                        search
+                    </mat-icon>
+                </button>
+            </div>
+            <div class="campo">
+                <mat-form-field class="">
+                    <input id="remisionPaciente" matInput placeholder="{{ historialPlanManejoViewModel.mensajesHistorial.campos.remisionPaciente }}"
+                    (keyup)="validadores(false)" formControlName="remisionPaciente" required (keydown.enter)="consultarRemision(false)">
+
+                    <mat-error *ngIf="formularioPrincipal.controls['remisionPaciente'].hasError('required')">
+                        {{ historialPlanManejoViewModel.mensajesHistorial.errores.remisionPacienteRequerido }}
+                    </mat-error>
+
+                    <mat-error *ngIf="formularioPrincipal.controls['remisionPaciente'].hasError('maxlength')">
+                        {{ historialPlanManejoViewModel.mensajesHistorial.errores.remisionPacienteMaximaLongitud }}
+                    </mat-error>
+
+                    <mat-error *ngIf="formularioPrincipal.controls['remisionPaciente'].hasError('pattern')">
+                        {{ historialPlanManejoViewModel.mensajesHistorial.errores.remisionPacienteInvalido }}
+                    </mat-error>
+                </mat-form-field>
+                <button (click)="consultarRemision(false)" [disabled]="habilitarBuscadorPorRemision()" matTooltip="{{ historialPlanManejoViewModel.mensajesHistorial.botones.buscarRemisionPaciente }}"
+                    [matTooltipPosition]="'right'" mat-icon-button>
+                    <mat-icon>
+                        search
+                    </mat-icon>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="sesiones" *ngIf="!historialPlanManejoViewModel.verFiltroPaciente">
+        <div class="separador-ancho"></div>
+        <div class="detalleNovedad">
+
+            <div class="datos-paciente" *ngIf="verDatosPaciente()">
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/datos-paciente.svg" alt="plan-manejo">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion">{{historialPlanManejoViewModel.mensajesDatosAtencion.titulos.datosPaciente}}</div>
+                </div>
+                <div class="separador"></div>
+
+                <form [formGroup]="formularioDatosPaciente">
+                    <div class="flex-contenedor-atencion">
+
+                        <div class="contenedor-item-atencion">
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="ciudad" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.ciudad }}"
+                                        formControlName="ciudad" formControlName="ciudad">
+                                </mat-form-field>
+                            </div>
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field class="direccion">
+                                    <textarea id="direccion" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.direccion }}"
+                                        matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"
+                                        formControlName="direccion" value="{{formularioDatosPaciente.controls['direccion'].value}}"></textarea>
+                                </mat-form-field>
+
+                                <button (click)="abrirModalDireccion()" matTooltip="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.agregarDireccion }}"
+                                    [matTooltipPosition]="'right'" mat-icon-button>
+                                    <mat-icon>
+                                        location_on
+                                    </mat-icon>
+                                </button>
+                            </div>
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="barrio" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.barrio }}"
+                                        formControlName="barrio">
+                                </mat-form-field>
+                            </div> 
+
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="municipio" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.municipio }}"
+                                        formControlName="municipio" formControlName="municipio">
+                                </mat-form-field>
+                            </div>                                                       
+                        </div>
+
+                        <div class="contenedor-item-atencion">
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="nombreCuidador" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.nombreCuidador }}"
+                                        formControlName="nombreCuidador">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="nombreResponsable" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.nombreResponsable }}"
+                                        formControlName="nombreResponsable">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="telefonoPaciente" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.telefonoPaciente }}"
+                                        formControlName="telefonoPaciente">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="campo flex-item-atencion">
+                                <mat-form-field>
+                                    <input id="celularPaciente" matInput placeholder="{{ historialPlanManejoViewModel.mensajesDatosAtencion.campos.celularPaciente }}"
+                                        formControlName="celularPaciente">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="diagnosticos" *ngIf="verDiagnosticos()">
+                <div class="separador"></div>
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/diagnostico.svg" alt="diagnosticos">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion">{{historialPlanManejoViewModel.mensajesDiagnosticos.titulos.diagnosticos}}</div>
+                </div>
+                <div class="separador"></div>
+
+                <div class="table">
+                    <p-table [columns]="columnasDiagnosticos" [value]="historialPlanManejoViewModel.diagnosticos"
+                        dataKey="codigo" [scrollable]="true" scrollHeight="175px">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th class="texto-tabla">
+                                    {{ this.historialPlanManejoViewModel.mensajesDiagnosticos.tabla.codigo }}
+                                </th>
+                                <th class="texto-tabla">
+                                    {{ this.historialPlanManejoViewModel.mensajesDiagnosticos.tabla.nombre }}
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td class="texto-tabla" *ngFor="let columna of columnasDiagnosticos">
+                                    <span class="ui-column-title">{{ rowData[columna.header] }}</span>
+                                    {{ rowData[columna.field] }}
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td class="centro" [attr.colspan]="columnasDiagnosticos.length + 1">
+                                    {{ historialPlanManejoViewModel.mensajesDiagnosticos.tabla.noDiagnosticos }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <p-footer>
+                        <div class="total-registros">
+                            <span class="total-registros-texto">{{
+                                historialPlanManejoViewModel.mensajesDiagnosticos.tabla.totalRegistros }}</span>
+                            <span class="total-registros-valor">{{ historialPlanManejoViewModel.diagnosticos.length }}</span>
+                        </div>
+                    </p-footer>
+                </div>
+            </div>
+
+            <div class="profesionales Recurso Preferido" *ngIf="verDatosPaciente()">
+                <div class="separador"></div>
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/asignar_profesional.svg" alt="tratamientos">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion">{{historialPlanManejoViewModel.mensajesPlanManejo.campos.profesional}}</div>
+                </div>
+
+                <div class="separador"></div>
+
+                <div class="table">
+                    <p-table [columns]="columnasProfesionales" [value]="historialPlanManejoViewModel.profesionalesRP"
+                        [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                         [responsive]="true" dataKey="id">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th class="texto-tabla nombreProfesional" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.nombreCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.nombre }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.nombreCampo"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla especialidad" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.especialidadCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.especialidad }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.especialidadCampo"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla region" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.regionCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tablaProfesionales.region }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.regionCampo"></p-sortIcon>
+                                </th>
+                               
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td class="texto-tabla medicamentoValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.medicamento }}</span>
+                                    {{ rowData.nombreCompleto }}
+                                </td>
+                                <td class="texto-tabla dosisValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.dosis }}</span>
+                                    {{ rowData.especialidad }} 
+                                </td>
+                                <td class="texto-tabla frecuenciaValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.frecuencia }}</span>
+                                    {{ rowData.region}}
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage" class="container" let-columns>
+                            <tr>
+                                <td class="texto-tabla" [attr.colspan]="columnasTratamientos.length + 1">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noProfesional }}
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                </div>
+                <div class="separador"></div>
+            </div>
+
+            <div class="tratamientos" *ngIf="verTratamientos()">
+                <div class="separador"></div>
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/tratamientos.svg" alt="tratamientos">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion">{{historialPlanManejoViewModel.mensajesPlanManejo.campos.tratamientos}}</div>
+                </div>
+
+                <div class="separador"></div>
+
+                <div class="table">
+                    <p-table [columns]="columnasTratamientos" [value]="historialPlanManejoViewModel.tratamientos"
+                        [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                         [responsive]="true" dataKey="id">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th class="texto-tabla medicamentoTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.medicamentoCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.medicamento }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.medicamentoCampo"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla dosisTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.dosisCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.dosis }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.dosisCampo"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla frecuenciaTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.frecuenciaCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.frecuencia }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.frecuenciaCampo"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla duracionTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.duracionCampo">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.duracion }}
+                                    <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.tabla.duracionCampo"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla accionTitulo">
+                                    Detalle
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td class="texto-tabla medicamentoValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.medicamento }}</span>
+                                    {{ rowData.medicamentoDescripcion }}
+                                </td>
+                                <td class="texto-tabla dosisValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.dosis }}</span>
+                                    {{ rowData.cantidadDosis }} {{ rowData.unidadDosis.descripcion }}
+                                </td>
+                                <td class="texto-tabla frecuenciaValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.frecuencia }}</span>
+                                    {{ rowData.frecuenciaDescripcion | listaFrecuencia | truncar: 20}}
+                                </td>
+                                <td class="texto-tabla duracionValor">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.tabla.duracion }}</span>
+                                    {{ rowData.duracion }} {{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.tratamientos.campos.duracionDosis
+                                    }}
+                                </td>
+                                <td class="texto-tabla">
+                                    <mat-icon class="accion" (click)="abrirModalTratamiento(rowData)" matTooltip="Ver detalle"
+                                        [matTooltipPosition]="'above'">
+                                        visibility
+                                    </mat-icon>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage" class="container" let-columns>
+                            <tr>
+                                <td class="texto-tabla" [attr.colspan]="columnasTratamientos.length + 1">
+                                    {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noTratamientos }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <p-footer>
+                        <div class="total-registros">
+                            <span class="total-registros-texto">{{
+                                historialPlanManejoViewModel.mensajesPlanManejo.tabla.totalRegistros }}</span>
+                            <span class="total-registros-valor">{{ historialPlanManejoViewModel.tratamientos.length }}</span>
+                        </div>
+                    </p-footer>
+                </div>
+                <div class="separador"></div>
+            </div>
+
+           
+
+            <div class="procedimientos" *ngIf="verProcedimientos()">
+                <div class="separador"></div>
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/procedimientos.svg" alt="procedimientos">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion">{{historialPlanManejoViewModel.mensajesPlanManejo.campos.procedimientos}}</div>
+                </div>
+                <div class="separador"></div>
+                <div class="curaciones" *ngIf="verCuraciones()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.opcionesMenu.curaciones}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasCuraciones" [value]="historialPlanManejoViewModel.curaciones"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.curaciones.tabla.accion
+                                        }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.curaciones.tabla.tipoCuracion
+                                            }}</span>
+                                        {{ rowData.tipoCuracion.descripcion }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.curaciones.tabla.diasSemana
+                                            }}</span>
+                                        {{ rowData.dias | listaNombreDia }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.curaciones.tabla.sesiones
+                                            }}</span>
+                                        {{ rowData.sesiones }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoCuraciones)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="texto-tabla" [attr.colspan]="columnasCuraciones.length + 1">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.curaciones.tabla.noCuraciones
+                                        }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.curaciones.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{ historialPlanManejoViewModel.curaciones.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+
+                <div class="sondajes" *ngIf="verSondajes()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.opcionesMenu.sondajes}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasSondajes" [value]="historialPlanManejoViewModel.sondajes"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla">
+                                        {{ this.historialPlanManejoViewModel.mensajesPlanManejo.tabla.accion }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.sondajes.tabla.tipoSondajeIngreso
+                                            }}</span>
+                                        {{ rowData.tipo | tipoSondaje }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.sondajes.tabla.categoriaSondaje
+                                            }}</span>
+                                        {{ rowData.descripcion }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoSondajes)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="texto-tabla" [attr.colspan]="columnasSondajes.length + 1">
+                                        {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noSondajes }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.sondajes.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{ historialPlanManejoViewModel.sondajes.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+
+                <div class="fototerapias" *ngIf="verFototerapias()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.campos.fototerapias}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasFototerapias" [value]="historialPlanManejoViewModel.fototerapias"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla">
+                                        {{ this.historialPlanManejoViewModel.mensajesPlanManejo.tabla.accion }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.fototerapias.tabla.diasTratamiento
+                                            }}</span>
+                                        {{ rowData.diasTratamiento }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.fototerapias.tabla.tipoFrecuencia
+                                            }}</span>
+                                        {{ rowData.tipoFrecuencia }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoFototerapias)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="texto-tabla" [attr.colspan]="columnasFototerapias.length + 1">
+                                        {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noFototerapias }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.fototerapias.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{ historialPlanManejoViewModel.fototerapias.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+
+                <div class="tomaMuestras" *ngIf="verTomaMuestras()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.campos.tomaMuestras}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasTomaMuestras" [value]="historialPlanManejoViewModel.tomaMuestras"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla">
+                                        {{ this.historialPlanManejoViewModel.mensajesPlanManejo.tabla.accion }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.tomaMuestra.tabla.tipoMuestra
+                                            }}</span>
+                                        {{ rowData.tipoMuestra.descripcion }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.tomaMuestra.tabla.fechaMuestra
+                                            }}</span>
+                                        {{ rowData.fechaMuestra | date:'dd-MM-yyyy hh:mm a'}}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.tomaMuestra.tabla.requiereAyuno
+                                            }}</span>
+                                        {{ rowData.requiereAyuno | textoBooleano }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoTomaMuestras)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="texto-tabla" [attr.colspan]="columnasTomaMuestras.length + 1">
+                                        {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noTomaMuestras }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.tomaMuestra.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{ historialPlanManejoViewModel.tomaMuestras.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+
+                <div class="secreciones" *ngIf="verSecreciones()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.campos.secreciones}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasSecreciones" [value]="historialPlanManejoViewModel.secreciones"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla">
+                                        {{ this.historialPlanManejoViewModel.mensajesPlanManejo.tabla.accion }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.diasTratamiento
+                                            }}</span>
+                                        {{ rowData.diasTratamiento }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.envioAspirador
+                                            }}</span>
+                                        {{ rowData.envioAspirador | textoBooleano }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.visitaEnfermeria
+                                            }}</span>
+                                        {{ rowData.visitaEnfermeria | textoBooleano }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.tipoSonda
+                                            }}</span>
+                                        {{ rowData.tipoSonda }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.nasal
+                                            }}</span>
+                                        {{ rowData.nasal | textoBooleano }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.traqueostomia
+                                            }}</span>
+                                        {{ rowData.traqueostomia | textoBooleano }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoSecreciones)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="texto-tabla" [attr.colspan]="columnasSecreciones.length + 1">
+                                        {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noSecreciones }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.secreciones.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{ historialPlanManejoViewModel.secreciones.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+
+                <div class="canalizaciones" *ngIf="verCanalizaciones()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.campos.canalizaciones}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasCanalizaciones" [value]="historialPlanManejoViewModel.canalizaciones"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla">
+                                        {{ this.historialPlanManejoViewModel.mensajesPlanManejo.tabla.accion }}
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.canalizaciones.tabla.tipoCanalizacion
+                                            }}</span>
+                                        {{ rowData.tipoCanalizacion }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoCanalizaciones)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="texto-tabla" [attr.colspan]="columnasCanalizaciones.length + 1">
+                                        {{ historialPlanManejoViewModel.mensajesPlanManejo.tabla.noCanalizaciones }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.canalizaciones.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{
+                                    historialPlanManejoViewModel.canalizaciones.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+
+                <div class="soporteNutricionales" *ngIf="verSoporteNutricionales()">
+                    <div class="separador"></div>
+                    <div class="subtitulo-procedimiento">
+                        <strong>{{historialPlanManejoViewModel.mensajesPlanManejo.campos.soporteNutricional}}</strong>
+                    </div>
+                    <div class="separador"></div>
+                    <div class="table">
+                        <p-table [columns]="columnasSoporteNutricional" [value]="historialPlanManejoViewModel.soporteNutricionales"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true" dataKey="id">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th class="texto-tabla medicamentoSoporteTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.medicamentoCampo">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.medicamento
+                                        }}
+                                        <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.medicamentoCampo"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla dosisSoporteTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.dosisCampo">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.dosis
+                                        }}
+                                        <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.dosisCampo"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla tipoNutricionSoporteTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.tipoNutricionCampo">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.tipoNutricion
+                                        }}
+                                        <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.tipoNutricionCampo"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla nutricionSoporteTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.nutricionCampo">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.nutricion
+                                        }}
+                                        <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.nutricionCampo"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla duracionSoporteTitulo" [pSortableColumn]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.duracionCampo">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.duracion
+                                        }}
+                                        <p-sortIcon [field]="historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.duracionCampo"></p-sortIcon>
+                                    </th>
+                                    <th class="texto-tabla accionTitulo">
+                                        Detalle
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla medicamentoSoporteValor">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.medicamento
+                                            }}</span>
+                                        {{ rowData.medicamentoDescripcion }}
+                                    </td>
+                                    <td class="texto-tabla dosisSoporteValor">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.dosis
+                                            }}</span>
+                                        {{ rowData.cantidadDosis }}
+                                    </td>
+                                    <td class="texto-tabla tipoNutricionSoporteValor">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.tipoNutricion
+                                            }}</span>
+                                        {{ rowData.tipoNutricion.tipo }}
+                                    </td>
+                                    <td class="texto-tabla nutricionSoporteValor">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.nutricion
+                                            }}</span>
+                                        {{ rowData.tipoNutricion.descripcion }}
+                                    </td>
+                                    <td class="texto-tabla duracionSoporteValor">
+                                        <span class="ui-column-title">{{
+                                            historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.duracion
+                                            }}</span>
+                                        {{ rowData.duracion }}
+                                    </td>
+                                    <td class="texto-tabla" accionValor>
+                                        <mat-icon class="accion" (click)="abrirModalProcedimientos(rowData, historialPlanManejoViewModel.procedimientoSoporteNutricionales)"
+                                            matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="centro" [attr.colspan]="columnas.length + 1">
+                                        {{
+                                        historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.noSoporteNutricional
+                                        }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <p-footer>
+                            <div class="total-registros">
+                                <span class="total-registros-texto">{{
+                                    historialPlanManejoViewModel.mensajesPlanManejo.procedimientos.soporteNutricional.tabla.totalRegistros
+                                    }}</span>
+                                <span class="total-registros-valor">{{
+                                    historialPlanManejoViewModel.soporteNutricionales.length
+                                    }}</span>
+                            </div>
+                        </p-footer>
+                    </div>
+                </div>
+            </div>
+
+            <div class="citas" *ngIf="verCitas()">
+                <div class="separador"></div>
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/citas-medicas.svg" alt="citas">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion">{{ historialPlanManejoViewModel.mensajesCitas.titulos.citas }}</div>
+                </div>
+
+                <div class="separador"></div>
+
+                <div class="table">
+                    <p-table [columns]="columnasCitas" [value]="historialPlanManejoViewModel.citas" [scrollable]="true"
+                        scrollHeight="400px" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                        [responsive]="true" dataKey="id">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                                <th class="texto-tabla">
+                                    {{ historialPlanManejoViewModel.mensajesCitas.tabla.accion }}
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td class="texto-tabla">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesCitas.tabla.tipoCita
+                                        }}</span>
+                                    {{ rowData.tipoCita.tipoCita }}
+                                </td>
+                                <td class="texto-tabla">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesCitas.tabla.profesional
+                                        }}</span>
+                                    {{ rowData.profesional }}
+                                </td>
+                                <td class="texto-tabla">
+                                    <span class="ui-column-title">{{
+                                        historialPlanManejoViewModel.mensajesCitas.tabla.fecha
+                                        }}</span>
+                                    {{ rowData.fecha | date:'dd-MM-yyyy hh:mm a' }}
+                                </td>
+                                <td class="texto-tabla">
+                                    <mat-icon class="mat-icon material-icons accion" (click)="abrirModalCita(rowData)"
+                                        matTooltip="Ver detalle" [matTooltipPosition]="'above'">
+                                        visibility
+                                    </mat-icon>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage" class="container" let-columns>
+                            <tr>
+                                <td class="texto-resultados-grid" [attr.colspan]="columnasCitas.length + 1">
+                                    {{ historialPlanManejoViewModel.mensajesCitas.tabla.noCitas }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <p-footer>
+                        <div class="total-registros">
+                            <span class="total-registros-texto">{{
+                                historialPlanManejoViewModel.mensajesCitas.tabla.totalRegistros
+                                }}</span>
+                            <span class="total-registros-valor">{{
+                                historialPlanManejoViewModel.citas.length
+                                }}</span>
+                        </div>
+                    </p-footer>
+                </div>
+            </div>
+
+            <div class="cambio-piso" *ngIf="verCambioPiso()">
+                <div class="separador"></div>
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/cambio-piso.svg" alt="cambio-piso">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion"> {{
+                        historialPlanManejoViewModel.mensajesCambioPiso.titulos.cambioPiso }}</div>
+                </div>                
+
+                <div class="flex-contenedor">
+                    <form class="contenedor" [formGroup]="formularioCambioPiso">
+                        <div class="campo">
+                            <mat-form-field>
+                                <input id="piso" matInput placeholder="{{ historialPlanManejoViewModel.mensajesCambioPiso.campos.piso }}"
+                                    formControlName="piso" formControlName="piso">
+                            </mat-form-field>
+                        </div>
+                    </form>
+                    <div class="separador"></div>
+                </div>
+
+            </div>
+
+            <div class="egreso" *ngIf="verEgreso()">
+
+                <div class="opcion-container">
+                    <div class="opcion-seleccionada">
+                        <div class="img-titulo">
+                            <img src="./assets/img/egreso.svg" alt="plan-manejo">
+                        </div>
+                    </div>
+                    <div class="titulo-opcion"> {{ historialPlanManejoViewModel.mensajesEgreso.titulos.egreso }}</div>
+                </div>                
+
+                <div class="flex-contenedor">
+                    <form class="contenedor" [formGroup]="formularioEgreso">
+                        <div class="campo">
+                            <mat-form-field>
+                                <input id="motivoEgreso" matInput placeholder="{{ historialPlanManejoViewModel.mensajesEgreso.campos.motivoEgreso }}"
+                                    formControlName="motivoEgreso">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input id="fechaAlta" matInput placeholder="{{ historialPlanManejoViewModel.mensajesEgreso.campos.fechaAlta }}"
+                                    formControlName="fechaAlta">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input id="fechaEgreso" matInput placeholder="{{ historialPlanManejoViewModel.mensajesEgreso.campos.fechaEgreso }}"
+                                    formControlName="fechaEgreso">
+                            </mat-form-field>
+                        </div>
+                        <div class="separador"></div>
+                        <div class="campo">
+                            <mat-form-field>
+                                <textarea class="alto-observacion" formControlName="observacion" #observacion matInput
+                                    placeholder="{{  historialPlanManejoViewModel.mensajesEgreso.campos.observacion }}"></textarea>
+                                <mat-hint align="end">{{ observacion.value.length }} / 4000</mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </form>
+                    <div class="separador"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="separador-ancho"></div>
+        <div class="remisionNovedad">
+
+            <div class="tabla remisiones">
+                <div class="titulo-tabla">{{ historialPlanManejoViewModel.mensajesHistorial.titulos.remisiones }}</div>
+                <p-table [columns]="columnasRemisiones" [value]="historialPlanManejoViewModel.respuestaRemisiones"
+                    selectionMode="single" [(selection)]="historialPlanManejoViewModel.remisionSeleccionada"
+                    [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                    [responsive]="true" dataKey="idRemision" (onRowSelect)="remisionSeleccionada($event.data)">
+
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="rowData">
+                            <td class="texto-tabla columna-remision">
+                                {{ rowData.idRemision }}
+                            </td>
+                            <td class="texto-tabla columna-fecha-remision">
+                                {{ rowData.fechaCreacion | date:'dd-MM-yyyy hh:mm a' }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" class="container" let-columns>
+                        <tr>
+                            <td class="centro" [attr.colspan]="columnasRemisiones.length + 1">
+                                {{ historialPlanManejoViewModel.mensajesHistorial.tablaRemision.noRemisiones }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+
+            <div class="separador-tabla"></div>
+
+            <div class="tabla novedades">
+                <div class="titulo-tabla">{{ historialPlanManejoViewModel.mensajesHistorial.titulos.planesManejo }}</div>
+                <p-table [columns]="columnasNovedades" [value]="historialPlanManejoViewModel.respuestaNovedades"
+                    selectionMode="single" [(selection)]="historialPlanManejoViewModel.novedadSeleccionada"
+                    [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+                    [responsive]="true" dataKey="idNovedadPk" (onRowSelect)="novedadSeleccionada($event.data)">
+
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="rowData">
+                            <td class="texto-tabla columna-remision">
+                                {{ rowData.tipoNovedad.replace('_', ' ') }}
+                            </td>
+                            <td class="texto-tabla columna-novedad">
+                                {{ rowData.fechaCreacionNovedad | date:'dd-MM-yyyy hh:mm a' }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" class="container" let-columns>
+                        <tr>
+                            <td class="centro" [attr.colspan]="columnasNovedades.length + 1">
+                                {{ historialPlanManejoViewModel.mensajesHistorial.tablaNovedad.noNovedades }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

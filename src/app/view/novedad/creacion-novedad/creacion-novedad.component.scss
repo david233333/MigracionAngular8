@@ -1,0 +1,324 @@
+.container {
+  margin-top: 2%;
+}
+
+.flex-contenedor-busqueda {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  margin-top: 5%;
+  .contenedor {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+
+      .identificacion {
+        mat-form-field {
+          width: 42% !important;
+        }
+      }
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 60% !important;
+      .identificacion {
+        mat-form-field {
+          width: 42% !important;
+        }
+      }
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 60% !important;
+    }
+  }
+  .campo {
+    padding-bottom: 5px;
+  }
+  .boton {
+    padding: 5px;
+    text-align: center;
+  }
+  .identificacion {
+    mat-form-field {
+      width: 45%;
+    }
+  }
+  mat-form-field {
+    width: 85%;
+  }
+}
+
+.infoPaciente {
+  margin-left: 9%;
+  display: flex;
+  text-align: center;
+}
+
+.numRemision {
+  width: 30%;
+  text-align: left;
+  display: flex;
+}
+
+.datosPaciente {
+  width: 70%;
+  text-align: left;
+}
+
+.container-opciones {
+  justify-content: center;
+}
+
+.seccion {
+  display: flex;
+  justify-content: center;
+}
+
+.tarjeta-novedad {
+  width: 15%;
+  height: 9em;
+  margin: 1%;
+  border: 1px solid #d5d5d5;
+  cursor: pointer;
+}
+
+.tarjeta-novedad:hover {
+  background: #cce5ff;
+}
+
+.tarjeta-container {
+  text-align: center;
+  margin-top: 5%;
+}
+
+.opciones-icon {
+  height: 0em;
+}
+
+.img-tarjeta {
+  margin-top: 15%;
+  width: 60%;
+}
+
+.texto {
+  font-weight: bold;
+}
+
+.linea-espacio {
+  border: 0.5px solid #d5d5d5;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.opcion-container {
+  display: flex;
+  width: 100%;
+}
+
+.img-opcion {
+  width: 3%;
+  cursor: pointer;
+}
+
+.texto-volver {
+  margin-top: 0.8%;
+  margin-left: 1%;
+  font-size: 12pt;
+  width: 15%;
+  color: #0033a0;
+  cursor: pointer;
+}
+
+.texto-titulo {
+  text-align: center;
+  font-size: 20pt;
+  width: 60%;
+  margin-top: 0.5%;
+}
+
+.tamano-control-calendario-egreso {
+  width: 29em !important;
+}
+
+.boton {
+  text-align: center;
+}
+
+.separador {
+  height: 2em;
+}
+
+.alto-campo {
+  height: 5em;
+}
+
+.mat-error-clase {
+  display: block;
+  color: #f44336;
+  font-size: 75%;
+  font-weight: 400;
+  line-height: 1.125;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin-top: 1%;
+}
+
+.espacio {
+  width: 1em;
+}
+
+.texto-info-paciente {
+  font-weight: bold;
+  color: #0033a0;
+  font-size: 10pt;
+}
+
+.valor-info-paciente {
+  font-size: 10pt;
+}
+
+.menu-superior {
+  position: fixed;
+  top: 4em;
+  width: 81%;
+  z-index: 100;
+}
+
+.grupo {
+  display: flex;
+}
+
+.campo-izquierda {
+  width: 40%;
+}
+
+.campo-derecha {
+  width: 40%;
+}
+
+.campo-largo {
+  width: 62%;
+}
+
+.campo-corto {
+  width: 30%;
+}
+
+.espacio-encabezado {
+  height: 0.3em;
+}
+
+.info-paciente {
+  width: 100%;
+  border-radius: 5px;
+  background-color: #f7f0f0;
+  height: 5em;
+}
+
+.campo-encabezado {
+  width: 33%;
+}
+
+.contenido {
+  margin-top: 6em;
+}
+
+@media (max-width: 800px) {
+  .container-opciones {
+    display: grid;
+  }
+
+  .tarjeta-novedad {
+    margin-top: 5%;
+    width: 100%;
+  }
+
+  .texto-volver {
+    font-size: 7pt;
+  }
+
+  .texto-titulo {
+    font-size: 15pt;
+  }
+
+  .img-opcion {
+    width: 7%;
+  }
+
+  .flex-contenedor-busqueda mat-form-field {
+    width: 85%;
+  }
+
+  .opciones-icon {
+    height: 5em;
+  }
+
+  .contenido {
+    margin-top: 9em;
+  }
+
+  .menu-superior {
+    display: flex;
+    width: 90%;
+  }
+
+  .info-paciente {
+    width: 90%;
+    height: 9em;
+  }
+
+  .campo-izquierda {
+    width: 55%;
+  }
+
+  .seccion {
+    display: inline;
+  }
+
+  .img-tarjeta {
+    width: 60%;
+    margin-top: 0%;
+  }
+
+  .opciones-icon {
+    height: 0em;
+  }
+}
+
+@media (min-width: 801px) and (max-width: 991px) {
+  .tarjeta-novedad {
+    width: 18%;
+  }
+
+  .img-tarjeta {
+    margin-top: 35%;
+    width: 60%;
+  }
+}
+
+@media (min-width: 991px) and (max-width: 1400px) {
+  .img-tarjeta {
+    margin-top: 23%;
+  }
+}
+
+@media (min-width: 1401px) and (max-width: 1600px) {
+  .img-tarjeta {
+    margin-top: 13%;
+  }
+}
+
+@media (min-width: 1601px) and (max-width: 1800px) {
+  .img-tarjeta {
+    margin-top: 5%;
+  }
+}
+
+@media (min-width: 1801px) and (max-width: 2800px) {
+  .img-tarjeta {
+    margin-top: 0%;
+  }
+}

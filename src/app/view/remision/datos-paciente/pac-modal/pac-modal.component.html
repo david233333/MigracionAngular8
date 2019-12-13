@@ -1,0 +1,79 @@
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="modal-header"  [ngClass]="{'basico': pacDatos.codigoPlan === '1',
+           'plus': pacDatos.codigoPlan === '2', 'preferencial': pacDatos.codigoPlan === '3'}">
+            <p>{{pacDatos.nombrePlan}}</p>
+            <img (click)="cerrar()" class="cerrar" src="/assets/img/pac/ico-plegar-chatbot.png" alt="acceso">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="modal-body">
+
+            <div class="modal-title-pac">
+              Plan complementario preferencial
+              <br>
+              <span>Tipo de plan</span>
+            </div>
+
+            <div class="subtitle">
+              Cobertura
+            </div>
+
+            <div class="benefits">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr *ngIf="pacDatos.especialistas !== null">
+                  <td><img src="/assets/img/pac/ico-acceso.png" alt="acceso"></td>
+                  <td><span>Acceso directo a consulta especializada: </span>
+                   {{pacDatos.especialistas}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.pago !== null">
+                  <td>
+                    <img src="/assets/img/pac/ico-no-pago.png" alt="no pago"></td>
+                  <td>{{pacDatos.pago}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.habitacionIndividual !== null">
+                  <td><img src="/assets/img/pac/ico-habitacion-individual.png" alt="habitacion"></td>
+                  <td>{{pacDatos.habitacionIndividual}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.atencionDomiciliaria !== null">
+                  <td><img src="/assets/img/pac/ico-atencion-domiciliaria.png" alt="atención domiciliaria"></td>
+                  <td>{{pacDatos.atencionDomiciliaria}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.dxIntrahospitalaria !== null ">
+                  <td><img src="/assets/img/pac/ico-ayuda-intrahospitalaria.png" alt="intrahospitalaria"></td>
+                  <td>{{pacDatos.dxIntrahospitalaria}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.dxIntrahospitalaria !== null ">
+                  <td><img src="/assets/img/pac/ico-ayuda-ambulatoria.png" alt="ayuda ambulatoria"></td>
+                  <td>{{pacDatos.dxIntrahospitalaria}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.recienNacido !== null ">
+                  <td><img src="/assets/img/pac/ico-recien-nacido.png" alt="atención recien nacido"></td>
+                  <td>{{pacDatos.recienNacido}}</td>
+                </tr>
+                <tr *ngIf="pacDatos.continuidadParto !== null ">
+                  <td><img *ngIf="pacDatos.continuidadParto !== '' || pacDatos.continuidadParto !== null "
+                            src="/assets/img/pac/ico-embarazo.png" alt="atención parto"></td>
+                  <td>{{pacDatos.continuidadParto}}</td>
+                </tr>
+              </table>
+
+            </div><!--fin benefits-->
+          </div><!-- fin modal-body clearfix-->
+        </div><!-- fin col-md-12-->
+      </div><!-- fin row-->
+
+
+      <div class="table-footer-pac">
+        Linea de Atención al cliente en Medellin: 448 61 15 Resto del País: 01 8000 519 519.
+        <br>
+        Conoce más en <a href="https://www.epssura.com/plancomplementario">www.epssura.com/plancomplementario</a>.
+      </div>
+    </div>
+  </div>
+

@@ -1,0 +1,87 @@
+@import '../../../../sass/abstracts/variables';
+
+.flex-contenedor {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  .contenedor {
+    text-align: center;
+    width: 100;
+
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+  }
+  .campo {
+    width: 100%;
+    margin-bottom: 3%;
+
+    .ancho-campo {
+      width: 90%;
+    }
+
+    .ancho-campo-tipo-documento {
+      width: 40%;
+    }
+
+    .ancho-campo-numero-documento {
+      display: flex !important;
+      width: 100% !important;
+      margin-left: 5% !important;
+
+    }
+
+  }
+
+  .espacio {
+    height: 20px;
+  }
+
+  .identificacion {
+    margin-bottom: 0;
+  }
+}
+.container-peso{
+  display: inline-flex;
+  width: 92%;
+}
+.campo_valor_peso{
+  width: 47%;
+}
+.field_valor_peso{
+  width: 92%;
+}
+
+.container_medida_peso{
+  width: 52%;
+}
+
+.alto-campo-resumen {
+  height: 5em;
+}
+
+.alto-campo-observacion {
+  height: 3em;
+}
+
+@media only screen and (max-width: 600px) {
+  .campos{
+    display: block;
+  }
+}
+.mat{
+  width: 83% !important;
+  margin-left: 1% !important;
+}
+.icon_{
+
+}

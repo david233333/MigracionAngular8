@@ -1,0 +1,46 @@
+<div class="header-container" [class.left]="true" [class.right]="false">
+  <div class="logo-containter">
+    <a (click)="toggleSidebar()" href="#" class="navigation">
+      <i class="nb-menu"></i>
+    </a>
+
+    <div class="logo">
+      <img
+        class="img"
+        (click)="menuPrincipal()"
+        src="./assets/logo-sura.svg"
+        alt="logo"
+      />
+    </div>
+  </div>
+</div>
+<div class="info-usuario">
+  <div class="usuario">
+    <span class="bienvenido">Bienvenid@</span>
+    <button mat-button [matMenuTriggerFor]="menu">{{ nombreUsuario }}</button>
+    <mat-menu #menu="matMenu" class="menu-usuario">
+      <button mat-menu-item (click)="cerrarSesion()">
+        <span class="cerrar-sesion"> Cerrar sesi&oacute;n</span>
+      </button>
+    </mat-menu>
+  </div>
+  <div class="titulo-sura">
+    <span> {{ mensajes.header.titulo }} </span>
+  </div>
+</div>
+
+<!-- <nb-actions size="small" class="header-container">
+  <nb-action> <nb-user></nb-user> </nb-action>
+  <button mat-button [matMenuTriggerFor]="menu">{{ usuario.nombre }} STEVEN</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="cerrarSesion()">Cerrar sesi&oacute;n</button>
+  </mat-menu>
+  <nb-action class="toggle-layout">
+    <span> {{ mensajes.header.titulo }} </span>
+  </nb-action>
+  <!-- <nb-action
+    icon="nb-power-circled"
+    title="Cerrar sesión"
+    (click)="cerrarSesion()"
+  ></nb-action> 
+</nb-actions> -->

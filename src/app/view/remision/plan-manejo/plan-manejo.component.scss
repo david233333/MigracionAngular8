@@ -1,0 +1,327 @@
+$center: center;
+
+.tarjetas-plan-manejo {
+       width: 15%;
+       height: 15%;
+       margin: 1%;
+       cursor: pointer;
+}
+
+.opciones-icon {
+    width: 50%;
+    height: 4em;
+    display:block;
+    margin:auto;
+}
+
+.container-opciones {
+    display: flex;
+    justify-content: $center;
+}
+
+.ocultarTarjetas {
+   display: none;
+}
+
+.texto{
+    margin-top: 8%;
+    margin-bottom: 2%;
+    font-weight: bold;
+}
+
+.tarjeta-container {
+    text-align: $center;
+}
+
+.opcion-container {
+    display: flex;
+}
+
+.opcion-seleccionada {
+    width: 5%;
+}
+
+.img-opcion {
+    width: 100%;
+}
+
+.titulo-opcion {
+    font-size: 20pt;
+    margin-top: 1%;
+}
+
+.linea-espacio {
+    border: 0.5px solid #D5D5D5;
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+}
+
+.separador {
+    height: 1em;;
+}
+
+.separador-pequeno {
+    height: 1em;
+}
+
+.separador-bebe-canguro {
+    height: 2em;;
+}
+
+.boton-agregar {
+    text-align: $center;
+}
+
+.centro {
+    text-align: $center;
+}
+
+.tarjeta-menu {
+    border: 1px solid #D5D5D5;
+}
+
+.tarjeta-menu:hover {
+    background: #CCE5FF;
+}
+
+.notificacion {
+    float: right;
+}
+
+.texto-tabla {
+    font-size: 10pt;
+    text-align: $center;
+}
+
+.center-header-table {
+    text-align: $center;
+}
+
+.accion {
+    cursor: pointer;
+}
+
+.mat-list-item {
+    float: left;
+    width: 33%;
+}
+
+.valoraciones-opciones {
+    display: inline-grid;
+}
+
+.guardarValoracion {
+    text-align: $center;
+}
+
+.subtitulo-procedimiento {
+    font-size: 15pt;
+    color: #0033a0;
+}
+
+.calendario {
+    text-align: center;
+}
+
+.mat-error-clase {
+    display: block;
+    color: #f44336;
+    font-size: 80%;
+    text-align: center;
+    font-weight: 400;
+    line-height: 1.125;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin-top: 1%;
+  }
+
+
+  .medicamentoTitulo {
+    width: 40%;
+  }
+
+  .medicamentoValor {
+    width: 40%;
+  }
+
+    .total-registros {
+        text-align: right;
+        margin-right: 1%;
+        margin-top: 1%;
+    }
+
+    .total-registros-texto {
+        font-size: 10pt;
+        font-weight: bold;
+        color: #0033a0;
+    }
+
+    .total-registros-valor {
+        font-size: 10pt;
+        font-weight: bold;
+    }    
+
+
+@media (max-width: 800px) {
+    .opciones-icon {
+        width: 53%;
+        height: 3em;
+        display:block;
+        margin:auto;
+    }
+
+    .texto{
+        font-size: 7pt;
+        margin-top: 0%;
+    }
+
+    .notificacion {
+        float: right;
+    }
+
+    .imagen-notificacion {
+        width: 1em;
+    }
+
+    .opcion-seleccionada {
+        width: 10%;
+        height: 2em;
+    }
+
+    .img-opcion {
+        width: 100%;
+        margin-top: 10%;
+    }
+
+    .titulo-opcion {
+        font-size: 16pt;
+    }
+
+    .mat-list-item {
+        float: none;
+        width: 100%;
+    }
+
+    .tarjetas-plan-manejo {
+        width: 30%;
+    }
+
+    .subtitulo-procedimiento {
+        font-size: 12pt;
+    }
+}
+
+.mat-list-option:not([disabled]){
+  .desactivarButtton:hover{
+    cursor: no-drop !important;
+  }
+}
+.desactivarButtton:hover{
+  cursor: no-drop !important;
+}
+.disableValoraciones{
+  mat-selection-list {
+    background: transparent;
+  }
+  mat-list-option {
+    background: transparent;
+    div{
+      background: transparent;
+    }
+  }
+}
+
+/* Column Priorities */
+@media only all {
+    th.ui-p-6,
+    td.ui-p-6,
+    th.ui-p-5,
+    td.ui-p-5,
+    th.ui-p-4,
+    td.ui-p-4,
+    th.ui-p-3,
+    td.ui-p-3,
+    th.ui-p-2,
+    td.ui-p-2,
+    th.ui-p-1,
+    td.ui-p-1 {
+        display: none;
+    }
+}
+
+/* Show priority 1 at 320px (20em x 16px) */
+@media screen and (min-width: 20em) {
+    th.ui-p-1,
+    td.ui-p-1 {
+        display: table-cell;
+    }
+}
+
+/* Show priority 2 at 480px (30em x 16px) */
+@media screen and (min-width: 30em) {
+    th.ui-p-2,
+    td.ui-p-2 {
+        display: table-cell;
+    }
+}
+
+/* Show priority 3 at 640px (40em x 16px) */
+@media screen and (min-width: 40em) {
+    th.ui-p-3,
+    td.ui-p-3 {
+        display: table-cell;
+    }
+}
+
+/* Show priority 4 at 800px (50em x 16px) */
+@media screen and (min-width: 50em) {
+    th.ui-p-4,
+    td.ui-p-4 {
+        display: table-cell;
+    }
+}
+
+/* Show priority 5 at 960px (60em x 16px) */
+@media screen and (min-width: 60em) {
+    th.ui-p-5,
+    td.ui-p-5 {
+        display: table-cell;
+    }
+}
+
+/* Show priority 6 at 1,120px (70em x 16px) */
+@media screen and (min-width: 70em) {
+    th.ui-p-6,
+    td.ui-p-6 {
+        display: table-cell;
+    }
+}
+
+@media (min-width: 801px) and (max-width: 1000px) {
+    .opciones-icon {
+        width: 60%;
+    }
+
+    .tarjetas-plan-manejo {
+        width: 20%;
+    }
+  }
+
+  @media (min-width: 1001px) and (max-width: 1200px) {
+    .opciones-icon {
+        height: 4em;
+    }
+  }
+  
+  @media (min-width: 1201px) and (max-width: 1600px) {
+    .opciones-icon {
+        width: 50%;
+        height: 4em;
+    }
+  }
+  
+  @media (min-width: 1601px) and (max-width: 2800px) {
+    .opciones-icon {
+        height: 5em;
+    }
+  }
+

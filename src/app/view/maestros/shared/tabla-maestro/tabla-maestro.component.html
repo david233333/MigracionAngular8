@@ -1,0 +1,52 @@
+<mat-progress-bar [hidden]="!tablaViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+<div class="boton-agregar">
+  <button (click)="crearMaestro()" color="primary" id="agregarMaestro" mat-raised-button>
+    <mat-icon>add</mat-icon>
+    {{ tablaViewModel.mensajes.agregar }}
+  </button>
+</div>
+<div class="table" *ngIf="this.cols">
+  <p-table [columns]="cols" [lazy]="true" [paginator]="true" [responsive]="true"
+           [rowsPerPageOptions]="[10,20,30]" [rows]="10" [scrollable]="true"
+           [totalRecords]="totalRegistros" [value]="tablaViewModel.listaMaestro"
+           scrollHeight="400px" sortMode="multiple">
+    <ng-template let-columns pTemplate="header">
+      <tr>
+        <th *ngFor="let header of cols" class="texto-tabla">
+          {{header.header}}
+        </th>
+        <th class="center-header-table" *ngIf="this.cols">
+          {{ tablaViewModel.mensajes.accion }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template let-columns="columns" let-rowData pTemplate="body">
+      <tr [pSelectableRow]="rowData">
+        <td *ngFor="let col of cols" class="texto-tabla" >
+          {{rowData[col.field]}}
+        </td>
+        <td class="texto-tabla" *ngIf="this.cols">
+          <mat-icon (click)="editarMaestro(rowData)"
+                    class="accion"
+                    matTooltip="{{ tablaViewModel.mensajes.acciones.editar }}">
+            edit
+          </mat-icon>
+          <mat-icon (click)="eliminarMaestro(rowData)"
+                    class="accion"
+                    matTooltip="{{ tablaViewModel.mensajes.acciones.eliminar }}">
+            delete
+          </mat-icon>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-footer>
+    <div class="total-registros">
+        <span class="total-registros-texto">{{
+            tablaViewModel.mensajes.totalRegistros }}</span>
+      <span class="total-registros-valor">{{ totalRegistros }}</span>
+    </div>
+  </p-footer>
+</div>

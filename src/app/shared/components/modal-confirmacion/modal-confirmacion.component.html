@@ -1,0 +1,21 @@
+<h4 mat-dialog-title>
+  {{ tituloVentana }}
+</h4>
+
+<mat-dialog-content>
+  {{ contenidoVentana }}
+  <div class="separador"></div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-raised-button id="cancelar" (click)="cancelar()">
+    <mat-icon>close</mat-icon>
+    {{ modalconfirmacionViewModel.mensajes.botones.cancelar }}
+  </button>
+
+  <button mat-raised-button id="continuar" color="primary" (click)="aceptar()">
+    <mat-icon>done</mat-icon>
+    {{ modalconfirmacionViewModel.mensajes.botones.aceptar }}
+  </button>
+</mat-dialog-actions>

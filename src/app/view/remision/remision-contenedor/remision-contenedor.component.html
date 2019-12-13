@@ -1,0 +1,176 @@
+<div class="contenido">
+
+  <sura-acciones [habilitaGuardado]="habilitaGuardado" [habilitaEnviado]="habilitaEnviado" [pasoActual]="pasoActual"
+                 [paciente]="paciente">
+  </sura-acciones>
+  
+  <div class="pacSebas" *ngIf="remisionContenedorViewModel.hide" [ngClass]="{'pac_mini': !show,
+           'pac_big': show}">
+    <div class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="cabecera_pac modal-header_" [ngClass]="{'basico': remisionContenedorViewModel.codigoPlan === '1',
+           'plus': remisionContenedorViewModel.codigoPlan === '2',
+            'preferencial': remisionContenedorViewModel.codigoPlan === '3'}">
+            <p>{{remisionContenedorViewModel.nombrePlan}}</p>
+            <img *ngIf="show" (click)="hidePac()" class="cerrar icono-hide" src="/assets/img/pac/ico-plegar-chatbot.png"
+              alt="acceso">
+            <img *ngIf="!show" (click)="hidePac()" class="cerrar icono-hide" src="/assets/img/pac/ico-desplegar-chatbot.png"
+              alt="acceso">
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="show">
+        <div class="col-md-12">
+          <div class="modal-body">
+            <div class="modal-title-pac">
+              Plan complementario preferencial
+              <br>
+              <span>Tipo de plan</span>
+            </div>
+            <div class="subtitle">
+              Cobertura
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="benefits" *ngIf="show">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr *ngIf="remisionContenedorViewModel.especialistas !== null">
+            <td>
+              <img src="/assets/img/pac/ico-acceso.png" alt="acceso">
+            </td>
+            <td>
+              <span>Acceso directo a consulta especializada: </span>
+              {{remisionContenedorViewModel.especialistas}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.pago !== null">
+            <td>
+              <img src="/assets/img/pac/ico-no-pago.png" alt="no pago">
+            </td>
+            <td>{{remisionContenedorViewModel.pago}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.habitacionIndividual !== null">
+            <td>
+              <img src="/assets/img/pac/ico-habitacion-individual.png" alt="habitacion">
+            </td>
+            <td>{{remisionContenedorViewModel.habitacionIndividual}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.atencionDomiciliaria !== null">
+            <td>
+              <img src="/assets/img/pac/ico-atencion-domiciliaria.png" alt="atención domiciliaria">
+            </td>
+            <td>{{remisionContenedorViewModel.atencionDomiciliaria}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.dxIntrahospitalaria !== null ">
+            <td>
+              <img src="/assets/img/pac/ico-ayuda-intrahospitalaria.png" alt="intrahospitalaria">
+            </td>
+            <td>{{remisionContenedorViewModel.dxIntrahospitalaria}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.dxAmbulatoria !== null ">
+            <td>
+              <img src="/assets/img/pac/ico-ayuda-ambulatoria.png" alt="ayuda ambulatoria">
+            </td>
+            <td>{{remisionContenedorViewModel.dxAmbulatoria}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.recienNacido !== null ">
+            <td>
+              <img src="/assets/img/pac/ico-recien-nacido.png" alt="atención recien nacido">
+            </td>
+            <td>{{remisionContenedorViewModel.recienNacido}}</td>
+          </tr>
+          <tr *ngIf="remisionContenedorViewModel.continuidadParto !== null ">
+            <td>
+              <img src="/assets/img/pac/ico-embarazo.png" alt="atención parto">
+            </td>
+            <td>{{remisionContenedorViewModel.continuidadParto}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="footer" *ngIf="show">
+        Linea de Atención al cliente en Medellin: 448 61 15 Resto del País: 01 8000 519 519.
+        <br> Conoce más en
+        <a href="https://www.epssura.com/plancomplementario">www.epssura.com/plancomplementario</a>.
+      </div>
+    </div>
+  </div>
+
+  <mat-horizontal-stepper class="stepper" [linear]="true" (selectionChange)="cambiarPaso($event)" #stepper="matHorizontalStepper">
+
+    <mat-step [stepControl]="datosPacienteFormulario['value'].esValido" [completed]="datosPacienteFormulario['value'].esValido">
+      <ng-template matStepLabel>
+        {{ remisionContenedorViewModel.mensajes.pasos.datosPaciente }}
+      </ng-template>
+      <form [formGroup]="datosPacienteFormulario">
+        <sura-datos-paciente [tiposIdentificacion]="remisionContenedorViewModel.respuestaTiposIdentificacion"
+          (continuar)="pasoValido(1, $event)" (datosPaciente)="generarObjetoDatosPaciente($event)" (edadPaciente)="validarEdadPaciente($event)"
+          (hide)="activaHide($event)">
+        </sura-datos-paciente>
+      </form>
+    </mat-step>
+
+    <mat-step [completed]="datosAtencionFormulario['value'].esValido" [stepControl]="datosAtencionFormulario['value'].esValido">
+      <form [formGroup]="datosAtencionFormulario">
+        <sura-datos-atencion (continuar)="pasoValido(2, $event)" (datosAtencion)="generarObjetoDatosAtencion($event)"
+          (ciudad)="ciudadSeleccionada($event)">
+          <ng-template matStepLabel>
+            {{ remisionContenedorViewModel.mensajes.pasos.datosAtencion }}
+          </ng-template>
+        </sura-datos-atencion>
+      </form>
+    </mat-step>
+
+    <mat-step [completed]="diagnosticosFormulario['value'].esValido" [stepControl]="diagnosticosFormulario['value'].esValido">
+      <form [formGroup]="diagnosticosFormulario">
+        <sura-diagnosticos [edadPaciente]="edadPaciente" (continuar)="pasoValido(3, $event)" (diagnosticos)="generarObjetoDiagnosticos($event)">
+          <ng-template matStepLabel>
+            {{ remisionContenedorViewModel.mensajes.pasos.diagnostico }}
+          </ng-template>
+        </sura-diagnosticos>
+      </form>
+    </mat-step>
+
+    <mat-step [completed]="datosRemisionFormulario['value'].esValido"
+              [stepControl]="datosRemisionFormulario['value'].esValido">
+      <form [formGroup]="datosRemisionFormulario">
+        <sura-datos-remision [edadPaciente]="edadPaciente" [tiposIdentificacion]="remisionContenedorViewModel.respuestaTiposIdentificacion"
+          [ciudad]="remisionContenedorViewModel.ciudadSeleccionada" (continuar)="pasoValido(4, $event)" (datosRemision)="generarObjetoDatosRemision($event)">
+          <ng-template matStepLabel>
+            {{ remisionContenedorViewModel.mensajes.pasos.datosRemision }}
+          </ng-template>
+        </sura-datos-remision>
+      </form>
+    </mat-step>
+
+    <mat-step [completed]="planManejoFormulario['value'].esValido"
+              [stepControl]="planManejoFormulario['value'].esValido">
+      <form [formGroup]="planManejoFormulario">
+        <sura-plan-manejo  (continuar)="pasoValido(5, $event)" (tratamientos)="generarObjetoTratamientos($event)" 
+          (procedimientos)="generarObjetoProcedimientos($event)" (valoraciones)="generarObjetoValoraciones($event)"
+          (habilitarGuardar)="habilitarGuardado($event)" >
+          <ng-template matStepLabel>
+            {{ remisionContenedorViewModel.mensajes.pasos.planManejo }}
+          </ng-template>
+        </sura-plan-manejo>
+      </form>
+    </mat-step>
+
+    <mat-step [completed]="admisionFormulario['value'].esValido" [stepControl]="admisionFormulario['value'].esValido"
+      *ngIf="remisionContenedorViewModel.estadoActual ===
+    'PENDIENTE_ADMITIR' || remisionContenedorViewModel.estadoActual === 'EMPALME'
+    || remisionContenedorViewModel.estadoActual === 'ADMITIDO'
+     || remisionContenedorViewModel.estadoActual === 'EGRESADO' ">
+      <form [formGroup]="admisionFormulario">
+        <sura-admision [ciudad]="remisionContenedorViewModel.ciudadSeleccionada" (continuar)="pasoValido(6, $event)"
+          (admision)="generarObjetoAdmision($event)">
+          <ng-template matStepLabel>
+            {{ remisionContenedorViewModel.mensajes.pasos.admision }}
+          </ng-template>
+        </sura-admision>
+      </form>
+    </mat-step>
+
+  </mat-horizontal-stepper>
+
+</div>

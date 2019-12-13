@@ -1,0 +1,1017 @@
+<section>
+    <div class="container">
+        <div class="titulo-ventana">
+            <h4 mat-dialog-title>{{ modalProcedimientosViewModel.tituloVentana }}</h4>
+        </div>
+        <div class="ventana-container">
+            <div [ngClass]="{'menu': !data.btnEditar, 'menu-edicion': data.btnEditar}">
+                <p-tabView orientation="left" (onChange)="seleccionarPlan($event)">
+
+                    <p-tabPanel *ngIf="habilitarCuraciones" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.curaciones"
+                        [selected]="seleccionCuraciones">
+                    </p-tabPanel>
+                    <p-tabPanel *ngIf="habilitarSondaje" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.sondajes"
+                        [selected]="seleccionSondajes">
+                    </p-tabPanel>
+                    <p-tabPanel *ngIf="habilitarFototerapias" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.fototerapias"
+                        [selected]="seleccionFototerapias">
+                    </p-tabPanel>
+                    <p-tabPanel *ngIf="habilitarTomaMuestras" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.tomaMuestras"
+                        [selected]="seleccionTomaMuestras">
+                    </p-tabPanel>
+                    <p-tabPanel *ngIf="habilitarSecreciones" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.secreciones"
+                        [selected]="seleccionSecreciones">
+                    </p-tabPanel>
+                    <p-tabPanel *ngIf="habilitarCanalizaciones" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.canalizaciones"
+                        [selected]="seleccionCanalizaciones">
+                    </p-tabPanel>
+                    <p-tabPanel *ngIf="habilitarSoporteNutricional" [header]="modalProcedimientosViewModel.mensajes.opcionesMenu.soporteNutricional"
+                        [selected]="seleccionSoporteNutricional">
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+            <div class="form">
+                <mat-dialog-content class="dialog-medicamentos">
+                    <!-- <div [ngClass]="{'dialog-procedimientos-calendario': verFormCalendario, 'dialog-procedimientos': verFormCalendario}"> -->
+                    <div>
+                        <div [ngSwitch]="nombreFormulario">
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.curaciones">
+
+                                <form [formGroup]="formularioCuraciones" class="curaciones">
+
+                                    <div class="seccion">
+                                        <div class="campo-curaciones">
+                                            <mat-form-field class="control-tipo-curacion">
+                                                <mat-select id="tipoCuracion" placeholder="{{ modalProcedimientosViewModel.mensajes.curaciones.campos.tipoCuracion }}"
+                                                    formControlName="tipoCuracion" required>
+                                                    <mat-option *ngFor="let tipo of modalProcedimientosViewModel.respuestaCuracionesTiposCuraciones"
+                                                        [value]="tipo.descripcion">
+                                                        {{ tipo.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="formularioCuraciones.controls['tipoCuracion'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.tipoCuracionRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="control-cantidad-sesion">
+                                                <input [maxlength]="2" id="sesiones" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.curaciones.campos.sesiones }}"
+                                                    formControlName="sesiones" required>
+
+                                                <mat-error *ngIf="formularioCuraciones.controls['sesiones'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.sesionesCantidadRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioCuraciones.controls['sesiones'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.sesionesCantidadInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioCuraciones.controls['sesiones'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.sesionesCantidadMinima
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioCuraciones.controls['sesiones'].hasError('max')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.sesionesCantidadMaxima
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="campo">
+                                            <mat-form-field class="control-descripcion-curacion">
+                                                <textarea [maxlength]="300" class="alto-descripcion" formControlName="descripcion"
+                                                    #descripcion matInput placeholder="{{  modalProcedimientosViewModel.mensajes.curaciones.campos.descripcion }}"
+                                                    required></textarea>
+                                                <mat-hint align="end">{{ descripcion.value.length }} / 300</mat-hint>
+
+                                                <mat-error *ngIf="formularioCuraciones.controls['descripcion'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.descripcionRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioCuraciones.controls['descripcion'].hasError('maxlength')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.curaciones.errores.descripcionMaximaLongitud
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                    <div class="seccion">
+                                        <div class="control-tabla-dias">
+                                            <p-table [value]="modalProcedimientosViewModel.listaDias" [(selection)]="modalProcedimientosViewModel.diasSeleccionados"
+                                                scrollHeight="400px" [responsive]="true" dataKey="id">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th>
+
+                                                        </th>
+                                                        <th class="seleccion-tabla">
+                                                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                                        </th>
+                                                    </tr>
+                                                </ng-template>
+
+                                                <ng-template pTemplate="body" let-rowData>
+                                                    <tr [pSelectableRow]="rowData">
+                                                        <td class="texto-tabla tamano-columna">
+                                                            {{ rowData.dia }}
+                                                        </td>
+                                                        <td class="seleccion-tabla">
+                                                            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+
+                                                <ng-template pTemplate="emptymessage" class="container">
+                                                    <tr>
+                                                        <td class="centro" [attr.colspan]="2">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.curaciones.tabla.noDias
+                                                            }}
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+
+                                            </p-table>
+                                        </div>
+
+                                        <p class="mat-error-clase" *ngIf="!modalProcedimientosViewModel.diasSeleccionados.length > 0">
+                                            {{
+                                            modalProcedimientosViewModel.mensajes.curaciones.errores.seleccionDiasRequerido
+                                            }}
+                                        </p>
+                                    </div>
+                                </form>
+                                <div class="separador"></div>
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.sondajes">
+                                <form [formGroup]="formularioSondajes" class="contenedor-formulario">
+
+                                    <div class="contenedor">
+
+                                        <div class="tipoSondaje-sondaje">
+                                            <mat-form-field class="campo-tipo-sondaje">
+                                                <mat-select id="tipoSondaje" placeholder="{{ modalProcedimientosViewModel.mensajes.sondajes.campos.tipoSondajeNovedades }}"
+                                                    formControlName="tipoSondajeNovedades" (selectionChange)="cargarSondajes($event.value)">
+
+                                                    <mat-option *ngFor="let tipoSondaje of infoComunes.datosSondajes"
+                                                        [value]="tipoSondaje.idTipo">
+                                                        {{ tipoSondaje.idTipo }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSondajes.controls['tipoSondajeNovedades'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.sondajes.errores.tipoSondajeRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-sondaje">
+                                                <mat-select id="sondaje" placeholder="{{ modalProcedimientosViewModel.mensajes.sondajes.campos.sondaje }}"
+                                                    formControlName="sondaje">
+
+                                                    <mat-option *ngFor="let sondaje of modalProcedimientosViewModel.respuestaSondajes"
+                                                        [value]="sondaje.idTipoSondaje">
+                                                        {{ sondaje.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSondajes.controls['sondaje'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.sondajes.errores.sondajeRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="sesiones-fecha">
+                                            <mat-form-field class="campo-sesion-sondaje">
+                                                <input [maxlength]="2" id="sesionesSondaje" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.sondajes.campos.sesionesSondaje }}"
+                                                    formControlName="sesionesSondaje" required>
+
+                                                <mat-error *ngIf="formularioSondajes.controls['sesionesSondaje'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.sondajes.errores.sesionesRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSondajes.controls['sesionesSondaje'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.sondajes.errores.sesionesInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSondajes.controls['sesionesSondaje'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.sondajes.errores.sesionesInvalido
+                                                    }}
+                                                </mat-error>
+
+                                            </mat-form-field>
+
+                                            <div class="calendario-sondaje">
+                                                <p-calendar inputStyleClass="input-calendario-sondaje" panelStyleClass="modal-calendario-sondaje"
+                                                    [(ngModel)]="fechaSondaje" formControlName="fechaSondaje"
+                                                    [showTime]="true" [showIcon]="true" [locale]="configEspanolCalendario"
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.sondajes.campos.fechaSondaje }}"
+                                                    dateFormat="dd/mm/yy" [monthNavigator]="true" [yearNavigator]="true"
+                                                    yearRange="1900:2100" hourFormat="12" [minDate]="fechaMinimaCalendarioActual"
+                                                    [readonlyInput]="true">
+                                                </p-calendar>
+                                                <div class="mat-error-clase" *ngIf="formularioSondajes.controls['fechaSondaje'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.sondajes.errores.fechaRequerido
+                                                    }}
+                                                </div>
+                                            </div>
+
+                                            <div class="agregar-sondaje">
+                                                <button mat-raised-button color="primary" id="agregarSondaje" (click)="agregarSondaje(modalProcedimientosViewModel.esEdicionSondaje)">
+                                                    <mat-icon *ngIf="!modalProcedimientosViewModel.esEdicionSondaje">add</mat-icon>
+                                                    <mat-icon *ngIf="modalProcedimientosViewModel.esEdicionSondaje">save</mat-icon>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="separador"></div>
+                                    <div class="tabla-sondaje" *ngIf="modalProcedimientosViewModel.respuestaSondajesTabla.length > 0">
+                                        <p-table [columns]="columnasSondajes" [value]="modalProcedimientosViewModel.respuestaSondajesTabla"
+                                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                                            [rowsPerPageOptions]="[10,20,30]"  [responsive]="true"
+                                            dataKey="id">
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th class="texto-tabla-sondaje tipo-sondaje-titulo"
+                                                        [pSortableColumn]="modalProcedimientosViewModel.mensajes.sondajes.tabla.tipoSondajeCampo">
+                                                        {{
+                                                        modalProcedimientosViewModel.mensajes.sondajes.tabla.tipoSondajeNovedades
+                                                        }}
+                                                        <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.sondajes.tabla.tipoSondajeCampo"></p-sortIcon>
+                                                    </th>
+                                                    <th class="texto-tabla-sondaje sondaje-titulo" [pSortableColumn]="modalProcedimientosViewModel.mensajes.sondajes.tabla.sondajeCampo">
+                                                        {{
+                                                        modalProcedimientosViewModel.mensajes.sondajes.tabla.sondaje
+                                                        }}
+                                                        <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.sondajes.tabla.sondajeCampo"></p-sortIcon>
+                                                    </th>
+                                                    <th class="texto-tabla-sondaje fecha-sondaje-titulo"
+                                                        [pSortableColumn]="modalProcedimientosViewModel.mensajes.sondajes.tabla.fechaSondajeCampo">
+                                                        {{
+                                                        modalProcedimientosViewModel.mensajes.sondajes.tabla.fechaSondaje
+                                                        }}
+                                                        <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.sondajes.tabla.fechaSondajeCampo"></p-sortIcon>
+                                                    </th>
+                                                    <th class="texto-tabla-sondaje sesiones-sondaje-titulo"
+                                                        [pSortableColumn]="modalProcedimientosViewModel.mensajes.sondajes.tabla.totalSesionesCampo">
+                                                        {{
+                                                        modalProcedimientosViewModel.mensajes.sondajes.tabla.totalSesiones
+                                                        }}
+                                                        <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.sondajes.tabla.totalSesionesCampo"></p-sortIcon>
+                                                    </th>
+                                                    <th class="texto-tabla-sondaje accion-tabla" *ngIf="!modalProcedimientosViewModel.esDetalle">
+                                                        {{
+                                                        modalProcedimientosViewModel.mensajes.sondajes.tabla.accion
+                                                        }}
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                                <tr [pSelectableRow]="rowData">
+                                                    <td class="texto-tabla-sondaje">
+                                                        <span class="ui-column-title">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.sondajes.tabla.tipoSondajeNovedades
+                                                            }}
+                                                        </span>
+                                                        {{ rowData.tipoSondaje }}
+                                                    </td>
+                                                    <td class="texto-tabla-sondaje">
+                                                        <span class="ui-column-title">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.sondajes.tabla.sondaje
+                                                            }}
+                                                        </span>
+                                                        {{ rowData.sondaje }}
+                                                    </td>
+                                                    <td class="texto-tabla-sondaje">
+                                                        <span class="ui-column-title">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.sondajes.tabla.fechaSondaje
+                                                            }}
+                                                        </span>
+                                                        {{ rowData.fechaSondaje | date:'dd-MM-yyyy HH:mm a' }}
+                                                    </td>
+                                                    <td class="texto-tabla-sondaje">
+                                                        <span class="ui-column-title">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.sondajes.tabla.totalSesiones
+                                                            }}
+                                                        </span>
+                                                        {{ rowData.totalSesiones }}
+                                                    </td>
+                                                    <td class="texto-tabla-sondaje" *ngIf="!modalProcedimientosViewModel.esDetalle">
+                                                        <button mat-button matSuffix mat-icon-button (click)="editarSondaje(rowData)">
+                                                            <mat-icon matTooltip="{{ modalProcedimientosViewModel.mensajes.sondajes.tabla.editar }}">edit</mat-icon>
+                                                        </button>
+                                                        <button mat-button matSuffix mat-icon-button (click)="eliminarSondaje(rowData)">
+                                                            <mat-icon matTooltip="{{ modalProcedimientosViewModel.mensajes.sondajes.tabla.eliminar }}">delete</mat-icon>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+
+                                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                                <tr>
+                                                    <td class="texto-tabla-sondaje" [attr.colspan]="columnasSondajes.length + 1">
+                                                        {{
+                                                        modalProcedimientosViewModel.mensajes.sondajes.tabla.noSondajes
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </form>
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.fototerapias">
+                                <form [formGroup]="formularioFototerapias" class="contenedor-formulario">
+                                    <div class="seccion-campos">
+
+                                        <div class="campo">
+                                            <mat-form-field class="campo-control">
+                                                <input [maxlength]="1" id="diasTratamiento" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.fototerapias.campos.diasTratamiento }}"
+                                                    formControlName="diasTratamiento">
+
+                                                <mat-error *ngIf="formularioFototerapias.controls['diasTratamiento'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.fototerapias.errores.diasTratamientoRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioFototerapias.controls['diasTratamiento'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.fototerapias.errores.diasTratamientoInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioFototerapias.controls['diasTratamiento'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.fototerapias.errores.diasTratamientoMinimoValor
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioFototerapias.controls['diasTratamiento'].hasError('max')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.fototerapias.errores.diasTratamientoMaximoValor
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <div class="campo">
+                                            <mat-form-field class="campo-control">
+                                                <mat-select id="tipoFrecuencia" placeholder="{{ modalProcedimientosViewModel.mensajes.fototerapias.campos.tipoFrecuencia }}"
+                                                    formControlName="tipoFrecuencia">
+
+                                                    <mat-option *ngFor="let tipo of modalProcedimientosViewModel.respuestaFototerapiasTipoFrecuencia"
+                                                        [value]="tipo.descripcion">
+                                                        {{ tipo.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioFototerapias.controls['tipoFrecuencia'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.fototerapias.errores.tipoFrecuenciaRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.tomaMuestras">
+                                <div class="tipoMuestras">
+                                    <form [formGroup]="formularioTomaMuestras" class="contenedor-formulario">
+                                        <div class="campo">
+                                            <mat-form-field class="campo-control">
+                                                <mat-select id="tipoMuestra" placeholder="{{ modalProcedimientosViewModel.mensajes.tomaMuestra.campos.tipoMuestra }}"
+                                                    formControlName="tipoMuestra" required>
+                                                    <mat-option *ngFor="let tipo of modalProcedimientosViewModel.respuestaTomaMuestrasTipoMuestra"
+                                                        [value]="tipo.descripcion">
+                                                        {{ tipo.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="formularioTomaMuestras.controls['tipoMuestra'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.tomaMuestra.errores.tipoMuestraRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="separador"></div>
+
+                                        <div class="campo">
+
+                                            <p-calendar inputStyleClass="input-calendario-toma-muestra" panelStyleClass="modal-calendario-toma-muestra"
+                                                [(ngModel)]="fechaTomaMuestra" formControlName="fechaMuestra"
+                                                [showTime]="true" [showIcon]="true" [locale]="configEspanolCalendario"
+                                                placeholder="{{ modalProcedimientosViewModel.mensajes.tomaMuestra.campos.fechaMuestra }}"
+                                                (onSelect)="abrirCalendario()" (onClose)="cerrarCalendario()"
+                                                dateFormat="dd/mm/yy" [monthNavigator]="true" [yearNavigator]="true"
+                                                yearRange="1900:2100" hourFormat="12" [minDate]="fechaMinimaCalendarioActual"
+                                                [readonlyInput]="true"></p-calendar>
+                                            <div class="mat-error-clase" *ngIf="formularioTomaMuestras.controls['fechaMuestra'].hasError('required')">
+                                                {{
+                                                modalProcedimientosViewModel.mensajes.tomaMuestra.errores.fechaMuestraRequerido
+                                                }}
+                                            </div>
+
+                                        </div>
+
+                                        <div class="separador"></div>
+
+                                        <div class="campo">
+                                            <mat-checkbox id="requiereAyuno" #requiereAyuno formControlName="requiereAyuno">
+                                                {{
+                                                modalProcedimientosViewModel.mensajes.tomaMuestra.campos.requiereAyuno
+                                                }}
+                                            </mat-checkbox>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.secreciones">
+                                <form [formGroup]="formularioAspiracionSecreciones" class="contenedor-formulario">
+                                    <div class="seccion-campos">
+
+                                        <div class="campo">
+                                            <mat-form-field class="campo-control">
+                                                <input [maxlength]="2" id="diasTratamiento" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.secreciones.campos.diasTratamiento }}"
+                                                    formControlName="diasTratamiento">
+
+                                                <mat-error *ngIf="formularioAspiracionSecreciones.controls['diasTratamiento'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.secreciones.errores.diasTratamientoRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioAspiracionSecreciones.controls['diasTratamiento'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.secreciones.errores.diasTratamientoInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioAspiracionSecreciones.controls['diasTratamiento'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.secreciones.errores.diasTratamientoMinimoValor
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioAspiracionSecreciones.controls['diasTratamiento'].hasError('max')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.secreciones.errores.diasTratamientoMaximoValor
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <div class="campo grupo-checkbox">
+                                            <div class="control-checkbox-envio-visita">
+                                                <mat-checkbox id="envioAspirador" #envioAspirador formControlName="envioAspirador"
+                                                    (change)="seleccionEnvioAspirador($event)">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.secreciones.campos.envioAspirador
+                                                    }}
+                                                </mat-checkbox>
+                                            </div>
+
+                                            <div class="control-checkbox-envio-visita">
+                                                <mat-checkbox id="visitaEnfermeria" #visitaEnfermeria formControlName="visitaEnfermeria">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.secreciones.campos.visitaEnfermeria
+                                                    }}
+                                                </mat-checkbox>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo">
+                                            <div class="control-radio">
+                                                <p-fieldset [toggleable]="false" legend="{{ modalProcedimientosViewModel.mensajes.secreciones.campos.tipoSonda }}">
+                                                    <mat-radio-group [(ngModel)]="modalProcedimientosViewModel.tipoSondaSecrecion"
+                                                        formControlName="tipoSonda" layout="row">
+                                                        <mat-radio-button [value]="modalProcedimientosViewModel.mensajes.secreciones.campos.pediatrica">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.secreciones.campos.pediatrica
+                                                            }}
+                                                        </mat-radio-button>
+                                                        <mat-radio-button [value]="modalProcedimientosViewModel.mensajes.secreciones.campos.adulto">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.secreciones.campos.adulto
+                                                            }}
+                                                        </mat-radio-button>
+                                                        <mat-error class="mat-error-clase" *ngIf="formularioAspiracionSecreciones.controls['tipoSonda'].hasError('required')">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.secreciones.errores.tipoSondaRequerido
+                                                            }}
+                                                        </mat-error>
+                                                    </mat-radio-group>
+                                                </p-fieldset>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo">
+                                            <div class="control-radio">
+                                                <p-fieldset [toggleable]="false" legend="{{ modalProcedimientosViewModel.mensajes.secreciones.campos.via }}">
+                                                    <div class="grupo-checkbox">
+                                                        <div class="control-checkbox-via">
+                                                            <mat-checkbox id="nasal" #nasal formControlName="nasal">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.secreciones.campos.nasal
+                                                                }}
+                                                            </mat-checkbox>
+                                                        </div>
+                                                        <div class="control-checkbox-via">
+                                                            <mat-checkbox id="traqueostomia" #traqueostomia
+                                                                formControlName="traqueostomia">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.secreciones.campos.traqueostomia
+                                                                }}
+                                                            </mat-checkbox>
+                                                        </div>
+                                                    </div>
+                                                </p-fieldset>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.canalizaciones">
+                                <form [formGroup]="formularioCanalizaciones" class="contenedor-formulario">
+                                    <div class="seccion-campos">
+
+                                        <div class="campo">
+                                            <div class="control-radio">
+                                                <p-fieldset [toggleable]="false" legend="{{ modalProcedimientosViewModel.mensajes.canalizaciones.campos.tipoCanalizacion }}">
+                                                    <mat-radio-group [(ngModel)]="modalProcedimientosViewModel.tipoCanalizacion"
+                                                        formControlName="tipoCanalizacion" layout="row">
+                                                        <mat-radio-button [value]="modalProcedimientosViewModel.mensajes.canalizaciones.campos.intravenosa">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.canalizaciones.campos.intravenosa
+                                                            }}
+                                                        </mat-radio-button>
+                                                        <mat-radio-button [value]="modalProcedimientosViewModel.mensajes.canalizaciones.campos.subcutanea">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.canalizaciones.campos.subcutanea
+                                                            }}
+                                                        </mat-radio-button>
+                                                        <mat-error class="mat-error-clase" *ngIf="formularioCanalizaciones.controls['tipoCanalizacion'].hasError('required')">
+                                                            {{
+                                                            modalProcedimientosViewModel.mensajes.canalizaciones.errores.tipoCanalizacionRequerido
+                                                            }}
+                                                        </mat-error>
+                                                    </mat-radio-group>
+                                                </p-fieldset>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </ng-template>
+                            <ng-template [ngSwitchCase]="modalProcedimientosViewModel.mensajes.opcionesMenu.soporteNutricional">
+                                <form [formGroup]="formularioSoporteNutricional" class="contenedor-formulario">
+                                    <div class="secciones-formulario">
+
+                                        <div class="campo">
+                                            <mat-form-field class="campo-soporte-medicamento">
+                                                <input id="medicamento" matInput placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.medicamento }}"
+                                                    [matAutocomplete]="auto" (keyup)="getMedicamentos(soporteNutricionalData)"
+                                                    formControlName="medicamento">
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['medicamento'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.medicamentoRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['medicamento'].hasError('maxlength')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.medicamentoMaximaLongitud
+                                                    }}
+                                                </mat-error>
+
+                                                <button mat-button *ngIf="formularioSoporteNutricional.controls['medicamento'].value"
+                                                    matSuffix mat-icon-button (click)="formularioSoporteNutricional.controls['medicamento'].setValue(null)">
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+
+                                                <mat-hint>{{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.campos.medicamentoBuscar
+                                                    }}</mat-hint>
+
+                                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarInformacion">
+                                                    <mat-option *ngFor="let opcion of modalProcedimientosViewModel.respuestaMedicamentos"
+                                                        [value]="opcion">
+                                                        {{ opcion.idMedicamento }} {{ opcion.nombre }} {{
+                                                        opcion.presentacion }}
+                                                    </mat-option>
+                                                </mat-autocomplete>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="campo-soporte">
+
+                                            <mat-form-field class="campo-soporte-dosis">
+                                                <input id="cantidadDosis" [maxlength]="8" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.dosis }}"
+                                                    formControlName="cantidadDosis">
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['cantidadDosis'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.dosisCantidadRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['cantidadDosis'].hasError('maxlength')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.dosisCantidadMaximaLongitud
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['cantidadDosis'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.dosisCantidadInvalido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-unidades">
+                                                <mat-select id="unidadDosis" placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.dosisUnidades }}"
+                                                    formControlName="unidadDosis">
+
+                                                    <mat-option *ngFor="let unidad of modalProcedimientosViewModel.respuestaUnidadesDosisSoporteNutricional"
+                                                        [value]="unidad.descripcion">
+                                                        {{ unidad.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['unidadDosis'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.dosisUnidadesRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-volumen">
+                                                <input id="volumen" [maxlength]="4" class="centro" matInput placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.volumen }}"
+                                                    formControlName="volumen">
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['volumen'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.volumenRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['volumen'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.volumenInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['volumen'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.volumenMin
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['volumen'].hasError('max')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.volumenMax
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-duracion">
+                                                <input id="duracion" [maxlength]="3" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.duracion }}"
+                                                    formControlName="duracion">
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['duracion'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.duracionRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['duracion'].hasError('maxlength')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.duracionMaximaLongitud
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['duracion'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.duracionInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['duracion'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.duracionMin
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['duracion'].hasError('max')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.duracionMax
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-tiponutricion">
+                                                <mat-select id="tipoNutricion" placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.tipoNutricion }}"
+                                                    (selectionChange)="seleccionTipoNutricion($event.value)" formControlName="tipoNutricion">
+
+                                                    <mat-option *ngFor="let tipo of modalProcedimientosViewModel.respuestaTiposNutricionesSoporteNutricional"
+                                                        [value]="tipo">
+                                                        {{ tipo }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['tipoNutricion'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.tipoNutricionRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-nutricion">
+                                                <mat-select id="nutricion" placeholder="Nutrición" formControlName="nutricion">
+
+                                                    <mat-option *ngFor="let nutricion of modalProcedimientosViewModel.datosNutricionSoporteNutricional"
+                                                        [value]="nutricion.descripcion">
+                                                        {{ nutricion.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['nutricion'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.nutricionRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                        </div>
+
+                                        <div class="campo-soporte" *ngIf="!this.modalProcedimientosViewModel.esDetalle">
+
+
+                                            <mat-form-field class="campo-soporte-dia-evento">
+                                                <mat-select id="diasEvento" placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.diasEvento }}"
+                                                    formControlName="diasEvento" multiple>
+                                                    <mat-option #todosDias (click)="seleccionarTodosDias()" [value]="0">Todos</mat-option>
+                                                    <mat-option *ngFor="let diasEvento of modalProcedimientosViewModel.listaDias"
+                                                        [value]="diasEvento.dia" (click)="seleccionDia(todosDias.viewValue)">
+                                                        {{ diasEvento.dia }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['diasEvento'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.diasEventoRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-hora-evento">
+                                                <mat-select id="frecuencia" placeholder="Hora Evento" formControlName="frecuencia">
+
+                                                    <mat-option *ngFor="let frecuencia of modalProcedimientosViewModel.respuestaFrecuenciasSoporteNutricional"
+                                                        [value]="frecuencia.descripcion">
+                                                        {{ frecuencia.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['frecuencia'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.horaEventoRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-tipo-evento">
+                                                <mat-select id="tipoEvento" placeholder="Tipo evento" formControlName="tipoEvento">
+
+                                                    <mat-option *ngFor="let tipoEvento of modalProcedimientosViewModel.respuestaTiposSoporteNutricional"
+                                                        [value]="tipoEvento.descripcion">
+                                                        {{ tipoEvento.descripcion }}
+                                                    </mat-option>
+                                                </mat-select>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['tipoEvento'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.tipoEventoRequerido
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <mat-form-field class="campo-soporte-sesiones-evento">
+                                                <input id="diasTratamiento" [maxlength]="2" class="centro" matInput
+                                                    placeholder="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.campos.diasTratamiento }}"
+                                                    formControlName="diasTratamiento">
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['diasTratamiento'].hasError('required')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.diasTratamientoRequerido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['diasTratamiento'].hasError('pattern')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.diasTratamientoInvalido
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['diasTratamiento'].hasError('min')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.diasTratamientoMin
+                                                    }}
+                                                </mat-error>
+
+                                                <mat-error *ngIf="formularioSoporteNutricional.controls['diasTratamiento'].hasError('max')">
+                                                    {{
+                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.errores.diasTratamientoMax
+                                                    }}
+                                                </mat-error>
+                                            </mat-form-field>
+
+                                            <button class="agregar-hora" mat-raised-button color="primary" id="agregarEvento"
+                                                (click)="agregarEvento(modalProcedimientosViewModel.esEdicionEventoSoporte)">
+                                                <mat-icon *ngIf="!modalProcedimientosViewModel.esEdicionEventoSoporte">add</mat-icon>
+                                                <mat-icon *ngIf="modalProcedimientosViewModel.esEdicionEventoSoporte">save</mat-icon>
+                                            </button>
+
+                                            <mat-error class="mat-error-clase" *ngIf="!modalProcedimientosViewModel.eventos.length > 0">
+                                                {{
+                                                modalProcedimientosViewModel.mensajes.soporteNutricional.errores.eventoRequerido
+                                                }}
+                                            </mat-error>
+
+
+                                        </div>
+
+                                        <div class="campo-soporte" *ngIf="modalProcedimientosViewModel.eventos.length > 0">
+                                            <div class="table">
+                                                <p-table [columns]="columnasEventos" [value]="modalProcedimientosViewModel.eventos"
+                                                    [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                                                    [rowsPerPageOptions]="[10,20,30]"  [responsive]="true"
+                                                    dataKey="id">
+                                                    <ng-template pTemplate="header" let-columns>
+                                                        <tr>
+                                                            <th class="texto-tabla dia-tabla-texto" [pSortableColumn]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.diasCampo">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.dias
+                                                                }}
+                                                                <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.diasCampo"></p-sortIcon>
+                                                            </th>
+                                                            <th class="texto-tabla hora-tabla-texto" [pSortableColumn]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.horaCampo">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.hora
+                                                                }}
+                                                                <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.horaCampo"></p-sortIcon>
+                                                            </th>
+                                                            <th class="texto-tabla evento-tabla-texto"
+                                                                [pSortableColumn]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.eventoCampo">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.evento
+                                                                }}
+                                                                <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.eventoCampo"></p-sortIcon>
+                                                            </th>
+                                                            <th class="texto-tabla dias-tratamiento-tabla-texto"
+                                                                [pSortableColumn]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.diasTratamientoCampo">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.diasTratamiento
+                                                                }}
+                                                                <p-sortIcon [field]="modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.diasTratamientoCampo"></p-sortIcon>
+                                                            </th>
+                                                            <th class="texto-tabla opciones-boton-texto" *ngIf="!this.modalProcedimientosViewModel.esDetalle">{{
+                                                                modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.accion
+                                                                }}</th>
+                                                        </tr>
+                                                    </ng-template>
+
+                                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                                        <tr [pSelectableRow]="rowData">
+                                                            <td class="texto-tabla dia-tabla-valor">
+                                                                <span class="ui-column-title">
+                                                                    {{
+                                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.dias
+                                                                    }}
+                                                                </span>
+                                                                {{ rowData.diasEvento | listaNombreDia }}
+                                                            </td>
+                                                            <td class="texto-tabla hora-tabla-valor">
+                                                                <span class="ui-column-title">
+                                                                    {{
+                                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.hora
+                                                                    }}
+                                                                </span>
+                                                                {{ rowData.frecuencia.descripcion }}
+                                                            </td>
+                                                            <td class="texto-tabla evento-tabla-valor">
+                                                                <span class="ui-column-title">
+                                                                    {{
+                                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.evento
+                                                                    }}
+                                                                </span>
+                                                                {{ rowData.tipoEvento.descripcion }}
+                                                            </td>
+                                                            <td class="texto-tabla dias-tratamiento-tabla-valor">
+                                                                <span class="ui-column-title">
+                                                                    {{
+                                                                    modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.diasTratamiento
+                                                                    }}
+                                                                </span>
+                                                                {{ rowData.diasTratamiento }}
+                                                            </td>
+                                                            <td class="texto-tabla opciones-boton-texto" *ngIf="!this.modalProcedimientosViewModel.esDetalle">
+                                                                <button mat-button matSuffix mat-icon-button (click)="editarEvento(rowData)">
+                                                                    <mat-icon matTooltip="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.editar }}">edit</mat-icon>
+                                                                </button>
+                                                                <button mat-button matSuffix mat-icon-button (click)="eliminarEvento(rowData)">
+                                                                    <mat-icon matTooltip="{{ modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.eliminar }}">delete</mat-icon>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+
+                                                    <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                                        <tr>
+                                                            <td class="texto-tabla" [attr.colspan]="columnasEventos.length + 1">
+                                                                {{
+                                                                modalProcedimientosViewModel.mensajes.soporteNutricional.tabla.noEventos
+                                                                }}
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-soporte">
+                                            <mat-checkbox id="noPBS" #noPBS formControlName="noPBS" (change)="onChangeNoPBS($event)">
+                                                {{
+                                                modalProcedimientosViewModel.mensajes.soporteNutricional.campos.noPBS
+                                                }}
+                                            </mat-checkbox>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </ng-template>
+                        </div>
+                    </div>
+                </mat-dialog-content>
+            </div>
+        </div>
+        <mat-dialog-actions align="end">
+
+            <button mat-raised-button id="cancelar" (click)="cerrarModal()">
+                {{ modalProcedimientosViewModel.mensajes.botones.cancelar }}
+            </button>
+            <div *ngIf="!modalProcedimientosViewModel.esDetalle">
+                <button *ngIf="!data.btnEditar" mat-raised-button id="agregar" color="primary" (click)="guardarProcedimiento()">
+                    {{ modalProcedimientosViewModel.mensajes.botones.agregar }}
+                </button>
+                <button *ngIf="data.btnEditar" mat-raised-button id="editar" color="primary" (click)="guardarProcedimiento()">
+                    {{ modalProcedimientosViewModel.mensajes.botones.editar }}
+                </button>
+            </div>
+
+
+        </mat-dialog-actions>
+    </div>
+</section>

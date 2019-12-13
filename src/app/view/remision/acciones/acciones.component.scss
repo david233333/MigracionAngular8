@@ -1,0 +1,87 @@
+@import "../../../../sass/abstracts/variables";
+
+button {
+  &:hover mat-icon {
+    color: $color-enfasis;
+  }
+}
+
+btn_enviar_enable {
+  color: red;
+  background: blue;
+}
+
+btn_enviar_disable:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  color: #c0c0c0;
+  background-color: #ffffff;
+}
+
+.texto-info-paciente {
+  font-weight: bold;
+  color: #0033a0;
+  font-size: 10pt;
+}
+
+.menu-superior {
+  display: flex;
+  overflow: hidden;
+  position: fixed;
+  top: 4em;
+  width: 80%;
+  z-index: 100;
+  background-color: white;
+}
+
+.contenedor-paciente {
+  width: 72%;
+}
+
+.opciones {
+  width: 28%;
+}
+
+.grupo {
+  display: flex;
+}
+
+.campo-izquierda {
+  width: 58%;
+}
+
+.campo-derecha {
+  width: 65%;
+}
+
+.espacio {
+  height: 0.3em;
+}
+
+.info-paciente {
+  width: 97%;
+  border-radius: 5px;
+  background-color: #f7f0f0;
+}
+
+.opciones {
+  display: flex;
+}
+
+.valor-info-paciente {
+  font-size: 10pt;
+}
+
+@media (max-width: 800px) {
+  .menu-superior {
+    display: flex;
+  }
+
+  .info-paciente {
+    width: 90%;
+  }
+
+  .contenedor-paciente {
+    width: 88%;
+  }
+}

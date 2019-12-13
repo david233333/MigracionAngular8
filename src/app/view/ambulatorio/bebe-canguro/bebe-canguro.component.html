@@ -1,0 +1,209 @@
+<!--<mat-progress-bar [hidden]="!listaRemisionViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>-->
+<section>
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="texto-titulo">{{ bebeCanguroViewModel.mensajes.titulos.subtitle }}</div>
+  </div>
+  <hr class="linea-espacio">
+  <div class="secction">
+    <div class="flex-contenedor-busqueda">
+      <form class="contenedor" [formGroup]="formulario">
+        <div class="campo identificacion">
+          <div class="first_field">
+            <mat-form-field >
+              <mat-select  id="tipoDocumento" placeholder="{{ bebeCanguroViewModel.mensajes.campos.tipoDocumento }}"
+                           formControlName="tipoDocumento" >
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option *ngFor="let tipo of bebeCanguroViewModel.respuestaTiposIdentificacion"
+                            [value]="tipo.idTipo">
+                  {{ tipo.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="secound_field">
+            <mat-form-field >
+              <input id="numeroDocumentos" matInput
+                     placeholder="{{ bebeCanguroViewModel.mensajes.campos.identificacion }}"
+                     formControlName="numeroDocumento">
+
+              <button mat-button *ngIf="formulario.controls['numeroDocumento'].value" matSuffix mat-icon-button>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('maxlength')">
+                {{ bebeCanguroViewModel.mensajes.errores.numeroMaximaLongitud }}
+              </mat-error>
+
+              <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('pattern')">
+                {{ bebeCanguroViewModel.mensajes.errores.numeroFormatoInvalido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="campo">
+          <div class="first_field">
+            <mat-form-field >
+              <mat-select id="ciudad" placeholder="{{ bebeCanguroViewModel.mensajes.campos.ciudadPrincipal }}"
+                          formControlName="ciudad"  (selectionChange)="institucionRemitente($event);">
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option  *ngFor="let ciudad of bebeCanguroViewModel.respuestaCiudades"
+                             [value]="ciudad.idCiudad">
+                  {{ ciudad.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="secound_field">
+            <mat-form-field>
+              <mat-select id="institucion"
+                          placeholder="{{ bebeCanguroViewModel.mensajes.campos.institucionRemitente }}"
+                          formControlName="institucion"
+              >
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option *ngFor="let institucion of bebeCanguroViewModel.respuestaInstituciones"
+                            [value]="institucion.id">
+                  {{ institucion.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="campo">
+          <div class="first_field">
+            <mat-form-field>
+              <mat-select id="planSalud" placeholder="{{ bebeCanguroViewModel.mensajes.campos.planSalud }}"
+                          formControlName="planSalud" >
+
+                <mat-option *ngFor="let plan of bebeCanguroViewModel.respuestaPlanesSalud"
+                            [value]="plan.idPlan">
+                  {{ plan.nombre }}
+                </mat-option>
+              </mat-select>
+
+            </mat-form-field>
+          </div>
+          <div class="secound_field_fecha campo_bebe_canguro" >
+            <p-calendar inputStyleClass="ancho-control-input-calendario-bebe-canguro"
+                        formControlName="fechaEmpalme"
+                        panelStyleClass=""
+                        [maxDate]="fechaMaximaCalendarioActual"
+                        [minDate]="fechaMinimaCalendarioActual"
+                        placeholder="{{ bebeCanguroViewModel.mensajes.campos.fechaInicio }}"
+                        [(ngModel)]="fechaInicio"  [locale]="configEspanolCalendario"
+                        [showIcon]="true" formControlName="fechaInicio"
+                        [showTime]="false"  dateFormat="dd/mm/yy"  [monthNavigator]="true"
+                        [yearNavigator]="true" yearRange="2018:2100" hourFormat="12"> </p-calendar>
+          </div>
+        </div>
+        <div class="campo contenedor_bebe_canguro">
+
+          <div class="secound_field campo_bebe_canguro">
+            <p-calendar inputStyleClass="ancho-control-input-calendario-bebe-canguro"
+                        formControlName="fechaEmpalme"
+                        panelStyleClass=""
+                        [maxDate]="fechaMaximaCalendarioActual"
+                        [minDate]="fechaMinimaCalendarioActual"
+                        placeholder="{{ bebeCanguroViewModel.mensajes.campos.fechaInicio }}"
+                        [(ngModel)]="fechaInicio"  [locale]="configEspanolCalendario"
+                        [showIcon]="true" formControlName="fechaInicio"
+                        [showTime]="false"  dateFormat="dd/mm/yy"  [monthNavigator]="true"
+                        [yearNavigator]="true" yearRange="2018:2100" hourFormat="12"> </p-calendar>
+          </div>
+        </div >
+
+        <div class="botones">
+          <div class="boton">
+            <button mat-raised-button id="limpiar" color="default" (click)="limpiar()">
+              <mat-icon>clear</mat-icon>
+              {{ bebeCanguroViewModel.mensajes.botones.limpiar }}
+            </button>
+          </div>
+
+          <div class="boton">
+            <button mat-raised-button id="buscar" color="primary" (click)="buscar()" >
+              <mat-icon>search</mat-icon>
+              {{ bebeCanguroViewModel.mensajes.botones.buscar }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="contenedor_tabla" >
+      <div class="table_bebe">
+        <p-table [columns]="cols" [value]="bebeCanguroViewModel.respuestaRemisiones" [scrollable]="true"
+                 scrollHeight="400px" [paginator]="true" (onPage)="onPageListaRemision($event)"
+                 [rows]="10" [rowsPerPageOptions]="[10,20,30]"  [totalRecords]="totalRegistros"
+                 [responsive]="true" dataKey="idRemisionPK">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th class="texto-tabla tab_numero_remision">
+                {{bebeCanguroViewModel.mensajes.tabla.numeroRemision}}
+                <p-sortIcon [field]="bebeCanguroViewModel.mensajes.tabla.numeroRemision"></p-sortIcon>
+              </th>
+              <th class="texto-tabla tab_fecha_remision">
+                {{bebeCanguroViewModel.mensajes.tabla.fechaRemision}}
+                <p-sortIcon [field]="bebeCanguroViewModel.mensajes.tabla.numeroRemision"></p-sortIcon>
+              </th>
+              <th class="texto-tabla tab_paciente">
+                {{bebeCanguroViewModel.mensajes.tabla.nombrePaciente}}
+                <p-sortIcon [field]="bebeCanguroViewModel.mensajes.tabla.nombrePaciente"></p-sortIcon>
+              </th>
+              <th class="texto-tabla tab_plan_salud">
+                {{bebeCanguroViewModel.mensajes.tabla.planSalud}}
+                <p-sortIcon [field]="bebeCanguroViewModel.mensajes.tabla.planSalud.nombre"></p-sortIcon>
+              </th>
+              <th class="texto-tabla estado_remision">
+                {{bebeCanguroViewModel.mensajes.tabla.estadoRemision}}
+                <p-sortIcon [field]="bebeCanguroViewModel.mensajes.tabla.estadoRemision"></p-sortIcon>
+              </th>
+              <th class="texto-tabla tab_usuario">
+                {{bebeCanguroViewModel.mensajes.tabla.usuarioModifica}}
+                <p-sortIcon [field]="bebeCanguroViewModel.mensajes.tabla.usuarioModifica"></p-sortIcon>
+              </th>
+              <th class="texto-tabla center-header-table">
+                {{ bebeCanguroViewModel.mensajes.tabla.accion }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+              <td class="tab_numero_remision">{{rowData.idRemision }}</td>
+              <td class="tab_fecha_remision">{{rowData.fechaRemision | date:'dd-MM-yyyy hh:mm a'  }}</td>
+              <td class="tab_paciente">{{rowData.nombrePaciente}}</td>
+              <td class="tab_plan_salud">{{rowData.planSalud.nombre}}</td>
+              <td class="estado_remision">{{rowData.estado}}</td>
+              <td class="tab_usuario">{{rowData.usuario}}</td>
+              <td class="texto-tabla accion">
+                <mat-icon   matTooltip="{{ bebeCanguroViewModel.mensajes.campos.editar }}"
+                            (click)="buscarRemision(rowData)"
+                          [matTooltipPosition]="'above'">
+                  visibility
+                </mat-icon>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage" class="container" let-columns>
+            <tr>
+              <td class="center-header-table" [attr.colspan]="cols.length + 1">
+                {{ bebeCanguroViewModel.mensajes.tabla.noRemisiones }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,106 @@
+.container-opciones {    
+    display: flex;
+    justify-content: center;
+}
+
+.tarjeta-info-paciente {
+    width: 15%;
+    height: 6em;
+    margin: 1%;
+    border: 1px solid #D5D5D5;
+    cursor: pointer;
+}
+
+
+.tarjeta-info-paciente:hover {
+    background: #CCE5FF;
+}
+
+.tarjeta-container {
+    text-align: center;
+    margin-top: 5%;
+}
+
+.opciones-icon {
+    width: 35%;
+    height: 3em;
+    display: block;
+    margin: auto;
+}
+
+.separador {
+    height: 2em;;
+}
+
+.texto{
+    font-weight: bold;
+    margin-top: 3%;
+}
+
+
+@media (max-width: 800px) { 
+
+    .container-opciones {
+        display: grid;
+    }
+
+    .tarjeta-info-paciente {
+        margin-top: 5%;
+        width: 100%;
+    }
+
+    .texto-volver {
+        font-size: 7pt;
+    }
+
+    .texto-titulo {
+        font-size: 18pt;
+    }
+
+    .img-opcion {
+        width: 7%;        
+    }
+
+  }
+
+  @media (min-width: 991px) and (max-width: 1200px) {
+    .texto {
+        margin-top: 10%;
+    }
+
+    .tarjeta-info-paciente {
+        height: 7em;
+    }
+  }
+  
+  @media (min-width: 1201px) and (max-width: 1400px) {
+    .texto {
+        margin-top: 0%;
+    }
+  }
+  
+  @media (min-width: 1401px) and (max-width: 1600px) {
+    .texto {
+        margin-top: 5%;
+    }
+  }
+
+  @media (min-width: 1601px) and (max-width: 2400px) {
+    .opciones-icon {
+        height: 4em;
+    }
+
+    .texto {
+        margin-top: 0%;
+    }
+  }
+
+  @media (min-width: 2401px) and (max-width: 2800px) {
+    .texto {
+        margin-top: 10%;
+    }
+
+    .tarjeta-info-paciente {
+        height: 7em;
+    }
+  }

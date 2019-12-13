@@ -1,0 +1,58 @@
+<section>
+  <mat-dialog-content>
+    <div class="titulos"><strong><h4>{{detalleModel.mensaje.campos.tratamientos}}</h4></strong></div>
+    <div class="tamaño_tabla_tratamientos">
+      <p-table [columns]="colTratamientos" [value]="detalleModel.respuestaMedicamentos" [scrollable]="true"
+               scrollHeight="400px"   [responsive]="true" dataKey="id">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th class="tabla_header">
+              {{detalleModel.mensaje.tabla.medicamento }}
+            </th>
+            <th class="tabla_header">
+              {{detalleModel.mensaje.tabla.dosis }}
+            </th>
+            <th class="tabla_header">
+              {{ detalleModel.mensaje.tabla.viaAdministracion }}
+            </th>
+            <th class="tabla_header">
+              {{detalleModel.mensaje.tabla.frecuencia }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+            <td class="tabla_header">
+              {{ rowData.medicamento.nombre }}
+            </td>
+            <td class="tabla_header">
+              {{ rowData.cantidadDosis }}
+            </td>
+            <td class="tabla_header">
+              {{ rowData.viaAdministracion.descripcion }}
+            </td>
+            <td class="tabla_header">
+              {{ rowData.frecuencia.descripcion | listaFrecuencia | truncar: 20}}
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" class="container" let-columns>
+          <tr>
+            <td class="tabla_header" [attr.colspan]="detalleModel.length + 1">
+              {{  detalleModel.mensaje.campos.noHayDatos  }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+
+    <button mat-raised-button id="cerrar" color="primary"(click)="cerrar()">
+      Cerrar
+    </button>
+  </mat-dialog-actions>
+</section>

@@ -1,0 +1,27 @@
+<h4 mat-dialog-title>
+  {{ modalCondicionPacienteAceptaViewModel.mensajes.campos.titulo }}
+</h4>
+
+<mat-dialog-content>
+  {{ modalCondicionPacienteAceptaViewModel.mensajes.campos.contenido }}
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button
+    mat-raised-button
+    id="cancelar"
+    (click)="cancelar()">
+    <mat-icon>close</mat-icon>
+    {{ modalCondicionPacienteAceptaViewModel.mensajes.botones.cancelar }}
+  </button>
+
+  <button
+    mat-raised-button
+    id="continuar"
+    color="primary"
+    (click)="continuar()">
+    <mat-icon>done</mat-icon>
+    {{ modalCondicionPacienteAceptaViewModel.mensajes.botones.continuar }}
+  </button>
+</mat-dialog-actions>

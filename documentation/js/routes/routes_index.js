@@ -1,0 +1,1 @@
+var ROUTES_INDEX = {"name":"<root>","kind":"module","className":"AppModule","children":[{"name":"routes","filename":"src/app/view/remision/remision.routing.ts","module":"RemisionRoutingModule","children":[{"path":"remision/nueva","component":"RemisionContenedorComponent"}],"kind":"module"}]}

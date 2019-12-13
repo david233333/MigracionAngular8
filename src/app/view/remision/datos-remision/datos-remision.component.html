@@ -1,0 +1,212 @@
+<form [formGroup]="formulario">
+  <div class="flex-contenedor">
+
+    <div class="contenedor">
+      <div class="espacio"></div>
+
+      <div class="campo">
+        <mat-form-field class="ancho-campo">
+          <mat-select id="institucion" placeholder="{{ datosRemisionViewModel.mensajes.campos.institucion }}"
+            formControlName="institucion" required>
+
+            <mat-option *ngFor="let institucion of datosRemisionViewModel.respuestaInstituciones" [value]="institucion.idInstitucion">
+              {{ institucion.nombre }}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="!formulario.controls['institucion'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.institucionRequerida }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="campo">
+        <mat-form-field class="ancho-campo">
+          <input [maxlength]="30" id="telefono" matInput placeholder="{{ datosRemisionViewModel.mensajes.campos.telefono }}"
+            formControlName="telefono" required>
+
+          <button [disabled]="disableButton" mat-button *ngIf="formulario.controls['telefono'].value" matSuffix
+            mat-icon-button (click)="formulario.controls['telefono'].setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <mat-error *ngIf="formulario.controls['telefono'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.telefonoRequerido }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['telefono'].hasError('maxlength')">
+            {{ datosRemisionViewModel.mensajes.errores.telefonoMaximaLongitud }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['telefono'].hasError('pattern')">
+            {{ datosRemisionViewModel.mensajes.errores.telefonoInvalido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="campo">
+        <mat-form-field class="ancho-campo alto-campo-resumen">
+          <textarea class="alto-campo-resumen" #resumenHistoriaClinica formControlName="resumenHistoriaClinica" [maxlength]="4000" matInput
+            placeholder="{{  datosRemisionViewModel.mensajes.campos.resumenHistoriaClinica }}" required></textarea>
+          <mat-hint align="end">{{ resumenHistoriaClinica.value.length }} / 4000</mat-hint>
+
+          <mat-error *ngIf="formulario.controls['resumenHistoriaClinica'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.historiaClinica }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="campo">
+        <mat-form-field class="ancho-campo ">
+          <textarea class="alto-campo-observacion" formControlName="observaciones" #observaciones matInput [maxlength]="4000"
+            placeholder="{{  datosRemisionViewModel.mensajes.campos.observaciones }}"></textarea>
+          <mat-hint align="end">{{ observaciones.value.length }} / 4000</mat-hint>
+        </mat-form-field>
+      </div>
+      <div class="container-peso" *ngIf="edadPaciente <= 18 && edadPaciente !== null">
+        <div class="campo_valor_peso">
+          <mat-form-field class="field_valor_peso">
+            <input id="peso" matInput placeholder="{{ datosRemisionViewModel.mensajes.campos.peso }}" formControlName="peso"
+              (keyup)="cambiarPeso($event)" required maxlength="8">
+
+            <button [disabled]="disableButton" mat-button *ngIf="formulario.controls['peso'].value" matSuffix
+              mat-icon-button (click)="formulario.controls['peso'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="formulario.controls['peso'].hasError('required')">
+              {{ datosRemisionViewModel.mensajes.errores.pesoRequerido }}
+            </mat-error>
+
+            <mat-error *ngIf="formulario.controls['peso'].hasError('maxlength')">
+              {{ datosRemisionViewModel.mensajes.errores.pesoMaximaLongitud }}
+            </mat-error>
+
+            <mat-error *ngIf="formulario.controls['peso'].hasError('pattern')">
+
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="container_medida_peso">
+          <mat-form-field class="field_valor_peso">
+            <mat-select id="medidaDepeso" placeholder="{{datosRemisionViewModel.mensajes.campos.medidaDePeso}}"
+              formControlName="medidaDepeso" required>
+              <mat-option *ngFor="let medida of datosRemisionViewModel.pesos" [value]="medida.descripcion">
+                {{medida.descripcion}}
+              </mat-option>
+
+            </mat-select>
+            <mat-error *ngIf="formulario.controls['medidaDepeso'].hasError('required')">
+              {{ datosRemisionViewModel.mensajes.errores.medidaPesoRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+    <div class="contenedor">
+      <p class="identificacion">{{ datosRemisionViewModel.mensajes.campos.identificacionMedico }}</p>
+      <div class="campo">
+        <mat-form-field class="ancho-campo">
+          <mat-select id="tipoDocumentoMedico" placeholder="{{ datosRemisionViewModel.mensajes.campos.tipoDocumentoMedico }}"
+            formControlName="tipoDocumentoMedico" required>
+
+            <mat-option *ngFor="let tipo of datosRemisionViewModel.respuestaTiposIdentificacion" [value]="tipo.idTipo">
+              {{ tipo.nombre }}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="!formulario.controls['tipoDocumentoMedico'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.tipoDocumentoMedicoRequerido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="ancho-campo-numero-documento">
+        <mat-form-field class="mat">
+          <input [maxlength]="10" id="numeroDocumentoMedico" matInput placeholder="{{ datosRemisionViewModel.mensajes.campos.numeroDocumentoMedico }}"
+            formControlName="numeroDocumentoMedico" required>
+
+          <mat-error *ngIf="formulario.controls['numeroDocumentoMedico'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.numeroDocumentoMedicoRequerido }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['numeroDocumentoMedico'].hasError('maxlength')">
+            {{ datosRemisionViewModel.mensajes.errores.numeroDocumentoMedicoMaximaLongitud }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['numeroDocumentoMedico'].hasError('pattern')">
+            {{ datosRemisionViewModel.mensajes.errores.numeroDocumentoMedicoInvalido }}
+          </mat-error>
+        </mat-form-field>
+        <button (click)="buscarProfesional()" [disabled]="!this.formulario.controls['numeroDocumentoMedico'].valid ||
+              !this.formulario.controls['tipoDocumentoMedico'].valid"
+          matTooltip="{{ datosRemisionViewModel.mensajes.campos.buscarProfesional }}" [matTooltipPosition]="'right'"
+          mat-icon-button>
+          <mat-icon matSuffix class="icon_">
+            search
+          </mat-icon>
+        </button>
+      </div>
+
+      <div class="campo">
+        <mat-form-field class="ancho-campo">
+          <input [maxlength]="80" id="nombreMedico" matInput placeholder="{{ datosRemisionViewModel.mensajes.campos.nombreMedico }}"
+            formControlName="nombreMedico" required>
+
+          <button mat-button [disabled]="disableButton" *ngIf="formulario.controls['nombreMedico'].value" matSuffix
+            mat-icon-button (click)="formulario.controls['nombreMedico'].setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <mat-error *ngIf="formulario.controls['nombreMedico'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.nombreMedicoRequerido }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['nombreMedico'].hasError('maxlength')">
+            {{ datosRemisionViewModel.mensajes.errores.nombreMedicoMaximaLongitud }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="campo">
+        <mat-form-field class="ancho-campo">
+          <input id="especialidadMedico" [maxlength]="50" matInput placeholder="{{ datosRemisionViewModel.mensajes.campos.especialidadMedico }}"
+            formControlName="especialidadMedico">
+
+          <button mat-button [disabled]="disableButton" *ngIf="formulario.controls['especialidadMedico'].value"
+            matSuffix mat-icon-button (click)="formulario.controls['especialidadMedico'].setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <mat-error *ngIf="formulario.controls['especialidadMedico'].hasError('maxlength')">
+            {{ datosRemisionViewModel.mensajes.errores.especialidadMedicoMaximaLongitud }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="campo">
+        <mat-form-field class="ancho-campo">
+          <input matInput id="emailContacto" type="email" [email]="true" [maxlength]="50" placeholder="{{ datosRemisionViewModel.mensajes.campos.emailContacto }}"
+            formControlName="emailContacto" required>
+
+          <button mat-button [disabled]="disableButton" *ngIf="formulario.controls['emailContacto'].value" matSuffix
+            mat-icon-button (click)="formulario.controls['emailContacto'].setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <mat-error *ngIf="formulario.controls['emailContacto'].hasError('required')">
+            {{ datosRemisionViewModel.mensajes.errores.emailContactoRequerido }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['emailContacto'].hasError('maxlength')">
+            {{ datosRemisionViewModel.mensajes.errores.emailContactoMaximaLongitud }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['emailContacto'].hasError('email')">
+            {{ datosRemisionViewModel.mensajes.errores.emailContactoInvalido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+  </div>
+</form>

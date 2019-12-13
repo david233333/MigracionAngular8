@@ -1,0 +1,72 @@
+<div class="container">
+        
+  <div class="flex-contenedor-busqueda">
+  <form class="contenedor" [formGroup]="formularioPrincipal">
+              <mat-form-field>
+                <mat-select
+                  id="formulario"
+                  placeholder="{{
+                    modificacionVisitasViewModel.mensajes.campos
+                      .formulario
+                  }}"
+                  (selectionChange)="verFormulario($event.value)"
+                  formControlName="formulario"
+                >
+                  <mat-option
+                    *ngFor="
+                      let tipo of modificacionVisitasViewModel.respuestaTiposFormularios
+                    "
+                    [value]="tipo.nombre"
+                  >
+                    {{ tipo.nombre }}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+</div>
+
+<div [ngSwitch]="opcionPantalla">
+  <ng-template
+  [ngSwitchCase]="
+  modificacionVisitasViewModel.mensajes.formularios.alertasVisitas
+  "
+  >
+  <div class="novedad-cita">
+  <sura-alertas-visitas></sura-alertas-visitas>
+  </div>
+  </ng-template>
+  <ng-template
+    [ngSwitchCase]="
+      modificacionVisitasViewModel.mensajes.formularios.aplicacionesCuidador
+    "
+  >
+    <div class="novedad-aplicacion-cuidador">
+      <sura-novedad-aplicacion-cuidador
+        (regresarPrincipal)="pantallaPrincipal($event, true)"
+      ></sura-novedad-aplicacion-cuidador>
+    </div>
+  </ng-template>
+  <ng-template
+  [ngSwitchCase]="
+  modificacionVisitasViewModel.mensajes.formularios.cancelarVisitas
+  "
+  >
+  <div class="novedad-cancela-visita">
+  <sura-novedad-cancela-cita
+  (regresarPrincipal)="pantallaPrincipal($event, true)"
+  ></sura-novedad-cancela-cita>
+  </div>
+  </ng-template>
+  <ng-template
+  [ngSwitchCase]="
+  modificacionVisitasViewModel.mensajes.formularios.fijarVisitas
+  "
+  >
+  <div class="novedad-fijar-visitas">
+  <sura-novedad-fijar-visitas
+  (regresarPrincipal)="pantallaPrincipal($event, true)"
+  ></sura-novedad-fijar-visitas>
+  </div>
+  </ng-template>  
+</div>

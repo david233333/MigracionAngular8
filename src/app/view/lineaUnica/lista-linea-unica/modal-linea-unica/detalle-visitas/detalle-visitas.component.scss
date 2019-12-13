@@ -1,0 +1,96 @@
+$primary-color: #0033A0;
+$centrar_texto: center;
+$borde_tabla: 2px solid $primary-color;
+$color_blanco: white;
+$tamaño_letra: 10pt;
+$tamaño_pequeño: 9pt;
+$tamaño_subtitulo: 12pt;
+$tamaño_titulo: 16pt;
+$boldLetra: bold;
+$display_desktop: flex ;
+
+@mixin tamanos_div($tamano_ancho, $tamano_alto) {
+  width: $tamano_ancho;
+  height: $tamano_alto;
+}
+
+@mixin table($borde) {
+  border-right: $borde;
+  color: $primary-color ;
+  text-align: $centrar_texto;
+  font-size: $tamaño_letra;
+  font-weight: 500;
+  cursor: pointer;
+}
+.tabla_header {
+  text-align: $centrar_texto;
+  @include tamanos_div(25%,none);
+  font-size: $tamaño_letra ;
+  mat-icon {
+    cursor: pointer;
+  }
+}
+
+.procedimientos {
+
+}
+.tamaño_tabla {
+  width: 50%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+.tamaño_tabla_tratamientos {
+  width: 98%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+
+.titulos {
+  font-weight: $boldLetra;
+  text-align:$centrar_texto ;
+  font-size: $tamaño_titulo;
+  margin-top: 2%;
+}
+.textos_subtitulo {
+  font-weight: $boldLetra;
+  font-size: $tamaño_subtitulo;
+  color: $primary-color;
+}
+.contenedorprocedimientos {
+  display: $display_desktop;
+  width: 100%;
+}
+
+.segundoContenedor {
+  display: flex;
+  width: 100%;
+}
+.especialidad{
+
+  font-weight: $boldLetra ;
+  display: $display_desktop;
+}
+.espacio_texto{
+  font-size: 12pt;
+  margin-right: 1%;
+  margin-left: 2%;
+  color: $primary-color;
+}
+
+.p_especialidad {
+  font-size: 13pt;
+  color: black;
+}
+.segundoContenedor {
+  width: 100%;
+}
+.contenedorSondajes {
+  width: 98%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+.tablas{
+  width: 98%;
+  margin-left: 2%;
+  margin-top: 2%;
+}

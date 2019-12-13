@@ -1,0 +1,129 @@
+.flex-contenedor-busqueda {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+
+  .contenedor {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+  }
+
+  .campo {
+    padding-bottom: 5px;
+  }
+
+  .boton {
+    padding: 5px;
+    text-align: center;
+  }
+
+  .identificacion {
+    display: flex;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.panel {
+  padding-top: 20px;
+}
+
+.boton-bebe-canguro {
+  margin-bottom: 1%;
+}
+
+.texto-tabla {
+  font-size: 10pt;
+  text-align: center;
+}
+
+.subtitulo-procedimiento {
+  font-size: 15pt;
+  color: #0033a0;
+}
+
+
+
+.separador-bebe-canguro {
+  height: 1em;
+}
+
+.flex-contenedor-paciente {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+
+  .contenedor-item-paciente {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 100%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 33%;
+    }
+
+    .flex-item-paciente {
+      text-align: center;
+
+      mat-list-item {
+        height: 65px;
+
+        h4 {
+          padding-bottom: 4px;
+          font-size: 0.75em;
+        }
+
+        p {
+          font-size: 1em;
+        }
+      }
+    }
+  }
+}
+
+.mat-list .mat-list-item .mat-line,
+.mat-nav-list .mat-list-item .mat-line,
+.mat-selection-list .mat-list-item .mat-line {
+  white-space: inherit;
+}
+
+.content-numero {
+  width: 36%;
+}
+
+.content-cedula {
+  width: 61%;
+  margin-right: 2%;
+}
+
+@media (max-width: 800px) {
+
+  .boton-bebe-canguro {
+    margin-bottom: 5%;
+  }
+
+}

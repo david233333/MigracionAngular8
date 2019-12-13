@@ -1,0 +1,7 @@
+<div [class.cargando-oculto]="!mostrar">
+  <div class="cargando-overlay">
+    <div>
+      <mat-progress-bar mode="indeterminate" *ngIf="mostrar"></mat-progress-bar>
+    </div>
+  </div>
+</div>

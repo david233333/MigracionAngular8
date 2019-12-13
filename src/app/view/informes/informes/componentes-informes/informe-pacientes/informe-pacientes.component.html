@@ -1,0 +1,71 @@
+<div style="text-align: center">
+  <form [formGroup]="formulario" class="formularios">
+    <div class="campos">
+      <div class="ciudad">
+        <mat-form-field>
+          <mat-select
+            (change)="emitirCiudad($event)"
+            formControlName="ciudad"
+            id="ciudad"
+            placeholder="Ciudad"
+            required>
+            <mat-option *ngFor=" let ciudad of informePacienteModel.listaCiudades"
+                        [value]="ciudad.idCiudad">
+              {{ ciudad.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formulario.controls['ciudad'].hasError('required')">
+            La ciudad es requerida
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="piso">
+        <mat-form-field>
+          <mat-select
+            formControlName="piso"
+            id="piso"
+            multiple
+            placeholder="Piso"
+          >
+            <mat-option *ngFor=" let piso of informePacienteModel.listaPisos"
+                        [value]="piso.idPiso">
+              {{ piso.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="estados">
+        <mat-form-field>
+          <mat-select
+            formControlName="estados"
+            id="estados"
+            multiple
+            placeholder="Estados"
+          >
+            <mat-option *ngFor=" let estado of estados"
+                        [value]="estado">
+              {{ estado }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="campos">
+      <div class="button">
+        <button
+          (click)="descargarInforme()"
+          [disabled]="!formulario.valid"
+          color="primary"
+          id="consultarInforme"
+          mat-raised-button
+        >
+          Descargar informe
+          <mat-icon>
+            cloud_download
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+
+</div>

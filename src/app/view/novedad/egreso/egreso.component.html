@@ -1,0 +1,56 @@
+<div class="novedad-egreso">
+    <div class="flex-contenedor-busqueda">
+        <form class="contenedor" [formGroup]="formularioEgreso">
+            <div class="campo">
+                <mat-form-field class="motivo">
+                    <mat-select id="motivoEgreso" placeholder="{{ egresoViewModel.mensajes.campos.motivoEgreso }}"
+                        formControlName="motivoEgreso" required (selectionChange)="seleccionEgreso($event)">
+                        <mat-option *ngFor="let motivo of egresoViewModel.respuestaMotivosEgreso" [value]="motivo">
+                            {{ motivo.descripcion }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!formularioEgreso.controls['motivoEgreso'].hasError('required')">
+                        {{ egresoViewModel.mensajes.errores.motivoEgresoRequerido }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="campo">
+                <div class="fecha">
+                    <p-calendar inputStyleClass="tamano-control-calendario-egreso" panelStyleClass="modal-calendario-egreso"
+                        formControlName="fechaAlta" [showTime]="true" [showIcon]="true" [locale]="configEspanolCalendario"
+                        placeholder="{{ egresoViewModel.mensajes.campos.fechaAlta }}" dateFormat="dd/mm/yy"
+                        [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" hourFormat="12" [minDate]="fechaMinimaCalendarioActual"
+                        [readonlyInput]="true"></p-calendar>
+                    <div class="mat-error-clase" *ngIf="formularioEgreso.controls['fechaAlta'].hasError('required')">
+                        {{ egresoViewModel.mensajes.errores.fechaAltaRequerido }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="campo">
+                <mat-form-field class="observacion">
+                    <textarea class="alto-campo" formControlName="observacion" #observacion matInput placeholder="{{  egresoViewModel.mensajes.campos.observacion }}"></textarea>
+                    <mat-hint align="end">{{ observacion.value.length }} / 4000</mat-hint>
+                    <div class="mat-error-clase" *ngIf="formularioEgreso.controls['observacion'].hasError('required')">
+                        {{ egresoViewModel.mensajes.errores.observacionRequerido }}
+                    </div>
+                </mat-form-field>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="boton">
+                <button mat-raised-button id="egresar" color="primary" (click)="egresarNovedad()" [disabled]="!formularioEgreso.valid">
+                    {{ egresoViewModel.mensajes.botones.egresar }}
+                </button>
+            </div>
+
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+@import '../sass/themes/nebularTheme';
+
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+
+
+/*
+#toast-container > .toast-success {
+  background-image: none;
+  background-color: #e9e9e9;
+  color: black;
+}
+ */
+
+#toast-container > .toast-error {
+  background-image: none;
+  background-color: red;
+  color: black;
+}
+@include nb-install-component() {
+  nb-layout-column.small {
+    flex: 0.15 !important;
+  }
+
+  nb-sidebar.settings-sidebar {
+    $sidebar-width: 7.5rem;
+
+    transition: width 0.3s ease;
+    width: $sidebar-width;
+    overflow: hidden;
+
+    &.collapsed {
+      width: 0;
+
+      /*/deep/ */.main-container {
+      width: 0;
+
+      .scrollable {
+        width: $sidebar-width;
+        padding: 1.25rem;
+      }
+    }
+    }
+
+    /*/deep/*/ .main-container {
+                 width: $sidebar-width;
+                 background: nb-theme(color-bg);
+                 transition: width 0.3s ease;
+                 overflow: hidden;
+
+                 .scrollable {
+                   width: $sidebar-width;
+                 }
+
+                 @include nb-for-theme(cosmic) {
+                   background: nb-theme(layout-bg);
+                 }
+               }
+  }
+
+  nb-sidebar.menu-sidebar {
+
+    margin-top: nb-theme(sidebar-header-gap);
+    z-index: 5000;
+
+    /*/deep/*/ .main-container {
+    height:
+      calc(#{nb-theme(sidebar-height)} - #{nb-theme(header-height)} - #{nb-theme(sidebar-header-gap)}) !important;
+    border-top-right-radius: nb-theme(radius);
+  }
+
+    /*/deep/*/ nb-sidebar-header {
+                 padding-bottom: 0.5rem;
+                 text-align: center;
+               }
+
+    background: transparent;
+
+    &.compacted {
+
+      /*/deep/*/ nb-sidebar-header {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    .main-content {
+      padding: 0.75rem !important;
+
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+
+    nb-sidebar.menu-sidebar {
+
+      margin-top: 0;
+
+      /*/deep/*/ .main-container {
+      height: calc(#{nb-theme(sidebar-height)} - #{nb-theme(header-height)}) !important;
+      border-top-right-radius: 0;
+
+      .scrollable {
+        padding-top: 0;
+      }
+    }
+    }
+
+  }
+
+  @include media-breakpoint-down(xl) {
+
+    nb-sidebar.menu-sidebar {
+
+      margin-top: 0;
+
+      /*/deep/*/ .main-container {
+      height: calc(#{nb-theme(sidebar-height)} - #{nb-theme(header-height)}) !important;
+      border-top-right-radius: 0;
+
+      .scrollable {
+        padding-top: 0;
+      }
+    }
+    }
+  }
+
+}
+
+@media (max-width: 800px) {
+  .cdk-overlay-pane {
+    width: 100%;
+  }
+  #cdk-overlay-0{
+    width: 100%;
+  }
+}

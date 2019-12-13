@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="novedad-informacion-paciente">
+    <div class="container-opciones">
+      <div class="tarjeta-info-paciente"
+           (click)="seleccionarMenu(informacionPacienteViewModel.mensajes.opcionesMenu.datosPaciente)">
+        <div class="tarjeta-container">
+          <div class="opciones-icon">
+            <img src="./assets/img/info-paciente.svg"
+                 alt="{{ informacionPacienteViewModel.mensajes.opcionesMenu.datosPaciente }}">
+          </div>
+          <div class="texto">
+            {{ informacionPacienteViewModel.mensajes.opcionesMenu.datosPaciente }}
+          </div>
+        </div>
+      </div>
+      <div class="tarjeta-info-paciente"
+           (click)="seleccionarMenu(informacionPacienteViewModel.mensajes.opcionesMenu.diagnostico)">
+        <div class="tarjeta-container">
+          <div class="opciones-icon">
+            <img src="./assets/img/diagnostico.svg"
+                 alt="{{ informacionPacienteViewModel.mensajes.opcionesMenu.diagnostico }}">
+          </div>
+          <div class="texto">
+            {{ informacionPacienteViewModel.mensajes.opcionesMenu.diagnostico }}
+          </div>
+        </div>
+      </div>
+      <div class="tarjeta-info-paciente"
+           (click)="seleccionarMenu(informacionPacienteViewModel.mensajes.opcionesMenu.cambioPiso)">
+        <div class="tarjeta-container">
+          <div class="opciones-icon">
+            <img src="./assets/img/cambio-piso.svg"
+                 alt="{{ informacionPacienteViewModel.mensajes.opcionesMenu.cambioPiso }}">
+          </div>
+          <div class="texto">
+            {{ informacionPacienteViewModel.mensajes.opcionesMenu.cambioPiso }}
+          </div>
+        </div>
+      </div>
+      <div  class="tarjeta-info-paciente"
+           (click)="seleccionarMenu(informacionPacienteViewModel.mensajes.opcionesMenu.asignarProfesional)">
+        <div class="tarjeta-container">
+          <div class="opciones-icon">
+            <img src="./assets/img/asignar_profesional.svg"
+                 alt="{{ informacionPacienteViewModel.mensajes.opcionesMenu.asignarProfesional }}">
+          </div>
+          <div class="texto">
+            {{ informacionPacienteViewModel.mensajes.opcionesMenu.asignarProfesional }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="separador">
+  </div>
+  <div [ngSwitch]="opcionPantalla">
+    <ng-template [ngSwitchCase]="informacionPacienteViewModel.mensajes.opcionesMenu.datosPaciente">
+      <div class="novedad-datos-paciente">
+        <sura-novedad-datos-paciente (regresarPrincipal)="pantallaPrincipal($event)"></sura-novedad-datos-paciente>
+      </div>
+    </ng-template>
+    <ng-template [ngSwitchCase]="informacionPacienteViewModel.mensajes.opcionesMenu.diagnostico">
+      <sura-novedad-diagnosticos (regresarPrincipal)="pantallaPrincipal($event)"></sura-novedad-diagnosticos>
+    </ng-template>
+    <ng-template [ngSwitchCase]="informacionPacienteViewModel.mensajes.opcionesMenu.cambioPiso">
+      <sura-novedad-cambio-piso (regresarPrincipal)="pantallaPrincipal($event)"></sura-novedad-cambio-piso>
+    </ng-template>
+    <ng-template [ngSwitchCase]="informacionPacienteViewModel.mensajes.opcionesMenu.asignarProfesional">
+      <sura-asignar-paciente [especialidad]=especialidad
+                             [nombreCiudad]=nombreCiudad
+                             [codigoCiudad]=codigoCiudad
+                             [idProgramaAsignarInfoPaciente] = idProgramaAsignarInfoPaciente
+                             (regresarPrincipal)="pantallaPrincipal($event)">
+
+      </sura-asignar-paciente>
+    </ng-template>
+  </div>
+</div>

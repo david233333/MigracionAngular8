@@ -1,0 +1,48 @@
+<h4 mat-dialog-title>
+  {{ modalViewModel.mensajes.campos.titulo }}
+</h4>
+
+<mat-dialog-content>
+  {{ modalViewModel.mensajes.campos.contenido }}
+  <form  class="form" [formGroup]="formulario">
+    <div class="field">
+      <mat-form-field class="mat" >
+        <mat-select
+          id="centroEstadia"
+          placeholder="Centro de estadia personal"
+          required  formControlName="centroEstadia">
+          <mat-option>
+            {{ modalViewModel.mensajes.campos.seleccione }}
+          </mat-option>
+          <mat-option
+            *ngFor="let centroEstadia of modalViewModel.respuestaCentroEstadia"
+            [value]="centroEstadia.id">
+            {{ centroEstadia.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button
+    mat-raised-button
+    id="cancelar"
+    (click)="cancelar()">
+    <mat-icon>close</mat-icon>
+    {{ modalViewModel.mensajes.botones.cancelar }}
+  </button>
+  <button
+    [disabled]="!formulario.valid"
+    mat-raised-button
+    id="continuar"
+    color="primary"
+    (click)="continuar()">
+    <mat-icon>done</mat-icon>
+    {{ modalViewModel.mensajes.botones.continuar }}
+  </button>
+</mat-dialog-actions>

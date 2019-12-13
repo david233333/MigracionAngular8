@@ -1,0 +1,422 @@
+<mat-progress-bar
+  [hidden]="!equipoBiomedicoViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+<div class="container">
+  <hr class="linea-espacio" />
+  <div class="opcion-container">
+    <div class="texto-titulo">
+      {{ equipoBiomedicoViewModel.mensajes.titulos.gestionarEquipos }}
+    </div>
+  </div>
+  <hr class="linea-espacio" />
+  <div class="flex-contenedor-busqueda">
+    <form class="contenedor" [formGroup]="formularioFiltros">
+      <div class="campo identificacion">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              id="tipoDocumento"
+              placeholder="{{
+                equipoBiomedicoViewModel.mensajes.campos.tipoDocumento
+              }}"
+              formControlName="tipoDocumento"
+            >
+              <mat-option
+                *ngFor="
+                  let tipo of equipoBiomedicoViewModel.respuestaTiposIdentificacion
+                "
+                [value]="tipo.idTipo"
+              >
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input
+              id="numeroDocumento"
+              matInput
+              placeholder="{{
+                equipoBiomedicoViewModel.mensajes.campos.numeroDocumento
+              }}"
+              formControlName="numeroDocumento"
+              maxLength="15"
+            />
+
+            <button
+              mat-button
+              *ngIf="formularioFiltros.controls['numeroDocumento'].value"
+              matSuffix
+              mat-icon-button
+            >
+              <mat-icon (click)="limpiarDocumento()">close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['numeroDocumento'].hasError(
+                  'maxlength'
+                )
+              "
+            >
+              {{
+                equipoBiomedicoViewModel.mensajes.errores
+                  .numeroDocumentoMaximaLongitud
+              }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['numeroDocumento'].hasError(
+                  'pattern'
+                )
+              "
+            >
+              {{
+                equipoBiomedicoViewModel.mensajes.errores
+                  .numeroDocumentoInvalido
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              id="ciudad"
+              placeholder="{{
+                equipoBiomedicoViewModel.mensajes.campos.ciudad
+              }}"
+              formControlName="ciudad"
+            >
+              <mat-option
+                *ngFor="
+                  let ciudad of equipoBiomedicoViewModel.respuestaCiudades
+                "
+                [value]="ciudad.idCiudad"
+              >
+                {{ ciudad.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input
+              id="remision"
+              matInput
+              placeholder="{{
+                equipoBiomedicoViewModel.mensajes.campos.remision
+              }}"
+              formControlName="remision"
+              maxLength="50"
+            />
+
+            <button
+              mat-button
+              *ngIf="formularioFiltros.controls['remision'].value"
+              matSuffix
+              mat-icon-button
+            >
+              <mat-icon (click)="limpiarRemision()">close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['remision'].hasError('maxlength')
+              "
+            >
+              {{
+                equipoBiomedicoViewModel.mensajes.errores.remisionMaximaLongitud
+              }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="formularioFiltros.controls['remision'].hasError('pattern')"
+            >
+              {{ equipoBiomedicoViewModel.mensajes.errores.remisionInvalido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              id="estado"
+              placeholder="{{
+                equipoBiomedicoViewModel.mensajes.campos.estado
+              }}"
+              formControlName="estado"
+            >
+              <mat-option
+                *ngFor="let estado of equipoBiomedicoViewModel.respuestaEstados"
+                [value]="estado.idEstado"
+              >
+                {{ estado.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="campo">
+        <div class="campo-izquierda">
+          <p-calendar
+            inputStyleClass="input-calendario-filtro-biomedico"
+            formControlName="fechaInicio"
+            [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{
+              equipoBiomedicoViewModel.mensajes.campos.fechaInicio
+            }}"
+            dateFormat="dd/mm/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1900:2100"
+            [readonlyInput]="true"
+            hourFormat="12"
+          ></p-calendar>
+          <div
+            class="mat-error-clase"
+            *ngIf="
+            formularioFiltros.controls['fechaInicio'].hasError('required')
+            "
+          >
+            {{
+                equipoBiomedicoViewModel.mensajes.errores.fechaFinRequerido
+            }}
+          </div>
+        </div>
+        <div class="campo-derecha fecha-fin">
+          <p-calendar
+            inputStyleClass="input-calendario-filtro-biomedico"
+            formControlName="fechaFin"
+            [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{
+              equipoBiomedicoViewModel.mensajes.campos.fechaFin
+            }}"
+            dateFormat="dd/mm/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1900:2100"
+            [readonlyInput]="true"
+            hourFormat="12"
+            (onSelect)="SeleccionFechaFin()"
+          ></p-calendar>
+        </div>
+
+        <div class="campo-guardarFiltros">
+          <button
+            mat-raised-button
+            id="guardarFiltro"
+            color="primary"
+            (click)="guardarFiltros()"
+          >
+            <mat-icon>save</mat-icon>
+            {{ equipoBiomedicoViewModel.mensajes.botones.guardarFiltros }}
+          </button>
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="botones">
+        <div class="boton">
+          <button
+            mat-raised-button
+            id="limpiar"
+            color="default"
+            (click)="limpiar()"
+          >
+            <mat-icon>clear</mat-icon>
+            {{ equipoBiomedicoViewModel.mensajes.botones.limpiar }}
+          </button>
+        </div>
+
+        <div class="boton">
+          <button
+            mat-raised-button
+            id="buscar"
+            color="primary"
+            (click)="buscar()"
+          >
+            <mat-icon>search</mat-icon>
+            {{ equipoBiomedicoViewModel.mensajes.botones.buscar }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="separador"></div>
+  <div class="table">
+    <p-table
+      [columns]="columnas"
+      [value]="equipoBiomedicoViewModel.respuestaEquiposBiomedcos"
+      [scrollable]="true"
+      scrollHeight="400px"
+      [lazy]="true"
+      [totalRecords]="totalRegistros"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 30]"
+      [responsive]="true"
+      dataKey="id"
+      (onPage)="onPageGestionEquipoBiomedico($event)"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="texto-tabla remision">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.remision }}
+            <p-sortIcon
+              [field]="equipoBiomedicoViewModel.mensajes.tabla.remisionCampo"
+            ></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_equipoBiomedico">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedico }}
+            <p-sortIcon
+              [field]="
+                equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedicoCampo
+              "
+            ></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_fechaInicio">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.fechaInicio }}
+            <p-sortIcon
+              [field]="equipoBiomedicoViewModel.mensajes.tabla.fechaInicioCampo"
+            ></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_fechaFin">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.fechaFin }}
+            <p-sortIcon
+              [field]="equipoBiomedicoViewModel.mensajes.tabla.fechaFinCampo"
+            ></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_estado">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.estado }}
+            <p-sortIcon
+              [field]="equipoBiomedicoViewModel.mensajes.tabla.estadoCampo"
+            ></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_usuario">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.usuario }}
+            <p-sortIcon
+              [field]="equipoBiomedicoViewModel.mensajes.tabla.usuarioCampo"
+            ></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_fechaRegistro">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.fechaRegistro }}
+            <p-sortIcon
+              [field]="
+                equipoBiomedicoViewModel.mensajes.tabla.fechaRegistroCampo
+              "
+            ></p-sortIcon>
+          </th>
+          <th class="center-header-table texto-accion">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.accion }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td class="texto-resultados-tabla tab_remision">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.remision
+            }}</span>
+            {{ rowData.idRemision }}
+          </td>
+          <td class="texto-resultados-tabla tab_equipoBiomedico">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedico
+            }}</span>
+            {{ rowData.tipoEquipo.descripcion }}
+          </td>
+          <td class="texto-resultados-tabla tab_fechaInicio">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.fechaInicio
+            }}</span>
+            {{ rowData.fechaInicio | date: "dd-MM-yyyy" }}
+          </td>
+          <td class="texto-resultados-tabla tab_fechaFin">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.fechaFin
+            }}</span>
+            {{ rowData.fechaFin === null ? 'Indefinido' : rowData.fechaFin | date:'dd-MM-yyyy' }}
+          </td>
+          <td class="texto-resultados-tabla tab_estado">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.estado
+            }}</span>
+            {{ rowData.estado.descripcion }}
+          </td>
+          <td class="texto-resultados-tabla tab_fecha_usuario">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.usuario
+            }}</span>
+            {{ rowData.usuario.username }}
+          </td>
+          <td class="texto-resultados-tabla tab_fechaRegistro">
+            <span class="ui-column-title">{{
+              equipoBiomedicoViewModel.mensajes.tabla.fechaRegistro
+              }}</span>
+            {{ rowData.fechaRegistro | date: "dd-MM-yyyy" }}
+          </td>
+          <td class="texto-resultados-tabla">
+            <mat-icon
+              class="accion"
+              *ngIf="
+              rowData.estado.idEstado == equipoBiomedicoViewModel.mensajes.estados.cancelado || rowData.estado.idEstado == equipoBiomedicoViewModel.mensajes.estados.terminado
+              "
+              (click)="gestionarEquipoBiomedico(rowData, true)"
+              matTooltip="{{
+                equipoBiomedicoViewModel.mensajes.tabla.visualizar
+              }}"
+              [matTooltipPosition]="'above'"
+            >
+              visibility
+            </mat-icon>
+            <mat-icon
+              class="accion"
+              *ngIf="
+                rowData.estado.idEstado == equipoBiomedicoViewModel.mensajes.estados.solicitado || rowData.estado.idEstado == equipoBiomedicoViewModel.mensajes.estados.asignado
+                || rowData.estado.idEstado == equipoBiomedicoViewModel.mensajes.estados.entregado
+              "
+              (click)="gestionarEquipoBiomedico(rowData, false)"
+              matTooltip="{{
+                equipoBiomedicoViewModel.mensajes.tabla.gestionar
+              }}"
+              [matTooltipPosition]="'above'"
+            >
+              sync
+            </mat-icon>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" class="container" let-columns>
+        <tr>
+          <td class="center-header-table" [attr.colspan]="columnas.length + 1">
+            {{ equipoBiomedicoViewModel.mensajes.tabla.noEquiposBiomedicos }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-footer>
+      <div class="total-registros">
+        <span class="total-registros-texto">{{
+          equipoBiomedicoViewModel.mensajes.tabla.totalRegistros
+        }}</span>
+        <span class="total-registros-valor">{{
+          equipoBiomedicoViewModel.respuestaEquiposBiomedcos.length
+        }}</span>
+      </div>
+    </p-footer>
+  </div>
+</div>

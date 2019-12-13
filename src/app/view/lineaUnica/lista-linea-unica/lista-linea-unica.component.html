@@ -1,0 +1,106 @@
+<div class="container">
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="texto-titulo">Linea Única</div>
+  </div>
+  <hr class="linea-espacio">
+  <form [formGroup]="formulario">
+    <div class="campo">
+      <div class="first_field">
+        <mat-form-field >
+          <mat-select (selectionChange)="consultarCiudad($event)"
+                      id="ciudad" placeholder="{{ listaLineaUnica.mensajes.campos.ciudad }}"
+                      formControlName="ciudad">
+            <mat-option>
+              {{SELECCIONAR}}
+            </mat-option>
+            <mat-option  *ngFor="let ciudad of listaLineaUnica.respuestaCiudades"
+                         [value]="ciudad">
+              {{ ciudad.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+  <div class="separador"></div>
+  <div [ngClass]="{'first2': show, 'third': show}">
+    <div class="table">
+      <p-table [columns]="cols" [value]="listaLineaUnica.respuestaRemisiones" [scrollable]="true"
+               scrollHeight="400px" [paginator]="true" (onPage)="onPageListaRemision($event)"
+               [totalRecords]="totalRecords"
+               [rows]="10" [rowsPerPageOptions]="[10,20,30]" [responsive]="true" dataKey="fechaAdmision">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th  class=" texto-tabla numeroRemion ">
+              {{listaLineaUnica.mensajes.tabla.tipoDocumentoCampo}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.tipoDocumento"></p-sortIcon>
+            </th>
+            <th class="texto-tabla tab_numeroIdentificacion ">
+              {{listaLineaUnica.mensajes.tabla.identificacion}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.identificacion"></p-sortIcon>
+            </th>
+            <th class="texto-tabla numeroRemion tab_paciente">
+              {{listaLineaUnica.mensajes.tabla.nombrePaciente}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.nombrePaciente"></p-sortIcon>
+            </th>
+            <th class="texto-tabla numeroRemion">
+              {{listaLineaUnica.mensajes.tabla.planSalud}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.planSalud"></p-sortIcon>
+            </th>
+            <th class="texto-tabla tab_fecha_admision">
+              {{listaLineaUnica.mensajes.tabla.fechaAdmision}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.fechaAdmision"></p-sortIcon>
+            </th>
+            <th class="texto-tabla tab_usuario">
+              {{listaLineaUnica.mensajes.tabla.usuario}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.usuario"></p-sortIcon>
+            </th>
+            <th class="texto-tabla tabContactos">
+              {{listaLineaUnica.mensajes.tabla.contacto}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.contacto"></p-sortIcon>
+            </th>
+            <th class="texto-tabla numeroRemion ">
+              {{listaLineaUnica.mensajes.tabla.estadoRemision}}
+              <p-sortIcon [field]="listaLineaUnica.mensajes.tabla.estadoRemision"></p-sortIcon>
+            </th>
+            <th class="icon">
+              {{ listaLineaUnica.mensajes.tabla.accion }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+            <td class="texto-tabla numeroRemion">{{rowData.tipoIdentificacion.nombre }}</td>
+            <td class="texto-tabla tab_numeroIdentificacion">{{rowData.numeroIdentificacion }}</td>
+            <td class="texto-tabla numeroRemion tab_paciente">{{rowData.nombrePaciente }}</td>
+            <td class="texto-tabla numeroRemion">{{rowData.planSalud.nombre }}</td>
+            <td class="texto-tabla tab_fecha_admision">{{rowData.fechaAdmision | date:'dd-MM-yyyy '}}</td>
+            <td class="texto-tabla tab_usuario">{{rowData.usuario}}</td>
+            <td class="texto-tabla tabContactos">{{rowData.intentos}}</td>
+            <td class="texto-tabla numeroRemion">{{rowData.estado}}</td>
+            <td class="icon">
+              <mat-icon class="accion" (click)="abrirModalLineaUnica(rowData)"
+                        matTooltip="{{ listaLineaUnica.mensajes.campos.editar }}"
+                        [matTooltipPosition]="'above'">
+                visibility
+              </mat-icon>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" class="container" let-columns>
+          <tr>
+            <td class="center-header-table" [attr.colspan]="cols.length + 1">
+              {{ listaLineaUnica.mensajes.tabla.noRemisiones }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </div>
+
+</div>

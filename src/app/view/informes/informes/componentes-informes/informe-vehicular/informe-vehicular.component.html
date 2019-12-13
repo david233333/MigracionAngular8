@@ -1,0 +1,104 @@
+<mat-progress-bar
+  [hidden]="!informeVehicularViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+
+<div class="container">
+  <div class="flex-contenedor-busqueda">
+    <form class="contenedor" [formGroup]="formulario">
+      <div class="campo identificacion">
+        <mat-form-field>
+          <mat-select
+            id="especialidad"
+            placeholder="{{
+              informeVehicularViewModel.mensajes.campos.especialidad
+            }}"
+            formControlName="especialidad"
+            required
+          >
+            <mat-option
+              *ngFor="
+                let esp of informeVehicularViewModel.respuestaEspecialidades
+              "
+              [value]="esp.especialidad"
+            >
+              {{ esp.profesion }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="!formulario.controls['especialidad'].hasError('required')"
+          >
+            {{
+              informeVehicularViewModel.mensajes.errores.especialidadRequerido
+            }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="campo">
+        <div class="control-fecha-inicial">
+          <p-calendar
+            inputStyleClass="tamano-control-informe-vehicular"
+            formControlName="fechaInicio"
+            [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{
+              informeVehicularViewModel.mensajes.campos.fechaInicio
+            }}"
+            dateFormat="dd/mm/yy"
+            [minDate]="fechaMinimaInforme"
+            [maxDate]="formulario.controls['fechaFin'].value"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1900:2100"
+            [showTime]="true"
+            hourFormat="12"
+            [readonlyInput]="true"
+          ></p-calendar>
+        </div>
+        <div class="control-fecha-final">
+          <p-calendar
+            inputStyleClass="tamano-control-informe-vehicular"
+            formControlName="fechaFin"
+            [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{
+              informeVehicularViewModel.mensajes.campos.fechaFin
+            }}"
+            dateFormat="dd/mm/yy"
+            [minDate]="formulario.controls['fechaInicio'].value"
+            [maxDate]="fechaMaximaInforme"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1900:2100"
+            [showTime]="true"
+            hourFormat="12"
+            [readonlyInput]="true"
+          ></p-calendar>
+        </div>
+        <div
+          class="mat-error-clase"
+          *ngIf="formulario.controls['fechaFin'].hasError('required')"
+        >
+          {{ informeVehicularViewModel.mensajes.errores.fechaFinRequerido }}
+        </div>
+      </div>
+
+      <div class="campo boton-descargar">
+        <button
+          mat-raised-button
+          id="consultarInforme"
+          color="primary"
+          (click)="descargarInforme()"
+          [disabled]="!formulario.valid"
+        >
+          {{ informeVehicularViewModel.mensajes.botones.descargarInforme }}
+          <mat-icon>
+            cloud_download
+          </mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" ></ngx-loading>

@@ -1,0 +1,526 @@
+<mat-progress-bar
+  [hidden]="!creacionNovedadViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+
+<div class="container">
+  <div class="menu-superior">
+
+    <div *ngIf="verInfoRemision && creacionNovedadViewModel.infoRemision !== null" class="info-paciente">
+
+      <div class="grupo">
+
+        <div *ngIf="creacionNovedadViewModel.infoRemision.nombre" class="campo-izquierda">
+          <span class="texto-info-paciente">{{
+            creacionNovedadViewModel.mensajes.titulos.nombre
+            }}</span>
+          <span class="valor-info-paciente">
+            {{ creacionNovedadViewModel.infoRemision.nombre }}
+            {{ creacionNovedadViewModel.infoRemision.apellido }}
+          </span>
+        </div>
+
+        <div class="espacio-encabezado"></div>
+
+        <div *ngIf="creacionNovedadViewModel.infoRemision.pisoHospitalario" class="campo-derecha">
+          <span class="texto-info-paciente">
+            {{ creacionNovedadViewModel.mensajes.titulos.piso }}</span
+          >
+          <span class="valor-info-paciente">
+            {{ creacionNovedadViewModel.infoRemision.pisoHospitalario.nombre }}
+          </span>
+        </div>
+
+      </div>
+
+      <div class="espacio-encabezado"></div>
+      <div class="grupo">
+        <div *ngIf="creacionNovedadViewModel.infoRemision.sexo" class="campo-izquierda">
+          <span class="texto-info-paciente">
+            {{ creacionNovedadViewModel.mensajes.titulos.sexo }}</span
+          >
+          <span class="valor-info-paciente">{{
+            creacionNovedadViewModel.infoRemision.sexo
+            }}</span>
+        </div>
+        <div
+          *ngIf="creacionNovedadViewModel.infoRemision.tipoAfiliacion"
+          class="campo-derecha"
+        >
+          <span class="texto-info-paciente">
+            {{ creacionNovedadViewModel.mensajes.titulos.tipoAfiliacion }}</span
+          >
+          <span class="valor-info-paciente">{{
+            creacionNovedadViewModel.infoRemision.tipoAfiliacion.nombre
+            }}</span>
+        </div>
+      </div>
+      <div class="espacio-encabezado"></div>
+      <div class="grupo">
+        <div
+          *ngIf="creacionNovedadViewModel.infoRemision.edad"
+          class="campo-izquierda"
+        >
+          <span class="texto-info-paciente">{{
+            creacionNovedadViewModel.mensajes.titulos.edad
+            }}</span>
+          <span class="valor-info-paciente">{{
+            creacionNovedadViewModel.infoRemision.edad
+            }}</span>
+        </div>
+        <div
+          *ngIf="creacionNovedadViewModel.infoRemision.tipoAdmision"
+          class="campo-derecha"
+        >
+          <span class="texto-info-paciente">{{
+            creacionNovedadViewModel.mensajes.titulos.tipoAdmision
+            }}</span>
+          <span class="valor-info-paciente">{{
+            creacionNovedadViewModel.infoRemision.tipoAdmision
+            }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contenido">
+    <div
+      *ngIf="
+        opcionPantalla !=
+        creacionNovedadViewModel.mensajes.opcionesMenu.principal
+      "
+    >
+      <hr class="linea-espacio"/>
+      <div class="opcion-container">
+        <div class="img-opcion">
+          <img
+            (click)="
+              seleccionarMenu(
+                creacionNovedadViewModel.mensajes.opcionesMenu.principal
+              )
+            "
+            alt="plan-manejo"
+            src="./assets/img/atras-icon.svg"
+          />
+        </div>
+        <div
+          (click)="
+            seleccionarMenu(
+              creacionNovedadViewModel.mensajes.opcionesMenu.principal
+            )
+          "
+          class="texto-volver"
+        >
+          <strong>{{
+            creacionNovedadViewModel.mensajes.botones.volverAtras
+            }}</strong>
+        </div>
+        <div class="texto-titulo">{{ tituloPantalla }}</div>
+      </div>
+      <hr class="linea-espacio"/>
+    </div>
+
+    <div [ngSwitch]="opcionPantalla">
+      <ng-template
+        [ngSwitchCase]="
+          creacionNovedadViewModel.mensajes.opcionesMenu.principal
+        "
+      >
+        <div class="novedad-principal">
+          <div class="flex-contenedor-busqueda">
+            <form [formGroup]="formularioPrincipal" class="contenedor">
+
+              <div class="campo identificacion">
+                <mat-form-field (click)="getTiposIdentificacion()">
+                  <mat-select
+                    (selectionChange)="validadores(true)"
+                    formControlName="tipoDocumentoPaciente"
+                    id="tipoDocumentoPaciente"
+                    placeholder="{{
+                      creacionNovedadViewModel.mensajes.campos
+                        .tipoDocumentoPaciente
+                    }}"
+                    required
+                  >
+                    <mat-option
+                      *ngFor="
+                        let tipo of creacionNovedadViewModel.respuestaTiposIdentificacion
+                      "
+                      [value]="tipo.idTipo"
+                    >
+                      {{ tipo.nombre }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls[
+                        'tipoDocumentoPaciente'
+                      ].hasError('required')
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .tipoDocumentoPacienteRequerido
+                    }}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="">
+                  <input
+                    (keydown.enter)="consultarRemision(true)"
+                    (keyup)="validadores(true)"
+                    formControlName="numeroDocumentoPaciente"
+                    id="numeroDocumentoPaciente"
+                    matInput
+                    maxlength="20"
+                    placeholder="{{
+                      creacionNovedadViewModel.mensajes.campos
+                        .numeroDocumentoPaciente
+                    }}"
+                    required
+                  />
+
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls[
+                        'numeroDocumentoPaciente'
+                      ].hasError('required')
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .numeroDocumentoPacienteRequerido
+                    }}
+                  </mat-error>
+
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls[
+                        'numeroDocumentoPaciente'
+                      ].hasError('maxlength')
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .numeroDocumentoPacienteMaximaLongitud
+                    }}
+                  </mat-error>
+
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls[
+                        'numeroDocumentoPaciente'
+                      ].hasError('pattern')
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .numeroDocumentoPacienteInvalido
+                    }}
+                  </mat-error>
+                </mat-form-field>
+
+                <button
+                  (click)="consultarRemision(true)"
+                  [disabled]="habilitarBuscadorPorIdentificacion()"
+                  [matTooltipPosition]="'right'"
+                  mat-icon-button
+                  matTooltip="{{
+                    creacionNovedadViewModel.mensajes.botones.buscarPaciente
+                  }}"
+                >
+                  <mat-icon>
+                    search
+                  </mat-icon>
+                </button>
+              </div>
+              <div class="campo">
+                <mat-form-field class="">
+                  <input
+                    (keydown.enter)="consultarRemision(false)"
+                    (keyup)="validadores(false)"
+                    formControlName="remisionPaciente"
+                    id="remisionPaciente"
+                    matInput
+                    placeholder="{{
+                      creacionNovedadViewModel.mensajes.campos.remisionPaciente
+                    }}"
+                    required
+                  />
+
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls['remisionPaciente'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .remisionPacienteRequerido
+                    }}
+                  </mat-error>
+
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls['remisionPaciente'].hasError(
+                        'maxlength'
+                      )
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .remisionPacienteMaximaLongitud
+                    }}
+                  </mat-error>
+
+                  <mat-error
+                    *ngIf="
+                      formularioPrincipal.controls['remisionPaciente'].hasError(
+                        'pattern'
+                      )
+                    "
+                  >
+                    {{
+                    creacionNovedadViewModel.mensajes.errores
+                      .remisionPacienteInvalido
+                    }}
+                  </mat-error>
+                </mat-form-field>
+
+                <button
+                  (click)="consultarRemision(false)"
+                  [disabled]="habilitarBuscadorPorRemision()"
+                  [matTooltipPosition]="'right'"
+                  mat-icon-button
+                  matTooltip="{{
+                    creacionNovedadViewModel.mensajes.botones
+                      .buscarRemisionPaciente
+                  }}"
+                >
+                  <mat-icon>
+                    search
+                  </mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div *ngIf="verInfoRemision">
+            <div class="container-opciones">
+              <div class="seccion">
+
+                <div
+                  (click)="seleccionarMenu(creacionNovedadViewModel.mensajes.opcionesMenu.tratamientoProcedimiento)"
+                  class="tarjeta-novedad">
+
+                  <div class="tarjeta-container">
+                    <div class="opciones-icon">
+                      <img alt="{{ creacionNovedadViewModel.mensajes.opcionesMenu.tratamientoProcedimiento }}"
+                           class="img-tarjeta" src="./assets/img/tratamientos.svg"/>
+                    </div>
+                    <div class="texto">
+                      {{ creacionNovedadViewModel.mensajes.opcionesMenu.tratamientoProcedimiento }}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div
+                  (click)="
+                seleccionarMenu(
+                creacionNovedadViewModel.mensajes.opcionesMenu.cita
+                )
+                "
+                  class="tarjeta-novedad"
+                >
+                  <div class="tarjeta-container">
+                    <div class="opciones-icon">
+                      <img
+                        alt="{{
+                creacionNovedadViewModel.mensajes.opcionesMenu.cita
+                }}"
+                        class="img-tarjeta"
+                        src="./assets/img/citas-medicas.svg"
+                      />
+                    </div>
+                    <div class="texto">
+                      {{ creacionNovedadViewModel.mensajes.opcionesMenu.cita }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  (click)="
+                seleccionarMenu(
+                creacionNovedadViewModel.mensajes.opcionesMenu.modificarVisitas
+                )
+                "
+                  class="tarjeta-novedad"
+                >
+                  <div class="tarjeta-container">
+                    <div class="opciones-icon">
+                      <img
+                        alt="{{
+                creacionNovedadViewModel.mensajes.opcionesMenu.modificarVisitas
+                }}"
+                        class="img-tarjeta"
+                        src="./assets/img/citas-medicas.svg"
+                      />
+                    </div>
+                    <div class="texto">
+                      {{ creacionNovedadViewModel.mensajes.opcionesMenu.modificarVisitas }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="seccion">
+                <div
+                  (click)="
+                    seleccionarMenu(
+                      creacionNovedadViewModel.mensajes.opcionesMenu
+                        .infoPaciente
+                    )
+                  "
+                  class="tarjeta-novedad"
+                >
+                  <div class="tarjeta-container">
+                    <div class="opciones-icon">
+                      <img
+                        alt="{{
+                          creacionNovedadViewModel.mensajes.opcionesMenu
+                            .infoPaciente
+                        }}"
+                        class="img-tarjeta"
+                        src="./assets/img/info-paciente.svg"
+                      />
+                    </div>
+                    <div class="texto">
+                      {{
+                      creacionNovedadViewModel.mensajes.opcionesMenu
+                        .infoPaciente
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  (click)="
+                    seleccionarMenu(
+                      creacionNovedadViewModel.mensajes.opcionesMenu
+                        .equiposBiomedicos
+                    )
+                  "
+                  class="tarjeta-novedad"
+                >
+                  <div class="tarjeta-container">
+                    <div class="opciones-icon">
+                      <img
+                        alt="{{
+                          creacionNovedadViewModel.mensajes.opcionesMenu
+                            .equiposBiomedicos
+                        }}"
+                        class="img-tarjeta"
+                        src="./assets/img/equipos-biomedicos.svg"
+                      />
+                    </div>
+                    <div class="texto">
+                      {{
+                      creacionNovedadViewModel.mensajes.opcionesMenu
+                        .equiposBiomedicos
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  (click)="seleccionarMenu(creacionNovedadViewModel.mensajes.opcionesMenu.egreso)"
+                  class="tarjeta-novedad">
+                  <div class="tarjeta-container">
+                    <div class="opciones-icon">
+                      <img alt="{{creacionNovedadViewModel.mensajes.opcionesMenu.egreso}}"
+                           class="img-tarjeta"
+                           src="./assets/img/egreso.svg"
+                      />
+                    </div>
+                    <div class="texto">
+                      {{
+                      creacionNovedadViewModel.mensajes.opcionesMenu.egreso
+                      }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template
+        [ngSwitchCase]="
+        creacionNovedadViewModel.mensajes.opcionesMenu
+          .tratamientoProcedimiento
+      "
+      >
+        <div class="novedad-plan-manejo">
+          <sura-novedad-plan-manejo
+            (regresarPrincipal)="pantallaPrincipal($event, true)"
+            (window:scroll)="doSomethingOnWindowScroll($event)"
+          ></sura-novedad-plan-manejo>
+        </div>
+      </ng-template>
+      <ng-template
+        [ngSwitchCase]="creacionNovedadViewModel.mensajes.opcionesMenu.cita"
+      >
+        <div class="novedad-cita">
+          <sura-novedad-citas
+            [idPrograma]=idPrograma
+            [especialidad]=especialidad
+            [nombreCiudad]=nombreCiudad.nombre
+            [codigoCiudad]=nombreCiudad.idCiudad
+            (regresarPrincipal)="pantallaPrincipal($event, true)"
+          ></sura-novedad-citas>
+        </div>
+      </ng-template>
+      <ng-template
+        [ngSwitchCase]="creacionNovedadViewModel.mensajes.opcionesMenu.modificarVisitas"
+      >
+        <div class="novedad-modificar-visitas">
+          <sura-novedad-modificacion-visitas
+            (regresarPrincipal)="pantallaPrincipal($event, true)"
+          ></sura-novedad-modificacion-visitas>
+        </div>
+      </ng-template>
+      <ng-template
+        [ngSwitchCase]="
+          creacionNovedadViewModel.mensajes.opcionesMenu.infoPaciente
+        "
+      >
+        <div class="novedad-info-paciente">
+          <sura-informacion-paciente
+            [idProgramaAsignarInfoPaciente]=idProgramaAsignarInfoPaciente
+            [especialidad]=especialidad
+            [codigoCiudad]=nombreCiudad.idCiudad
+            [nombreCiudad]=nombreCiudad.nombre
+            (regresarPrincipal)="pantallaPrincipal($event, true)"
+          ></sura-informacion-paciente>
+        </div>
+      </ng-template>
+      <ng-template
+        [ngSwitchCase]="
+          creacionNovedadViewModel.mensajes.opcionesMenu.equiposBiomedicos
+        "
+      >
+        <div class="novedad-equipo-biomedico">
+          <sura-novedad-equipo-biomedico
+            (regresarPrincipal)="pantallaPrincipal($event, true)"
+          ></sura-novedad-equipo-biomedico>
+        </div>
+      </ng-template>
+      <ng-template
+        [ngSwitchCase]="creacionNovedadViewModel.mensajes.opcionesMenu.egreso"
+      >
+        <sura-novedad-egreso
+          (regresarPrincipal)="pantallaPrincipal($event, false)"
+        ></sura-novedad-egreso>
+      </ng-template>
+    </div>
+  </div>
+</div>

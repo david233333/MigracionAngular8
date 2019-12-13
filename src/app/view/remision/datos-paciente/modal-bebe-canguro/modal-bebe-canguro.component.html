@@ -1,0 +1,161 @@
+<section>
+        <div class="container">
+            <div class="titulo-ventana">
+                <h4 mat-dialog-title>{{ modalBebeCanguroViewModel.tituloVentana }}</h4>
+            </div>
+            <div class="ventana-container">
+                <div class="menu">
+                    <p-tabView orientation="left" (onChange)="seleccionarPlan($event)">
+                        <div>
+                            <p-tabPanel [header]="modalBebeCanguroViewModel.mensajes.opcionesMenu.bebeCanguro" [selected]="seleccionBebeCanguro">
+                            </p-tabPanel>
+                        </div>
+                    </p-tabView>
+                </div>
+                <div class="form">
+                    <div class="dialog-valoraciones">
+                        <div [ngSwitch]="nombreFormulario">
+                            <ng-template [ngSwitchCase]="modalBebeCanguroViewModel.mensajes.opcionesMenu.bebeCanguro">
+                                <form [formGroup]="formularioBebeCanguro" class="contenedor-formulario">
+                                    <div class="seccion-campos">
+    
+                                        <div class="campo">
+                                            <p-calendar inputStyleClass="input-calendario-bebeCanguro" panelStyleClass="modal-calendario-bebeCanguro" [(ngModel)]="fechaNacimiento"
+                                                formControlName="fechaNacimiento" [showTime]="true" [showIcon]="true" [locale]="configEspanolCalendario"
+                                                placeholder="{{ modalBebeCanguroViewModel.mensajes.campos.fechaNacimiento }}"
+                                                dateFormat="dd/mm/yy" [maxDate]="fechaMaximaCalendarioActual" [monthNavigator]="true"
+                                                [yearNavigator]="true" yearRange="1900:2100" hourFormat="12" [readonlyInput]="true"></p-calendar>
+                                            <div class="mat-error-clase" *ngIf="formularioBebeCanguro.controls['fechaNacimiento'].hasError('required')">
+                                                {{ modalBebeCanguroViewModel.mensajes.errores.fechaNacimientoRequerido }}
+                                            </div>
+                                        </div>
+    
+                                        <div class="campo peso-gramos">
+                                            <mat-form-field class="campo-control-bebeCanguro">
+                                                <input id="pesoNacimiento" class="center" matInput placeholder="{{ modalBebeCanguroViewModel.mensajes.campos.pesoNacimiento }}"
+                                                    formControlName="pesoNacimiento" [maxlength]="5">
+    
+                                                <mat-error *ngIf="formularioBebeCanguro.controls['pesoNacimiento'].hasError('required')">
+                                                    {{ modalBebeCanguroViewModel.mensajes.errores.pesoNacimientoRequerido }}
+                                                </mat-error>
+    
+                                                <mat-error *ngIf="formularioBebeCanguro.controls['pesoNacimiento'].hasError('pattern')">
+                                                    {{ modalBebeCanguroViewModel.mensajes.errores.pesoNacimientoInvalido }}
+                                                </mat-error>
+    
+                                                <mat-error *ngIf="formularioBebeCanguro.controls['pesoNacimiento'].hasError('min')">
+                                                    {{ modalBebeCanguroViewModel.mensajes.errores.pesoNacimientoMinimoValor }}
+                                                </mat-error>
+                                            </mat-form-field>
+                                            <div class="texto-gramos">
+                                                {{ modalBebeCanguroViewModel.mensajes.campos.gramos }}
+                                            </div>
+                                        </div>
+    
+    
+                                        <div class="campo">
+                                            <div class="control-edad-gestacional">
+                                                <p-fieldset [toggleable]="false" legend="{{ modalBebeCanguroViewModel.mensajes.campos.edadGestacional }}">
+                                                    <div class="contenedor-edad-gestacional">
+                                                        <div class="semanas-dias">
+                                                            <mat-form-field class="campo-edad-gestacional">
+                                                                <input id="edadGestacionalSemanas" class="center" matInput placeholder="{{ modalBebeCanguroViewModel.mensajes.campos.cantidad }}"
+                                                                    formControlName="edadGestacionalSemanas" [maxlength]="2">
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalSemanas'].hasError('required')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalSemanasRequerido }}
+                                                                </mat-error>
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalSemanas'].hasError('pattern')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalSemanasInvalido }}
+                                                                </mat-error>
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalSemanas'].hasError('min')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalSemanasMinimoValor }}
+                                                                </mat-error>
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalSemanas'].hasError('max')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalSemanasMaximoValor }}
+                                                                </mat-error>
+                                                            </mat-form-field>
+    
+                                                            <div class="texto-edad-gestacional">
+                                                                {{ modalBebeCanguroViewModel.mensajes.campos.semanas }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="semanas-dias">
+                                                            <mat-form-field class="campo-edad-gestacional">
+                                                                <input id="edadGestacionalDias" class="center" matInput placeholder="{{ modalBebeCanguroViewModel.mensajes.campos.cantidad }}"
+                                                                    formControlName="edadGestacionalDias" [maxlength]="1">
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalDias'].hasError('required')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalDiasRequerido }}
+                                                                </mat-error>
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalDias'].hasError('pattern')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalDiasInvalido }}
+                                                                </mat-error>
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalDias'].hasError('min')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalDiasMinimoValor }}
+                                                                </mat-error>
+    
+                                                                <mat-error *ngIf="formularioBebeCanguro.controls['edadGestacionalDias'].hasError('max')">
+                                                                    {{ modalBebeCanguroViewModel.mensajes.errores.edadGestacionalDiasMaximoValor }}
+                                                                </mat-error>
+    
+                                                            </mat-form-field>
+    
+                                                            <div class="texto-edad-gestacional">
+                                                                {{ modalBebeCanguroViewModel.mensajes.campos.dias }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </p-fieldset>
+                                            </div>
+                                        </div>
+    
+    
+    
+                                        <div class="campo peso-gramos">
+                                            <mat-form-field class="campo-control-bebeCanguro">
+                                                <input id="pesoAlta" class="center" matInput placeholder="{{ modalBebeCanguroViewModel.mensajes.campos.pesoAlta }}"
+                                                    formControlName="pesoAlta" [maxlength]="5">
+    
+                                                <mat-error *ngIf="formularioBebeCanguro.controls['pesoAlta'].hasError('required')">
+                                                    {{ modalBebeCanguroViewModel.mensajes.errores.pesoAltaRequerido }}
+                                                </mat-error>
+    
+                                                <mat-error *ngIf="formularioBebeCanguro.controls['pesoAlta'].hasError('pattern')">
+                                                    {{ modalBebeCanguroViewModel.mensajes.errores.pesoAltaInvalido }}
+                                                </mat-error>
+    
+                                                <mat-error *ngIf="formularioBebeCanguro.controls['pesoAlta'].hasError('min')">
+                                                    {{ modalBebeCanguroViewModel.mensajes.errores.pesoAltaMinimoValor }}
+                                                </mat-error>
+    
+                                            </mat-form-field>
+                                            <div class="texto-gramos">
+                                                {{ modalBebeCanguroViewModel.mensajes.campos.gramos }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <mat-dialog-actions align="end">
+    
+                <button mat-raised-button id="cancelar" (click)="cerrarModal()">
+                    {{ modalBebeCanguroViewModel.mensajes.botones.cancelar }}
+                </button>
+    
+                <button mat-raised-button id="guardar" color="primary" (click)="guardarProcedimiento()">
+                    {{ modalBebeCanguroViewModel.mensajes.botones.guardar }}
+                </button>
+    
+            </mat-dialog-actions>
+        </div>
+    </section>

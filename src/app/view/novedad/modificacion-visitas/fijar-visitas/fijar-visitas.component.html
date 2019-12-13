@@ -1,0 +1,218 @@
+<div class="novedad-fijacion-visitas">
+  <div class="contenedor">
+    <form class="contenedor" [formGroup]="formularioFijarVisitas">
+      <div class="separador"></div>
+
+      <div class="tablaPrincipal">
+        <div class="listas">
+          <div class="campo-motivo">
+            <mat-form-field class="control-motivo">
+              <mat-select
+                id="motivoFijacion"
+                placeholder="{{
+                  fijarVisitasViewModel.mensajes.campos.motivoFijacion
+                }}"
+                formControlName="motivoFijacion"
+                required
+              >
+                <mat-option
+                  *ngFor="
+                    let motivo of fijarVisitasViewModel.respuestaMotivosFijacion
+                  "
+                  [value]="motivo"
+                >
+                  {{ motivo.descripcion }}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  formularioFijarVisitas.controls['motivoFijacion'].hasError(
+                    'required'
+                  )
+                "
+              >
+                {{
+                fijarVisitasViewModel.mensajes.errores.motivoFijacionRequerido
+                }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="campo-filtro-horas">
+            <mat-form-field>
+              <mat-select
+                id="especialidad"
+                placeholder="{{
+                  fijarVisitasViewModel.mensajes.campos.especialidad
+                }}"
+                formControlName="especialidad"
+                (selectionChange)="seleccionEspecialidad($event.value)"
+              >
+                <mat-option
+                  *ngFor="
+                    let esp of fijarVisitasViewModel.respuestaEspecialidad
+                  "
+                  [value]="esp"
+                >
+                  {{ esp.especialidad }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="separador"></div>
+        <div class="tabla">
+          <p-table
+            #dt
+            [columns]="columnas"
+            [value]="fijarVisitasViewModel.respuestaVisitas"
+            [(selection)]="fijarVisitasViewModel.visitasSeleccionadas"
+            [scrollable]="true"
+            scrollHeight="400px"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [responsive]="true"
+            dataKey="idCitaNumber"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th class="texto-tabla tamano-columna"> <a>Tipo</a> <p-sortIcon> </p-sortIcon></th>
+                <th class="texto-tabla tamano-columna"> <a>Fecha Visita</a> <p-sortIcon> </p-sortIcon></th>
+                <th class="texto-tabla tamano-columna"> <a>Motivo Fijacion</a> <p-sortIcon> </p-sortIcon></th>
+                <th class="texto-tabla tamano-columna"> <a>Rango de horas fijadas</a></th>
+
+                <th class="seleccion-tabla">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+
+              <td class="texto-tabla tamano-columna">
+                  <span class="ui-column-title">{{ fijarVisitasViewModel.mensajes.tabla.idTipoCita }}</span>
+                   {{ rowData.idTipoCita }}
+              </td>
+
+                <td class="texto-tabla tamano-columna">
+                  <span class="ui-column-title">{{
+                    fijarVisitasViewModel.mensajes.tabla.fechaVisita
+                    }}</span>
+                  {{ rowData.fechaInicioCita | date: "dd-MM-yyyy hh:mm a" }}
+                </td>
+                <td class="texto-tabla tamano-columna">
+                  <span class="ui-column-title">{{
+                    fijarVisitasViewModel.mensajes.tabla.motivo
+                    }}</span>
+                  {{ rowData.motivoFijarCita }}
+                </td>
+                <td class="texto-tabla tamano-columna">
+                  <span class="ui-column-title">{{
+                    fijarVisitasViewModel.mensajes.tabla.horaFijado
+                    }}</span>
+                  {{ rowData.horaFijadaInicio}}-{{ rowData.horaFijadaFin}}
+                </td>
+                <td class="seleccion-tabla">
+                  <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+              <tr>
+                <td class="texto-tabla" [attr.colspan]="columnas.length + 1">
+                  {{ fijarVisitasViewModel.mensajes.tabla.noVisitas }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">
+                {{ fijarVisitasViewModel.mensajes.tabla.totalRegistros }}</span
+              >
+              <span class="total-registros-valor">{{
+                fijarVisitasViewModel.respuestaVisitas.length
+                }}</span>
+            </div>
+          </p-footer>
+        </div>
+      </div>
+
+      <div class="separador"></div>
+      <div class="mensajeHoras">
+        <label> {{fijarVisitasViewModel.mensajes.campos.mensajeHoras}} : </label>
+      </div>
+      <div class="rangeHours">
+        <div>
+          <p-calendar
+            inputStyleClass="input-calendario-hora-fijar-cita"
+            formControlName="horaFijada"
+            [timeOnly]="true"
+            [showIcon]="true"
+            icon="fa-clock-o"
+            placeholder="{{fijarVisitasViewModel.mensajes.campos.horaInicial }}"
+            [readonlyInput]="true"
+            hourFormat="24"
+            class="timer"
+          ></p-calendar>
+          <span class="mat-error-clase"
+                *ngIf="formularioFijarVisitas.controls['horaFijada'].hasError('required')">
+             {{ fijarVisitasViewModel.mensajes.errores.horaFijacionRequerido }}
+          </span>
+        </div>
+
+        <div>
+          <p-calendar
+            inputStyleClass="input-calendario-hora-fijar-cita"
+            formControlName="horaFijada2"
+            (on)="validarHoras()"
+            [timeOnly]="true"
+            [showIcon]="true"
+            icon="fa-clock-o"
+            placeholder="{{ fijarVisitasViewModel.mensajes.campos.horaFinal }}"
+            [readonlyInput]="true"
+            hourFormat="24"
+            class="timer"
+          ></p-calendar>
+          <span class="mat-error-clase"
+                *ngIf="formularioFijarVisitas.controls['horaFijada2'].hasError('required')">
+             {{ fijarVisitasViewModel.mensajes.errores.horaFijacionRequerido }}
+          </span>
+        </div>
+      </div>
+
+
+      <div class="pie-pagina">
+
+
+        <button
+          class="botones"
+          mat-raised-button
+          id="fijar"
+          color="primary"
+          (click)="FijarDesfijarCitas(true)"
+          [disabled]="habilitarFijarDesfijar()"
+
+        >
+          {{ fijarVisitasViewModel.mensajes.botones.fijar }}
+        </button>
+        <button
+          class="botones boton-desfijar"
+          mat-raised-button
+          id="desfijar"
+          color="primary"
+          (click)="FijarDesfijarCitas(false)"
+          [disabled]="habilitarFijarDesfijar()"
+        >
+          {{ fijarVisitasViewModel.mensajes.botones.desfijar }}
+        </button>
+
+      </div>
+
+      <div class="separador"></div>
+    </form>
+  </div>
+</div>
+

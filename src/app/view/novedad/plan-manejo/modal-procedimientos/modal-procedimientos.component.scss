@@ -1,0 +1,647 @@
+.container {
+  width: 100%;
+  padding-left: 0px !important;
+}
+
+
+.ventana-container {
+display: flex;
+}
+
+.menu {
+margin-top: 3%;
+width: 25%;
+}
+
+
+.form {
+  width: 100%;
+  border: 1px solid #D5D5D5;
+}
+
+.contenedor-formulario {
+  margin-top: 1%;
+  margin-bottom: 3%;
+}
+
+.titulo-ventana {
+text-align: left;
+margin-bottom: 3%;
+}
+
+.campo {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 3%;
+}
+
+.campo-soporte {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1%;
+  margin-left: 3%;
+
+   .mat-raised-button {
+     width: 3em !important;
+     min-width: 56px !important;
+   }
+
+}
+
+.parental-dias {
+  width: 100%;
+  display: flex;
+}
+
+.dias {
+  width: 37%;
+  text-align: right;
+}
+
+.dias-solo {
+  width: 36%;
+  margin-left: 68%;
+}
+
+.campo-curaciones {
+  width: 100%;
+  text-align: center;  
+}
+
+.control-cantidad-sesion {
+  width: 30%;
+}
+
+.control-tipo-curacion {
+  width: 50%;
+}
+
+.control-descripcion-curacion {
+  width: 80%;
+}
+
+.campo-control {
+width: 40%
+}
+
+.campo-control-sondaje {
+  width: 35%
+}
+
+.campo-soporte-medicamento {
+  width: 94%;
+  margin-left: 1%;  
+}
+
+.campo-soporte-dias {
+  width: 66%;
+}
+
+.campo-soporte-dosis {
+  width: 13%;
+  margin-right: 1.5%;
+}
+
+.campo-soporte-unidades {
+  width: 15%;
+  margin-right: 1.5%;
+}
+
+.campo-soporte-volumen {
+  width: 13%;
+  margin-right: 1.5%;
+}
+
+.campo-soporte-duracion {
+  width: 16%;
+  margin-right: 1%;
+}
+
+.campo-soporte-tiponutricion {
+  width: 17%;
+  margin-right: 1%;
+}
+
+.campo-soporte-nutricion {
+  width: 15%;
+}
+
+
+.campo-soporte-nopbs {
+  width: 15%;
+}
+
+.campo-soporte-dia-evento {
+  width: 30%;
+  margin-right: 1%;
+}
+
+.campo-soporte-hora-evento {
+  width: 16%;
+  margin-right: 1%;
+}
+
+.campo-soporte-tipo-evento {
+  width: 16%;
+  margin-right: 1%;
+}
+
+.campo-soporte-sesiones-evento {
+  width: 16%;
+  margin-right: 1%;
+}
+
+.agregar-hora {
+  margin-left: 2%;
+}
+
+.agregar-sondaje {
+  margin-left: 18%;
+  margin-top: 3%;
+}
+
+.table {
+  width: 94%;
+}
+
+.texto-tabla {
+  text-align: center;
+  font-size: 10pt;
+}
+
+
+.dia-tabla-texto {
+  width: 40%;
+}
+
+.dia-tabla-valor {
+  width: 40%;
+}
+
+.hora-tabla-texto {
+  width: 10%;
+}
+
+.hora-tabla-valor {
+  width: 10%;
+}
+
+.evento-tabla-texto {
+  width: 16%;
+}
+
+.evento-tabla-valor {
+  width: 16%;
+}
+
+.dias-tratamiento-tabla-texto {
+  width: 19%;
+}
+
+.dias-tratamiento-tabla-valor {
+  width: 19%;
+}
+
+.opciones-boton-texto {
+  width: 15%
+}
+
+.opciones-boton-valor {
+  width: 15%
+}
+
+
+.control-radio {
+width: 40%;
+display: inline-block;
+}
+
+.seccion-formulario-grande {
+  width: 55%;
+}
+  
+.seccion-formulario-pequeno {
+    width: 45%;
+}
+
+.secciones-formulario {
+width: 100%;
+display: flex;
+flex-flow: row wrap;
+justify-content: space-evenly;
+}
+
+
+.ui-tabview .ui-tabview-panel {
+padding: 0 !important;
+}
+
+.titulo-campo {
+text-align: center;
+margin-bottom: 0;
+}
+
+
+.mat-error-clase {
+display: block;
+color: #f44336;
+font-size: 75%;
+text-align: center;
+font-weight: 400;
+line-height: 1.125;
+font-family: Roboto, "Helvetica Neue", sans-serif;
+margin-top: 1%;
+}
+
+.alto-descripcion {
+  height: 10em;
+}
+
+.tabla-dias {
+width: 100%;
+}
+
+.control-tabla-dias {
+width: 90%;
+text-align: center;
+}
+
+.curaciones {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+}
+
+.seccion {
+  width: 50%;
+}
+
+.ui-state-highlight {
+background-color: #0033a0 !important;
+}
+
+
+.centro {
+  text-align: center;
+}
+
+.separador {
+  height: 1em;
+}
+
+.dialog-procedimientos-calendario {
+  height: 25em !important;
+}
+
+.dialog-procedimientos {
+  height: 100% !important;
+}
+
+.grupo-checkbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.control-checkbox-envio-visita {
+  width: 21%;
+}
+
+.control-checkbox-via {
+  width: 33%;
+}
+
+.cantidadDosis {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+  
+
+.control-dosis-texto {
+  margin-top: 5%;
+  width: 20%;
+  font-size: 12pt;
+}
+
+.fieldset-control {
+  width: 50%;
+  margin-left: 5%;
+}
+
+.left {
+  text-align: left !important;
+}
+
+.nutricion-control {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.titulo-dias {
+  font-size: 11pt;
+}
+
+.campo-tipo-sondaje {
+  width: 50%;
+  margin-right: 7%;
+}
+
+.campo-sondaje {
+  width: 50%;
+}
+
+.campo-sesion-sondaje {
+  width: 23%;
+  margin-right: 5%;
+}
+
+.calendario-sondaje {
+  margin-top: 3%;
+}
+
+.controles-sondajes {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.tipoSondaje-sondaje {
+  display: flex;
+}
+
+.sesiones-fecha {
+  display: flex;
+}
+
+
+.contenedor-formulario {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  .contenedor {
+      /*Pantalla pequenia*/
+      @media (max-width: 640px) {
+          width: 100%;
+      }
+      /*Pantalla Mediana*/
+      @media (min-width: 641px) {
+          width: 50%;
+      }
+      /*Pantalla grande*/
+      @media (min-width: 1006px) {
+          width: 50%;
+      }
+  }
+}
+
+.tabla-sondaje {
+  width: 95%;
+}
+
+.texto-tabla-sondaje {
+  text-align: center;
+  font-size: 10pt;
+}
+
+.seccion-campos {
+  width: 100%;
+}
+
+
+@media (max-width: 800px) {
+
+
+  .form {
+    display: grid;
+  }
+
+  .tipoSondaje-sondaje {
+    display: grid;
+    justify-content: center;
+  }
+
+  .campo-tipo-sondaje {
+    width: 100%;
+  }
+
+  .campo-sondaje {
+    width: 100%;
+  }
+
+  .sesiones-fecha {
+    display: grid;
+    justify-content: center;
+  }
+
+  .campo-sesion-sondaje {
+    width: 100%;
+  }
+
+  .agregar-sondaje {
+    margin-top: 5%;
+    text-align: center;
+  }
+
+  .ventana-container {
+    display: grid;
+    justify-items: center;
+  }
+
+  .menu {
+    width: 65%;
+    font-size: 9pt;
+    height: 21em;
+  }
+
+  .secciones-formulario {
+    width: 100%;
+    display: block;
+    justify-content: center;
+  }
+
+  .seccion-formulario {
+    width: 100%;
+  }
+
+  .campo {
+    font-size: 9pt;
+  }
+
+  .control-radio {
+    width: 65%;
+  }
+
+
+  .menu-edicion {
+    height: 4em;
+  }
+
+  .campo-control {
+    width: 65%;
+  }
+
+  .campo-control-fototerapia {
+    width: 65%;
+  }
+
+  .grupo-checkbox {
+    display: grid;
+  }
+
+  .control-cantidad-sesion {
+    width: 60%;
+  }
+  
+  .control-tipo-curacion {
+    width: 60%;
+  }
+
+  .curaciones {
+    display: inline;
+  }
+
+  .seccion {
+    width: 100%;
+  }
+
+  .control-descripcion-curacion {
+    width: 60%;
+  }
+
+  .control-tabla-dias {
+    margin-top: 15%;
+  }
+
+  .campo-control-sondaje {
+    width: 70%;
+  }
+
+  .seccion-formulario-grande {
+    width: 100%;
+  }
+
+  .campo-soporte-medicamento {
+    width: 90%;
+  }
+
+  .campo-soporte-dias {
+    width: 90%;
+  }
+
+  .campo-soporte-dosis {
+    width: 90%;
+  }
+
+  .campo-soporte-unidades {
+    width: 90%;    
+  }
+
+  .campo-soporte-volumen {
+    width: 90%;
+  }
+
+  .campo-soporte-tiponutricion {
+    width: 90%;
+  }
+
+  .campo-soporte-duracion {
+    width: 50%;
+  }
+
+  .seccion-formulario-pequeno {
+    width: 100%;
+  }
+
+  .campo-soporte-dia-evento {
+    width: 90%;
+  } 
+
+  .campo-soporte-hora-evento {
+    width: 90%;
+  }
+
+  .campo-soporte-nutricion {
+    width: 90%;
+  }
+
+  .campo-soporte-tipo-evento {
+    width: 90%;
+  }
+
+  .campo-soporte-sesiones-evento {
+    width: 62%;
+  }
+
+}
+
+/* Column Priorities */
+@media only all {
+th.ui-p-6,
+td.ui-p-6,
+th.ui-p-5,
+td.ui-p-5,
+th.ui-p-4,
+td.ui-p-4,
+th.ui-p-3,
+td.ui-p-3,
+th.ui-p-2,
+td.ui-p-2,
+th.ui-p-1,
+td.ui-p-1 {
+    display: none;
+}
+}
+
+/* Show priority 1 at 320px (20em x 16px) */
+@media screen and (min-width: 20em) {
+th.ui-p-1,
+td.ui-p-1 {
+    display: table-cell;
+}
+}
+
+/* Show priority 2 at 480px (30em x 16px) */
+@media screen and (min-width: 30em) {
+th.ui-p-2,
+td.ui-p-2 {
+    display: table-cell;
+}
+}
+
+/* Show priority 3 at 640px (40em x 16px) */
+@media screen and (min-width: 40em) {
+th.ui-p-3,
+td.ui-p-3 {
+    display: table-cell;
+}
+}
+
+/* Show priority 4 at 800px (50em x 16px) */
+@media screen and (min-width: 50em) {
+th.ui-p-4,
+td.ui-p-4 {
+    display: table-cell;
+}
+}
+
+/* Show priority 5 at 960px (60em x 16px) */
+@media screen and (min-width: 60em) {
+th.ui-p-5,
+td.ui-p-5 {
+    display: table-cell;
+}
+}
+
+/* Show priority 6 at 1,120px (70em x 16px) */
+@media screen and (min-width: 70em) {
+th.ui-p-6,
+td.ui-p-6 {
+    display: table-cell;
+}
+}

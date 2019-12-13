@@ -1,0 +1,97 @@
+<section>
+  <div class="citas_tabla">
+    <p-table [columns]="columnasCitas" [value]="alertasVisitasModel.respuestaCitas" selectionMode="single"
+      [(selection)]="alertasVisitasModel.alertaSeleccionada" [scrollable]="true" scrollHeight="400px" [paginator]="true"
+      [rows]="10" [rowsPerPageOptions]="[10,20,30]" [responsive]="true" dataKey="idCitaNumber" (onRowSelect)="citasSeleccionadas($event.data)">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="tabla_header">
+            {{ alertasVisitasModel.mensajes.tabla.fechaVisita }}
+            <p-sortIcon [field]="alertasVisitasModel.mensajes.tabla.fechaVisitaCampo"></p-sortIcon>
+          </th>
+          <th class="tabla_header">
+            {{ alertasVisitasModel.mensajes.tabla.especialista }}
+            <p-sortIcon [field]="alertasVisitasModel.mensajes.tabla.especialistaCampo"></p-sortIcon>
+          </th>
+          <th class="tabla_header">
+            {{alertasVisitasModel.mensajes.tabla.visualizar}}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td class="tabla_header">
+            <span class="ui-column-title">{{ alertasVisitasModel.mensajes.tabla.fechaVisita }}</span>
+            {{ rowData.fechaInicioCita | date:'dd-MM-yyyy hh:mm a' }}
+          </td>
+          <td class="tabla_header">
+            <span class="ui-column-title">{{alertasVisitasModel.mensajes.tabla.especialista}}</span>
+            {{ rowData.especialidad}}
+          </td>
+          <td class="tabla_header" (click)="detalleVisita(rowData)">
+            <mat-icon>
+              visibility
+            </mat-icon>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" class="container" let-columns>
+        <tr>
+          <td class="tabla_header" [attr.colspan]="columnasCitas.length + 1">
+            {{ alertasVisitasModel.mensajes.tabla.noHaycitas }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-footer>
+      <div class="total-registros">
+        <span class="total-registros-texto"> {{
+          alertasVisitasModel.mensajes.tabla.totalRegistros }}</span>
+        <span class="total-registros-valor">{{ alertasVisitasModel.respuestaCitas.length }}</span>
+      </div>
+    </p-footer>
+  </div>
+  <form [formGroup]="formulario">
+    <div class="contenedor_campos">
+      <div class="campo_alerta">
+
+        <mat-form-field>
+          <textarea class="tamaño_area" (keyup)="cambioAlerta()" formControlName="alerta" matInput placeholder="Texto Alerta"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="contenedor_tiempo">
+        <div class="check_tiempo">
+          <mat-checkbox (change)="activarValidadores($event)" formControlName="cambiarDuracion">
+            {{alertasVisitasModel.mensajes.campos.minutosTexto }}</mat-checkbox>
+        </div>
+        <div class="campo_minutos">
+          <mat-form-field>
+            <input (keyup)="cambioTiempo()" pattern="[0-9]{1,3600}" id="duracion" matInput placeholder="{{ alertasVisitasModel.mensajes.campos.minutoCita }}"
+              formControlName="duracion" [maxlength]="4">
+            <button mat-button *ngIf="formulario.controls['duracion'].value" matSuffix mat-icon-button (click)="formulario.controls['duracion'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="formulario.controls['duracion'].hasError('required')">
+              {{ alertasVisitasModel.mensajes.errores.campoRequerido }}
+            </mat-error>
+            <mat-error *ngIf="formulario.controls['duracion'].hasError('maxlength')">
+              {{ alertasVisitasModel.mensajes.errores.miximoCita }}
+            </mat-error>
+            <mat-error *ngIf="formulario.controls['duracion'].hasError('pattern')">
+              {{ alertasVisitasModel.mensajes.errores.patterCita }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+  <div class="botton">
+    <button (click)="enviar()" mat-raised-button id="guardar" color="primary">
+      {{ alertasVisitasModel.mensajes.botones.guardar }}
+    </button>
+  </div>
+  <div class="separador"></div>
+</section>

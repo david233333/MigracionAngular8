@@ -1,0 +1,242 @@
+<section>
+  <h4 mat-dialog-title>
+    {{direccionModalMensaje.mensaje.campos.ingresarDireccion}}
+  </h4>
+
+  <mat-dialog-content #matDialog>
+    <div align="center" class="direccion">
+      <h4>{{direccionModalMensaje.mensaje.campos.direccion}}</h4>
+      <h6 #labelDireccion *ngIf="formulario.controls['tipoVia'].value" class="campo_direccion_final">
+        {{formulario.controls['tipoVia']?.value}} {{formulario.controls['numero1']?.value}} {{formulario.controls['letraCruce1']?.value}}
+        {{formulario.controls['puntoCardinal1']?.value}}
+        # {{formulario.controls['nroInterseccion']?.value}} {{formulario.controls['letraCruce2']?.value}}
+        {{formulario.controls['puntoCardinal2']?.value}} - {{formulario.controls['numero2']?.value}}
+      </h6>
+    </div>
+    <form [formGroup]="formulario">
+      <div align="center" class="container">
+        <div *ngIf="!sinNomenclatura" class="contenido_formulario_direccion">
+          <div class="separador_campo">
+            <mat-form-field>
+              <mat-select formControlName="tipoVia" id="tipoVia"
+                          placeholder={{direccionModalMensaje.mensaje.campos.tipoDeVia}}
+                          placeholder="Seleccione"
+                          required>
+                <mat-option>
+                  {{ direccionModalMensaje.mensaje.campos.seleccionar }}
+                </mat-option>
+                <mat-option *ngFor="let vias of direccionModalMensaje.respuestaGeoReferenciacion.tipoVia"
+                            [value]="vias.nombre">
+                  {{vias.nombre}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formulario.controls['tipoVia'].hasError('required')">
+                {{direccionModalMensaje.mensaje.errores.via}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="separador_campo">
+            <mat-form-field>
+              <input [maxlength]="3" formControlName="numero1" id="numero1" matInput placeholder="Numero" required>
+              <mat-error *ngIf="formulario.controls['numero1'].hasError('required')">
+                {{direccionModalMensaje.mensaje.errores.numerovia}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="separador_campo">
+            <mat-form-field>
+              <mat-select formControlName="letraCruce1" id="letraCruce1" placeholder="Letra de cruce">
+                <mat-option>
+                  {{ direccionModalMensaje.mensaje.campos.seleccionar }}
+                </mat-option>
+                <mat-option *ngFor="let letra of direccionModalMensaje.respuestaGeoReferenciacion.letraCruce"
+                            [value]="letra.nombre">
+                  {{letra.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="separador_campo">
+            <mat-form-field>
+              <mat-select formControlName="puntoCardinal1" id="puntoCardinal1" placeholder="Punto cardinal">
+                <mat-option>
+                  {{ direccionModalMensaje.mensaje.campos.seleccionar }}
+                </mat-option>
+                <mat-option
+                  *ngFor="let puntoCardinal of direccionModalMensaje.respuestaGeoReferenciacion.puntosCardinales"
+                  [value]="puntoCardinal.nombre">
+                  {{puntoCardinal.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="!sinNomenclatura" align="center" class="contenido_formulario_direccion">
+          <div class="separador_campo">
+            <mat-form-field>
+              <input [maxlength]="3" formControlName="nroInterseccion" id="segundoNumeroVia" matInput
+                     placeholder="Numero" required>
+              <mat-error *ngIf="formulario.controls['nroInterseccion'].hasError('required')">
+                {{direccionModalMensaje.mensaje.errores.numerovia}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="separador_campo">
+            <mat-form-field>
+              <mat-select formControlName="letraCruce2" id="segundoLetraDeCruse" placeholder="Letra de cruce">
+                <mat-option>
+                  {{ direccionModalMensaje.mensaje.campos.seleccionar }}
+                </mat-option>
+                <mat-option *ngFor="let segundaLetra of direccionModalMensaje.respuestaGeoReferenciacion.letraCruce"
+                            [value]="segundaLetra.nombre">
+                  {{segundaLetra.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="separador_campo">
+            <mat-form-field>
+              <mat-select formControlName="puntoCardinal2" id="segundoPuntoCardinales" placeholder="Punto cardinal">
+                <mat-option>
+                  {{ direccionModalMensaje.mensaje.campos.seleccionar }}
+                </mat-option>
+
+                <mat-option
+                  *ngFor="let puntoCardinal of direccionModalMensaje.respuestaGeoReferenciacion.puntosCardinales"
+                  [value]="puntoCardinal.nombre">
+                  {{puntoCardinal.nombre}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="separador_campo">
+            <mat-form-field>
+              <input [maxlength]="3" formControlName="numero2" id="tercerNumero" matInput placeholder="Numero" required>
+              <mat-error *ngIf="formulario.controls['numero2'].hasError('required')">
+                {{direccionModalMensaje.mensaje.errores.numerovia}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div [ngClass]="{'contenedor_ConNomenclatura':
+         !sinNomenclatura, 'contenedor_sinNomenclatura': sinNomenclatura}">
+
+          <div [ngClass]="{  'municipio_sinNomenclatura': sinNomenclatura}" class="contenido_formulario_direccion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <mat-select
+                  (selectionChange)="cambiarMunicipio($event.value)"
+                  formControlName="municipio"
+                  id="municipio"
+                  placeholder="{{ direccionModalMensaje.mensaje.campos.municipio }}"
+                  required>
+                  <mat-option>
+                    SELECCIONAR
+                  </mat-option>
+                  <mat-option
+                    *ngFor="let municipio of direccionModalMensaje.respuestaMunicipios"
+                    [value]="municipio">
+                    {{ municipio.nombre }}
+
+                  </mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="!formulario.controls['municipio'].hasError('required')">
+                  {{ direccionModalMensaje.mensaje.errores.municipioRequerido }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div [ngClass]="{'sinNomenclatura': !sinNomenclatura,
+            'descripcion_sinNomenclatura': sinNomenclatura}" align="center">
+
+            <div *ngIf="sinNomenclatura">
+              <mat-form-field class="descripcion">
+                <input id="direccionComplementaria" matInput
+                       [maxlength]="150"
+                       placeholder={{direccionModalMensaje.mensaje.campos.nombreLugar}}
+                       formControlName="direccionComplementaria"
+                      >
+              </mat-form-field>
+            </div>
+
+            <div>
+
+              <p *ngIf="!sinNomenclatura"
+                 class="parrafo_informacion">{{direccionModalMensaje.mensaje.campos.informacion}}</p>
+              <mat-form-field class="descripcion">
+            <textarea (ngModelChange)="cambioDireccion($event)" [maxlength]="150"
+                      formControlName="informacionComplementaria"
+                      id="informacionComplementaria"
+                      matInput
+                      placeholder={{direccionModalMensaje.mensaje.campos.descripcion}}></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div [ngClass]="{'sinNomenclatura': !sinNomenclatura,
+        'check_sinNomenclatura': sinNomenclatura}">
+            <mat-checkbox #SInNomenclatura
+                          (change)="changeDireccion($event.checked)" formControlName="cambioDireccion">Dirección
+              sin
+              nomenclatura
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <div class="contenedor-direccion-complementaria">
+
+          <div align="center" class="top_boton opcion-ubicar">
+            <button (click)="buscarDireccion()" *ngIf="ubicarVisible()" [disabled]="!formulario.valid" color="primary"
+                    id="buscarPorNombre"
+                    mat-raised-button>
+              <mat-icon>location_on</mat-icon>
+              Ubicar
+            </button>
+          </div>
+        </div>
+
+        <div class="contenedor-direccion-complementaria" *ngIf="sinNomenclatura">
+
+          <div align="center" class="top_boton opcion-ubicar">
+            <button (click)="buscarPorNombreLugar()" [disabled]="formulario.controls['direccionComplementaria'].invalid"
+                    color="primary"
+                    id="buscar"
+                    mat-raised-button>
+              <mat-icon>location_on</mat-icon>
+              Ubicar
+            </button>
+          </div>
+        </div>
+
+        <div class="expression">
+          <agm-map [mapTypeControl]="true" (mapTypeIdChange)="onDrag($event)" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+            <agm-marker (dragEnd)="markerDragEnd($event)"
+                        [latitude]="lat" [longitude]="lng" [markerDraggable]="!esDetalle"></agm-marker>
+          </agm-map>
+        </div>
+      </div>
+    </form>
+    <div>
+
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+    <button (click)="cerrarModal()" id="cancelar" mat-raised-button>
+      <mat-icon>close</mat-icon>
+
+    </button>
+
+    <button (click)="guardarDireccion()" [disabled]="activarEnviar" color="primary" id="continuar"
+            mat-raised-button>
+      <mat-icon>done</mat-icon>
+
+    </button>
+  </mat-dialog-actions>
+</section>

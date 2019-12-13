@@ -1,0 +1,1170 @@
+<mat-progress-bar [hidden]="!planManejoViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+
+<div class="container">
+  <form [formGroup]="formulario">
+    <div
+      [ngClass]="{
+        ocultarTarjetas: disableButton,
+        'container-opciones': !disableButton
+      }"
+    >
+      <div class="tarjetas-plan-manejo">
+        <div
+          class="tarjeta-menu"
+          (click)="
+            seleccionarPlan(planManejoViewModel.mensajes.campos.tratamientos)
+          "
+        >
+          <div class="tarjeta-container">
+            <div class="opciones-icon">
+              <img
+                src="./assets/img/tratamientos.svg"
+                alt="{{ planManejoViewModel.mensajes.campos.tratamientos }}"
+              />
+            </div>
+            <div class="texto">
+              {{ planManejoViewModel.mensajes.campos.tratamientos }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarjetas-plan-manejo">
+        <div
+          class="tarjeta-menu"
+          (click)="
+            seleccionarPlan(planManejoViewModel.mensajes.campos.procedimientos)
+          "
+        >
+          <div class="tarjeta-container">
+            <div class="opciones-icon">
+              <img
+                src="./assets/img/procedimientos.svg"
+                alt="{{ planManejoViewModel.mensajes.campos.procedimientos }}"
+              />
+            </div>
+            <div class="texto">
+              {{ planManejoViewModel.mensajes.campos.procedimientos }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarjetas-plan-manejo">
+        <div
+          class="tarjeta-menu"
+          (click)="
+            seleccionarPlan(planManejoViewModel.mensajes.campos.valoraciones)
+          "
+        >
+          <div class="tarjeta-container">
+            <div class="opciones-icon">
+              <img
+                src="./assets/img/valoraciones.svg"
+                alt="{{ planManejoViewModel.mensajes.campos.valoraciones }}"
+              />
+            </div>
+            <div class="texto">
+              {{ planManejoViewModel.mensajes.campos.valoraciones }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="tratamientos"
+      *ngIf="planManejoViewModel.tratamientos.length > 0"
+    >
+      <div class="separador"></div>
+      <hr class="linea-espacio" />
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <div class="img-opcion">
+            <img src="./assets/img/tratamientos.svg" alt="plan-manejo" />
+          </div>
+        </div>
+        <div class="titulo-opcion">
+          {{ planManejoViewModel.mensajes.campos.tratamientos }}
+        </div>
+      </div>
+      <hr class="linea-espacio" />
+
+      <div class="campo" [hidden]="true">
+        <mat-checkbox
+          id="pacientePICC"
+          #esPacientePICC
+          (change)="alerta($event)"
+        >
+          {{ planManejoViewModel.mensajes.campos.pacientePICC }}
+        </mat-checkbox>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="table">
+        <p-table
+          [columns]="columnasTratamientos"
+          [value]="planManejoViewModel.tratamientos"
+          [scrollable]="true"
+          scrollHeight="400px"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 20, 30]"
+          
+          [responsive]="true"
+          dataKey="id"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th
+                class="texto-tabla medicamentoTitulo"
+                [pSortableColumn]="
+                  planManejoViewModel.mensajes.tabla.medicamentoCampo
+                "
+              >
+                {{ planManejoViewModel.mensajes.tabla.medicamento }}
+                <p-sortIcon
+                  [field]="planManejoViewModel.mensajes.tabla.medicamentoCampo"
+                ></p-sortIcon>
+              </th>
+              <th
+                class="texto-tabla"
+                [pSortableColumn]="
+                  planManejoViewModel.mensajes.tabla.dosisCampo
+                "
+              >
+                {{ planManejoViewModel.mensajes.tabla.dosis }}
+                <p-sortIcon
+                  [field]="planManejoViewModel.mensajes.tabla.dosisCampo"
+                ></p-sortIcon>
+              </th>
+              <th
+                class="texto-tabla"
+                [pSortableColumn]="
+                  planManejoViewModel.mensajes.tabla.frecuenciaCampo
+                "
+              >
+                {{ planManejoViewModel.mensajes.tabla.frecuencia }}
+                <p-sortIcon
+                  [field]="planManejoViewModel.mensajes.tabla.frecuenciaCampo"
+                ></p-sortIcon>
+              </th>
+              <th
+                class="texto-tabla duracionTitulo"
+                [pSortableColumn]="
+                  planManejoViewModel.mensajes.tabla.duracionCampo
+                "
+              >
+                {{ planManejoViewModel.mensajes.tabla.duracion }}
+                <p-sortIcon
+                  [field]="planManejoViewModel.mensajes.tabla.duracionCampo"
+                ></p-sortIcon>
+              </th>
+              <th class="texto-tabla">
+                {{ planManejoViewModel.mensajes.tabla.accion }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+              <td class="texto-tabla medicamentoValor">
+                <span class="ui-column-title">{{
+                  planManejoViewModel.mensajes.tabla.medicamento
+                }}</span>
+                {{ rowData.medicamentoDescripcion }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  planManejoViewModel.mensajes.tabla.dosis
+                }}</span>
+                {{ rowData.cantidadDosis }}
+                {{ rowData.unidadDosis.descripcion }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  planManejoViewModel.mensajes.tabla.frecuencia
+                }}</span>
+                {{
+                  rowData.frecuenciaDescripcion | listaFrecuencia | truncar: 20
+                }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  planManejoViewModel.mensajes.tabla.duracion
+                }}</span>
+                {{ rowData.duracion }}
+                {{
+                  planManejoViewModel.mensajes.tratamientos.campos.duracionDosis
+                }}
+              </td>
+              <td class="texto-tabla">
+                <button
+                  [disabled]="disableButton"
+                  mat-button
+                  matSuffix
+                  mat-icon-button
+                  (click)="editarTratamiento(rowData)"
+                >
+                  <mat-icon
+                    [ngClass]="{
+                      desactivarButtton: disableButton,
+                      action: disableButton
+                    }"
+                    >edit</mat-icon
+                  >
+                </button>
+                <button
+                  [disabled]="disableButton"
+                  mat-button
+                  matSuffix
+                  mat-icon-button
+                  (click)="eliminarTratamiento(rowData)"
+                >
+                  <mat-icon
+                    [ngClass]="{
+                      desactivarButtton: disableButton,
+                      action: disableButton
+                    }"
+                    >delete</mat-icon
+                  >
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage" class="container" let-columns>
+            <tr>
+              <td class="centro" [attr.colspan]="columnas.length + 1">
+                {{ planManejoViewModel.mensajes.tabla.noTratamientos }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-footer>
+          <div class="total-registros">
+            <span class="total-registros-texto">{{
+              planManejoViewModel.mensajes.tabla.totalRegistros
+            }}</span>
+            <span class="total-registros-valor">{{
+              planManejoViewModel.tratamientos.length
+            }}</span>
+          </div>
+        </p-footer>
+      </div>
+      <div #scrollDownTratamiento tabindex="1"></div>
+    </div>
+
+    <div class="procedimientos" *ngIf="verProcedimientos()">
+      <div class="separador"></div>
+      <hr class="linea-espacio" />
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <div class="img-opcion">
+            <img src="./assets/img/procedimientos.svg" alt="plan-manejo" />
+          </div>
+        </div>
+        <div class="titulo-opcion">
+          {{ planManejoViewModel.mensajes.campos.procedimientos }}
+        </div>
+      </div>
+      <hr class="linea-espacio" />
+      <div class="curaciones" *ngIf="planManejoViewModel.curaciones.length > 0">
+        <div class="separador"></div>
+        <div class="subtitulo-procedimiento">
+          <strong>{{ planManejoViewModel.mensajes.campos.curaciones }}</strong>
+        </div>
+        <div class="separador"></div>
+        <div class="table">
+          <p-table
+            [columns]="columnasCuraciones"
+            [value]="planManejoViewModel.curaciones"
+            [scrollable]="true"
+            scrollHeight="400px"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 30]"
+           
+            [responsive]="true"
+            dataKey="id"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of columns"
+                  [pSortableColumn]="col.field"
+                  class="texto-tabla"
+                >
+                  {{ col.header }}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th class="texto-tabla">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                      .accion
+                  }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                      .tipoCuracion
+                  }}</span>
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                      .tipoCuracionCampo
+                  }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                      .descripcion
+                  }}</span>
+                  {{ rowData.descripcion }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                      .ultimaCuracion
+                  }}</span>
+                  {{ rowData.ultimaCuracion | date: "dd-MM-yyyy hh:mm a" }}
+                </td>
+                <td class="texto-tabla">
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="editarProcedimientoCuracion(rowData)"
+                  >
+                    <mat-icon
+                      matTooltip="{{
+                        planManejoViewModel.mensajes.campos.editar
+                      }}"
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >edit</mat-icon
+                    >
+                  </button>
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="eliminarProcedimientoCuracion(rowData)"
+                  >
+                    <mat-icon
+                      matTooltip="{{
+                        planManejoViewModel.mensajes.campos.eliminar
+                      }}"
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >delete</mat-icon
+                    >
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+              <tr>
+                <td
+                  class="centro"
+                  [attr.colspan]="columnasCuraciones.length + 1"
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                      .noCuraciones
+                  }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">{{
+                planManejoViewModel.mensajes.procedimientos.curaciones.tabla
+                  .totalRegistros
+              }}</span>
+              <span class="total-registros-valor">{{
+                planManejoViewModel.curaciones.length
+              }}</span>
+            </div>
+          </p-footer>
+        </div>
+        <div #scrollDownProcedimientoCuracion tabindex="1"></div>
+      </div>
+      <div class="sondajes" *ngIf="planManejoViewModel.sondajes.length > 0">
+        <div class="separador"></div>
+        <div class="subtitulo-procedimiento">
+          <strong>{{ planManejoViewModel.mensajes.campos.sondajes }}</strong>
+        </div>
+        <div class="separador"></div>
+        <div class="table">
+          <p-table
+            [columns]="columnasSondajes"
+            [value]="planManejoViewModel.sondajes"
+            [scrollable]="true"
+            scrollHeight="400px"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            
+            [responsive]="true"
+            dataKey="id"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of columns"
+                  [pSortableColumn]="col.field"
+                  class="texto-tabla"
+                >
+                  {{ col.header }}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+
+                <th class="texto-tabla">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.sondajes.tabla
+                      .accion
+                  }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.sondajes.tabla
+                      .tipoSondajeIngreso
+                  }}</span>
+                  {{ rowData.idTipoSondaje | tipoSondaje }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.sondajes.tabla
+                      .categoriaSondaje
+                  }}</span>
+                  {{ rowData.sondaje }}
+                </td>
+                <td class="texto-tabla">
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="editarProcedimientoSondajes(rowData)"
+                  >
+                    <mat-icon
+                      matTooltip="{{
+                        planManejoViewModel.mensajes.campos.editar
+                      }}"
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >edit</mat-icon
+                    >
+                  </button>
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="eliminarProcedimientoSondajes(rowData)"
+                  >
+                    <mat-icon
+                      matTooltip="{{
+                        planManejoViewModel.mensajes.campos.eliminar
+                      }}"
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >delete</mat-icon
+                    >
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+              <tr>
+                <td class="centro" [attr.colspan]="columnasSondajes.length + 1">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.sondajes.tabla
+                      .noSondajes
+                  }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">{{
+                planManejoViewModel.mensajes.procedimientos.sondajes.tabla
+                  .totalRegistros
+              }}</span>
+              <span class="total-registros-valor">{{
+                planManejoViewModel.sondajes.length
+              }}</span>
+            </div>
+          </p-footer>
+        </div>
+        <div #scrollDownProcedimientoSondaje tabindex="1"></div>
+      </div>
+      <div
+        class="fototerapias"
+        *ngIf="planManejoViewModel.fototerapias.length > 0"
+      >
+        <div class="separador"></div>
+        <div class="subtitulo-procedimiento">
+          <strong>{{
+            planManejoViewModel.mensajes.campos.fototerapias
+          }}</strong>
+        </div>
+        <div class="separador"></div>
+        <div class="table">
+          <p-table
+            [columns]="columnasFototerapias"
+            [value]="planManejoViewModel.fototerapias"
+            [scrollable]="true"
+            scrollHeight="400px"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 30]"
+          
+            [responsive]="true"
+            dataKey="id"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of columns"
+                  [pSortableColumn]="col.field"
+                  class="texto-tabla"
+                >
+                  {{ col.header }}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th class="texto-tabla">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.fototerapias
+                      .tabla.accion
+                  }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.fototerapias
+                      .tabla.diasTratamiento
+                  }}</span>
+                  {{ rowData.diasTratamiento }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.fototerapias
+                      .tabla.bilirrubinaTotal
+                  }}</span>
+                  {{ rowData.bilirrubinaTotal }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.fototerapias
+                      .tabla.ultimaTomaMuestra
+                  }}</span>
+                  {{ rowData.ultimaTomaMuestra | date: "dd-MM-yyyy hh:mm a" }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.fototerapias
+                      .tabla.tipoFrecuencia
+                  }}</span>
+                  {{ rowData.tipoFrecuencia }}
+                </td>
+                <td class="texto-tabla">
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="editarProcedimientoFototerapia(rowData)"
+                  >
+                    <mat-icon
+                      matTooltip="{{
+                        planManejoViewModel.mensajes.campos.editar
+                      }}"
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >edit</mat-icon
+                    >
+                  </button>
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="eliminarProcedimientoFototerapia(rowData)"
+                  >
+                    <mat-icon
+                      matTooltip="{{
+                        planManejoViewModel.mensajes.campos.eliminar
+                      }}"
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >delete</mat-icon
+                    >
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+              <tr>
+                <td
+                  class="centro"
+                  [attr.colspan]="columnasFototerapias.length + 1"
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.fototerapias
+                      .tabla.noFototerapias
+                  }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">{{
+                planManejoViewModel.mensajes.procedimientos.fototerapias.tabla
+                  .totalRegistros
+              }}</span>
+              <span class="total-registros-valor">{{
+                planManejoViewModel.fototerapias.length
+              }}</span>
+            </div>
+          </p-footer>
+        </div>
+        <div #scrollDownProcedimientoFototerapia tabindex="1"></div>
+      </div>
+      <div
+        class="secreciones"
+        *ngIf="planManejoViewModel.secreciones.length > 0"
+      >
+        <div class="separador"></div>
+        <div class="subtitulo-procedimiento">
+          <strong>{{ planManejoViewModel.mensajes.campos.secreciones }}</strong>
+        </div>
+        <div class="separador"></div>
+        <div class="table">
+          <p-table
+            [columns]="columnasSecreciones"
+            [value]="planManejoViewModel.secreciones"
+            [scrollable]="true"
+            scrollHeight="400px"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 30]"
+         
+            [responsive]="true"
+            dataKey="id"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of columns"
+                  [pSortableColumn]="col.field"
+                  class="texto-tabla"
+                >
+                  {{ col.header }}
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th class="texto-tabla">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.accion
+                  }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.diasTratamiento
+                  }}</span>
+                  {{ rowData.diasTratamiento }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.envioAspirador
+                  }}</span>
+                  {{ rowData.envioAspirador | textoBooleano }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.visitaEnfermeria
+                  }}</span>
+                  {{ rowData.visitaEnfermeria | textoBooleano }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.tipoSonda
+                  }}</span>
+                  {{ rowData.tipoSonda }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.nasal
+                  }}</span>
+                  {{ rowData.nasal | textoBooleano }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.traqueostomia
+                  }}</span>
+                  {{ rowData.traqueostomia | textoBooleano }}
+                </td>
+                <td class="texto-tabla">
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="editarProcedimientoSecrecion(rowData)"
+                  >
+                    <mat-icon
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >edit</mat-icon
+                    >
+                  </button>
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="eliminarProcedimientoSecrecion(rowData)"
+                  >
+                    <mat-icon
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >delete</mat-icon
+                    >
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+              <tr>
+                <td
+                  class="centro"
+                  [attr.colspan]="columnasSecreciones.length + 1"
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos.secreciones
+                      .tabla.noSecreciones
+                  }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">{{
+                planManejoViewModel.mensajes.procedimientos.secreciones.tabla
+                  .totalRegistros
+              }}</span>
+              <span class="total-registros-valor">{{
+                planManejoViewModel.secreciones.length
+              }}</span>
+            </div>
+          </p-footer>
+        </div>
+        <div #scrollDownProcedimientoSecrecion tabindex="1"></div>
+      </div>
+      <div
+        class="soporteNutricional"
+        *ngIf="planManejoViewModel.soporteNutricionales.length > 0"
+      >
+        <div class="separador"></div>
+        <div class="subtitulo-procedimiento">
+          <strong>{{
+            planManejoViewModel.mensajes.campos.soporteNutricional
+          }}</strong>
+        </div>
+        <div class="separador"></div>
+        <div class="table">
+          <p-table
+            [columns]="columnasSoporteNutricional"
+            [value]="planManejoViewModel.soporteNutricionales"
+            [scrollable]="true"
+            scrollHeight="400px"
+            [paginator]="true"
+            [rows]="10"
+            [rowsPerPageOptions]="[10, 20, 30]"
+          
+            [responsive]="true"
+            dataKey="id"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  class="texto-tabla medicamentoTitulo"
+                  [pSortableColumn]="
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.medicamentoCampo
+                  "
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.medicamento
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      planManejoViewModel.mensajes.procedimientos
+                        .soporteNutricional.tabla.medicamentoCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th
+                  class="texto-tabla"
+                  [pSortableColumn]="
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.dosisCampo
+                  "
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.dosis
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      planManejoViewModel.mensajes.procedimientos
+                        .soporteNutricional.tabla.dosisCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th
+                  class="texto-tabla"
+                  [pSortableColumn]="
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.tipoNutricionCampo
+                  "
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.tipoNutricion
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      planManejoViewModel.mensajes.procedimientos
+                        .soporteNutricional.tabla.tipoNutricionCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th
+                  class="texto-tabla"
+                  [pSortableColumn]="
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.nutricionCampo
+                  "
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.nutricion
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      planManejoViewModel.mensajes.procedimientos
+                        .soporteNutricional.tabla.nutricionCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th
+                  class="texto-tabla duracionTitulo"
+                  [pSortableColumn]="
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.duracionCampo
+                  "
+                >
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.duracion
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      planManejoViewModel.mensajes.procedimientos
+                        .soporteNutricional.tabla.duracionCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th class="texto-tabla">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.accion
+                  }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                <td class="texto-tabla medicamentoValor">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.medicamento
+                  }}</span>
+                  {{ rowData.medicamento.nombre }}
+                  {{ rowData.medicamento.presentacion }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.dosis
+                  }}</span>
+                  {{ rowData.cantidadDosis }}
+                  {{ rowData.unidadDosis.descripcion }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.tipoNutricion
+                  }}</span>
+                  {{ rowData.tipoNutricion.tipo }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.nutricion
+                  }}</span>
+                  {{ rowData.tipoNutricion.descripcion }}
+                </td>
+                <td class="texto-tabla">
+                  <span class="ui-column-title">{{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.duracion
+                  }}</span>
+                  {{ rowData.duracion }}
+                  {{
+                    planManejoViewModel.mensajes.tratamientos.campos
+                      .duracionDosis
+                  }}
+                </td>
+                <td class="texto-tabla">
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="editarProcedimientoSoporteNutricional(rowData)"
+                  >
+                    <mat-icon
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >edit</mat-icon
+                    >
+                  </button>
+                  <button
+                    [disabled]="disableButton"
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    (click)="eliminarProcedimientoSoporteNutricional(rowData)"
+                  >
+                    <mat-icon
+                      [ngClass]="{
+                        desactivarButtton: disableButton,
+                        action: disableButton
+                      }"
+                      >delete</mat-icon
+                    >
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+              <tr>
+                <td class="centro" [attr.colspan]="columnas.length + 1">
+                  {{
+                    planManejoViewModel.mensajes.procedimientos
+                      .soporteNutricional.tabla.noSoporteNutricional
+                  }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">{{
+                planManejoViewModel.mensajes.procedimientos.soporteNutricional
+                  .tabla.totalRegistros
+              }}</span>
+              <span class="total-registros-valor">{{
+                planManejoViewModel.soporteNutricionales.length
+              }}</span>
+            </div>
+          </p-footer>
+        </div>
+        <div #scrollDownProcedimientoSoporteNutricional tabindex="1"></div>
+      </div>
+    </div>
+
+    <div class="valoraciones" *ngIf="verValoraciones">
+      <div class="separador"></div>
+      <hr class="linea-espacio" />
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <div class="img-opcion">
+            <img src="./assets/img/valoraciones.svg" alt="plan-manejo" />
+          </div>
+        </div>
+        <div class="titulo-opcion">
+          {{ planManejoViewModel.mensajes.campos.valoraciones }}
+        </div>
+      </div>
+      <hr class="linea-espacio" />
+
+      <div class="separador"></div>
+      <div class="valoraciones-opciones">
+        <div>
+          <mat-selection-list
+            [ngClass]="{
+              disableValoraciones: disableButton,
+              desactivarButtton: disableButton
+            }"
+            [disabled]="disableButton"
+            #lista
+            (selectionChange)="seleccionValoracion($event, valoracion)"
+          >
+            <mat-list-option
+              [disableRipple]="true"
+              *ngFor="let valoracion of planManejoViewModel.valoraciones"
+              [selected]="valoracion.selected"
+              [disabled]="valoracion.disabled"
+              (click)="verValoracionesSeleccionadas(lista)"
+              [value]="valoracion"
+            >
+              {{ valoracion.nombre }}
+            </mat-list-option>
+          </mat-selection-list>
+        </div>
+
+        <div *ngIf="verValorizacionesPoliza">
+          <div class="separador-pequeno"></div>
+          <p-fieldset
+            class="left"
+            [toggleable]="false"
+            legend="{{
+              planManejoViewModel.mensajes.valoraciones.tipos.ingresoPolizaVida
+            }}"
+          >
+            <div class="calendario">
+              <p-calendar
+                inputStyleClass="ancho-control-input-calendario"
+                panelStyleClass="modal-calendario-examen-medico"
+                [(ngModel)]="fechaExamenMedico"
+                formControlName="fechaExamenMedico"
+                [showTime]="true"
+                [showIcon]="true"
+                [locale]="configEspanolCalendario"
+                placeholder="{{
+                  planManejoViewModel.mensajes.valoraciones.campos
+                    .fechaExamenMedico
+                }}"
+                dateFormat="dd/mm/yy"
+                [minDate]="fechaMinimaCalendarioActual"
+                [monthNavigator]="true"
+                [yearNavigator]="true"
+                yearRange="1900:2100"
+                hourFormat="12"
+                [readonlyInput]="true"
+              ></p-calendar>
+              <div
+                class="mat-error-clase"
+                *ngIf="
+                  formulario.controls['fechaExamenMedico'].hasError('required')
+                "
+              >
+                {{
+                  planManejoViewModel.mensajes.valoraciones.validaciones
+                    .fechaExamenMedicoRequerido
+                }}
+              </div>
+            </div>
+            <mat-selection-list
+              #listaPoliza
+              [ngClass]="{
+                disableValoraciones: disableButton,
+                desactivarButtton: disableButton
+              }"
+              [disabled]="disableButton"
+            >
+              <mat-list-option
+                *ngFor="
+                  let valoracion of planManejoViewModel.valoracionesPoliza
+                "
+                [selected]="valoracion.selected"
+                (click)="verValoracionesSeleccionadasPoliza(listaPoliza)"
+                [value]="valoracion"
+                [disabled]="valoracion.disabled"
+              >
+                {{ valoracion.nombre }}
+              </mat-list-option>
+            </mat-selection-list>
+          </p-fieldset>
+          <mat-error
+            class="mat-error-clase"
+            *ngIf="
+              !this.planManejoViewModel.valoracionesSeleccionadasPoliza.length >
+              0
+            "
+          >
+            {{
+              planManejoViewModel.mensajes.valoraciones.validaciones
+                .valoracionesTipoPoliza
+            }}
+          </mat-error>
+        </div>
+      </div>
+      <div #scrollDownValoracion tabindex="1"></div>
+    </div>
+
+    <div class="separador"></div>
+  </form>
+</div>

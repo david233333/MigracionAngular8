@@ -1,0 +1,153 @@
+<div class="novedad-equipo-biomedico">
+    <div class="flex-contenedor">
+        <form class="contenedor" [formGroup]="formularioEquipoBiomedico">
+            <div class="campo">
+                <mat-form-field>
+                    <mat-select id="tipoEquipoBiomedico" placeholder="{{ equipoBiomedicoViewModel.mensajes.campos.tipoEquipoBiomedico }}"
+                        formControlName="tipoEquipoBiomedico" (change)="seleccionTipoEquipo($event.value);" required>
+                        <mat-option *ngFor="let tipo of equipoBiomedicoViewModel.respuestaTipoEquipos" [value]="tipo.idEquipoBioMedico">
+                            {{ tipo.descripcion }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!formularioEquipoBiomedico.controls['tipoEquipoBiomedico'].hasError('required')">
+                        {{ equipoBiomedicoViewModel.mensajes.errores.tipoEquipoBiomedicoRequerido }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="campo" *ngIf="formularioEquipoBiomedico.controls['tipoEquipoBiomedico'].value">
+
+                <div class="programacion">
+
+                    <div class="control">
+
+
+                        <p-calendar inputStyleClass="tamano-control-calendario-biomedico" formControlName="fechaInicio"
+                            [showIcon]="true" [locale]="configEspanolCalendario" placeholder="{{ equipoBiomedicoViewModel.mensajes.campos.fechaInicio }}"
+                            dateFormat="dd/mm/yy" [minDate]="fechaMinimaEquipo" [maxDate]="formularioEquipoBiomedico.controls['fechaFin'].value"
+                            [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" hourFormat="12" [readonlyInput]="true"></p-calendar>
+                        <div class="mat-error-clase" *ngIf="formularioEquipoBiomedico.controls['fechaInicio'].hasError('required')">
+                            {{ equipoBiomedicoViewModel.mensajes.errores.fechaInicioRequerido }}
+                        </div>
+                    </div>
+
+                    <div class="control">
+                        <p-calendar inputStyleClass="tamano-control-calendario-biomedico" formControlName="fechaFin"
+                            [showIcon]="true" [locale]="configEspanolCalendario" placeholder="{{ equipoBiomedicoViewModel.mensajes.campos.fechaFin }}"
+                            dateFormat="dd/mm/yy" [minDate]="formularioEquipoBiomedico.controls['fechaInicio'].value"
+                            [maxDate]="fechaMaximaEquipo" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" hourFormat="12"
+                            [readonlyInput]="true" (onSelect)="esModificado()"></p-calendar>
+                    </div>
+
+
+                    <button class="agregar-programacion" mat-raised-button color="primary" id="agregarEvento" (click)="agregarProgramacion(equipoBiomedicoViewModel.esEdicionEquipo)">
+                        <mat-icon *ngIf="!equipoBiomedicoViewModel.esEdicionEquipo" matTooltip="{{ equipoBiomedicoViewModel.mensajes.tabla.guardar }}">add</mat-icon>
+                        <mat-icon *ngIf="equipoBiomedicoViewModel.esEdicionEquipo" matTooltip="{{ equipoBiomedicoViewModel.mensajes.tabla.editar }}">save</mat-icon>
+                    </button>
+
+                </div>
+
+                <div class="separador"></div>
+            </div>
+        </form>
+    </div>
+
+    <div class="table">
+        <p-table [columns]="columnasEquiposBiomedicos" [value]="equipoBiomedicoViewModel.equiposBiomedicosTabla"
+            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+            [responsive]="true" dataKey="id">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th class="texto-tabla equipo-tabla-texto" [pSortableColumn]="equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedicoCampo">
+                        {{
+                        equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedico
+                        }}
+                        <p-sortIcon [field]="equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedicoCampo"></p-sortIcon>
+                    </th>
+                    <th class="texto-tabla fecha-inicio-tabla-texto" [pSortableColumn]="equipoBiomedicoViewModel.mensajes.tabla.fechaInicioCampo">
+                        {{
+                        equipoBiomedicoViewModel.mensajes.tabla.fechaInicio
+                        }}
+                        <p-sortIcon [field]="equipoBiomedicoViewModel.mensajes.tabla.fechaInicioCampo"></p-sortIcon>
+                    </th>
+                    <th class="texto-tabla fecha-fin-tabla-texto" [pSortableColumn]="equipoBiomedicoViewModel.mensajes.tabla.fechaFinCampo">
+                        {{
+                        equipoBiomedicoViewModel.mensajes.tabla.fechaFin
+                        }}
+                        <p-sortIcon [field]="equipoBiomedicoViewModel.mensajes.tabla.fechaFinCampo"></p-sortIcon>
+                    </th>
+                    <th class="texto-tabla fecha-fin-tabla-texto" [pSortableColumn]="equipoBiomedicoViewModel.mensajes.tabla.estadoCampo">
+                        {{
+                        equipoBiomedicoViewModel.mensajes.tabla.estado
+                        }}
+                        <p-sortIcon [field]="equipoBiomedicoViewModel.mensajes.tabla.estadoCampo"></p-sortIcon>
+                    </th>
+                    <th class="texto-tabla accion-tabla" *ngIf="!equipoBiomedicoViewModel.esEdicionEquipo">
+                        {{
+                        equipoBiomedicoViewModel.mensajes.tabla.accion
+                        }}
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td class="texto-tabla equipo-tabla-valor">
+                        <span class="ui-column-title">{{
+                            equipoBiomedicoViewModel.mensajes.tabla.equipoBiomedico }}</span>
+                        {{ rowData.tipoEquipo.descripcion }}
+                    </td>
+                    <td class="texto-tabla fecha-inicio-tabla-valor">
+                        <span class="ui-column-title">{{
+                            equipoBiomedicoViewModel.mensajes.tabla.fechaInicio }}</span>
+                        {{ rowData.fechaInicio | date:'dd-MM-yyyy' }}
+                    </td>
+                    <td class="texto-tabla fecha-fin-tabla-valor">
+                        <span class="ui-column-title">{{
+                            equipoBiomedicoViewModel.mensajes.tabla.fechaFin }}</span>
+                        {{ rowData.fechaFin === null ? 'Indefinido' : rowData.fechaFin | date:'dd-MM-yyyy' }}
+                    </td>
+                    <td class="texto-tabla estado-tabla-valor">
+                        <span class="ui-column-title">{{
+                            equipoBiomedicoViewModel.mensajes.tabla.estado }}</span>
+                        {{ rowData.estado === null ? rowData.estadoDefecto : rowData.estadoDescripcion }}
+                    </td>
+                    <td class="texto-tabla accion-tabla-valor">
+                        <button *ngIf="rowData.estado.idEstado != equipoBiomedicoViewModel.mensajes.estados.terminado && rowData.estado.idEstado != equipoBiomedicoViewModel.mensajes.estados.cancelado"
+                         mat-button matSuffix mat-icon-button (click)="editarSolicitud(rowData)">
+                            <mat-icon matTooltip="{{ equipoBiomedicoViewModel.mensajes.tabla.editar }}">edit</mat-icon>
+                        </button>
+                        <button *ngIf="rowData.estado.idEstado != equipoBiomedicoViewModel.mensajes.estados.terminado && rowData.estado.idEstado != equipoBiomedicoViewModel.mensajes.estados.cancelado"
+                         mat-button matSuffix mat-icon-button (click)="eliminarSolicitud(rowData)">
+                            <mat-icon matTooltip="{{ equipoBiomedicoViewModel.mensajes.tabla.eliminar }}">delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                <tr>
+                    <td class="texto-tabla" [attr.colspan]="columnasEquiposBiomedicos.length + 1">
+                        {{
+                        equipoBiomedicoViewModel.mensajes.tabla.noEquiposBiomedicos
+                        }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <p-footer>
+            <div class="total-registros">
+                <span class="total-registros-texto"> {{
+                    equipoBiomedicoViewModel.mensajes.tabla.totalRegistros }}</span>
+                <span class="total-registros-valor">{{ equipoBiomedicoViewModel.equiposBiomedicos.length }}</span>
+            </div>
+        </p-footer>
+    </div>
+
+    <div class="boton">
+        <button mat-raised-button id="solicitar" color="primary" (click)="solicitarEquipos()" [disabled]="habilitarGuardar()">
+            {{ equipoBiomedicoViewModel.mensajes.botones.solicitar }}
+        </button>
+    </div>
+
+    <div class="separador"></div>
+</div>

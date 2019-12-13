@@ -1,0 +1,5 @@
+Novedades- Modificar visitas-Fijacion horas
+
+Se actualizo el front añadiendosele la funcionalidad que
+permitiera elegir entre una hora fijada o un rango de horas para la visita.
+Se agrego el campo HoraFijada2 que servira como complemnto 

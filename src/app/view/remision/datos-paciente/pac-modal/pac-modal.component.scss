@@ -1,0 +1,200 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-dialog{
+  width: 100%;
+  max-width: 100%;
+  margin: 0%;
+  overflow: hidden;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 6px;
+  outline: 0;
+  -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+  box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}
+
+.modal-body {
+  position: relative;
+  padding: 15px;
+}
+
+.modal-header{
+  background-color: #f8971d;
+  color: #fff !important;
+  font-size: 25px;
+  height: 100%;
+  margin-top: 0%;
+  border-radius: 6px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+}
+
+.modal-header p, .modal-header span{
+
+}
+
+.modal-header span{
+  font-size: 22px;
+}
+
+.modal-title-pac{
+  background-color: #95b533;
+  color: #fff;
+  font-size: 20px;
+  padding: 5px;
+  line-height: 0.9;
+}
+
+.modal-title-pac-plus{
+  background-color: #66a4a4;
+}
+
+.modal-title-pac-basico{
+  background-color: #cca61b;
+}
+
+.modal-title-pac span{
+  font-size: 16px;
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #000;
+  height: 30%;
+  font-weight: 600;
+}
+
+.benefits{
+  color: #969899;
+  font-size: 16px;
+}
+
+.benefits span{
+  font-weight: bold;
+}
+
+.benefits td, .benefits th{
+  padding: 5px;
+}
+
+.table-footer-pac{
+  width: 94%;
+  margin-left: 3%;
+  border-top: 1px dashed #959595;
+  font-size: 12px;
+  color: #313131;
+  text-align: center;
+  height: 50%;
+  padding-top: 8px;
+}
+
+.table-footer-pac a{
+  color: #2023bb;
+  text-decoration: underline;
+}
+
+/* Estilos chatbot */
+
+.card-chatbot{
+  width: 100%;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border-radius: 6px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+  box-shadow: 0 3px 9px rgba(0,0,0,.5);
+  min-height: 710px;
+  padding: 6px;
+  position: absolute;
+  right: 0;
+}
+
+/* botón */
+
+.button-chatbot button{
+  width: 100%;
+  height: 62%;
+  color: #fff;
+  font-size: 20px;
+  background-color: #f8971d;
+  border-radius: 6px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border: none;
+  text-align: left;
+  position: absolute;
+  right: 0;
+}
+
+.button-chatbot button span{
+  font-size: 18px;
+}
+
+.button-chatbot button img{
+  float: right;
+  margin-top: -20px;
+}
+
+/* desplegado */
+
+.card-chatbot .modal-header{
+  height: 65%;
+  font-size: 20px !important;
+  padding-top: 0px;
+  padding-left: 5px;
+  margin: -6px;
+  margin-top: -26px;
+}
+
+.card-chatbot .modal-header span{
+  font-size: 18px !important;
+}
+
+.card-chatbot .modal-header img{
+  float: right;
+  margin-top: -65px !important;
+  margin-right: 5px;
+}
+
+.card-chatbot .modal-title-pac{
+  margin-top: 15px;
+}
+
+.card-chatbot .modal-title-pac-plus{
+  background-color: #66a4a4 !important;
+  margin-top: 15px;
+}
+
+.card-chatbot .modal-title-pac-basico{
+  background-color: #cca61b !important;
+  margin-top: 15px;
+}
+
+.cerrar{
+  cursor: pointer;
+}
+.basico{
+  background: #95b533;
+}
+.plus{
+  background: #66a4a4  ;
+}
+.preferencial  {
+  background: #f8971d;
+}

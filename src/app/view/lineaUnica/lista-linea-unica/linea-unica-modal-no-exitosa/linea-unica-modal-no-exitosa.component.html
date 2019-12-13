@@ -1,0 +1,41 @@
+<section>
+  <mat-dialog-content>
+    <div class="titulo-ventana">
+      <h4 mat-dialog-title> {{lineaModalUnicaModel.mensajes.campos.llamdaNocontestada}}</h4>
+    </div>
+  </mat-dialog-content>
+  <form [formGroup]="formulario">
+  <div [align]="'center'">
+    <mat-form-field class="campo">
+      <mat-select  id="motivoCancelacion" placeholder="{{ lineaModalUnicaModel.mensajes.campos.motivos }}"
+                  formControlName="causa" required>
+        <mat-option>
+          SELECCIONAR
+        </mat-option>
+        <mat-option *ngFor="let causa of lineaModalUnicaModel.repuestaCausas"
+                    [value]="causa.idCausa">
+          {{ causa.nombreCausa }}
+        </mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="!formulario.controls['causa'].hasError('required')">
+        {{ lineaModalUnicaModel.mensajes.errores.noExitosa }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  </form>
+
+  <mat-dialog-actions align="center">
+
+    <button mat-raised-button id="cancelar" (click)="cancelar()">
+      <mat-icon>close</mat-icon>
+      {{ lineaModalUnicaModel.mensajes.botones.cancelar }}
+    </button>
+
+    <button mat-raised-button id="continuar" color="primary"  (click)="guardar()" [disabled]="!formulario.valid">
+      <mat-icon>done</mat-icon>
+      {{ lineaModalUnicaModel.mensajes.botones.guardar }}
+    </button>
+  </mat-dialog-actions>
+
+</section>

@@ -1,0 +1,60 @@
+<div class="novedad-cambio-piso">
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="img-opcion">
+      <img src="./assets/img/asignar_profesional.svg" alt="cambio-piso">
+    </div>
+    <div class="subtitulo">
+      <strong>{{ asignarPacienteViewModel.mensajes.titulos.asignarProfesional }}</strong>
+    </div>
+  </div>
+  <hr class="linea-espacio">
+  <div class="flex-contenedor-busqueda">
+
+
+    <mat-radio-group (ngModelChange)="traerProfesionalesPorEspecialidad($event)" [(ngModel)]="especialidadPorDefecto">
+      <mat-radio-button value="Psicologia">Psicología</mat-radio-button>
+      <mat-radio-button class="check-margin" value="TrabajoSocial">Trabajo Social</mat-radio-button>
+      <mat-radio-button *ngIf="especialidadMedicina" class="check-margin" value="medicina">Medicina</mat-radio-button>
+    </mat-radio-group>
+
+
+  </div>
+  <div class="flex-contenedor-busqueda">
+    <form class="contenedor" [formGroup]="formAsignarProfesional">
+      <div class="campo">
+        <mat-form-field>
+          <mat-select id="piso" (change)="filtrarProfesional($event)" formControlName="profesionalForm">
+            <mat-option [value]="sinProfesional">
+              {{sinProfesional}}
+            </mat-option>
+
+            <mat-option *ngFor="let profesional of profesionalesList" [value]="profesional.idProfesional">
+              {{ profesional.nombreCompleto }}
+            </mat-option>
+          </mat-select>
+
+        </mat-form-field>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="separador"></div>
+
+      <div class="boton">
+        <button mat-raised-button id="asignarProfesional" color="primary" style="padding-right: 3%;"
+                (click)="asignar()" [disabled]="deshabilitarBotones">
+          {{ asignarPacienteViewModel.mensajes.botones.asignarProfesional }}
+        </button>
+        <button mat-raised-button id="asignarPiso" color="primary" (click)="anularAsignacion()"
+                [disabled]="deshabilitarBotones">
+          {{ asignarPacienteViewModel.mensajes.botones.anularAsignacion }}
+        </button>
+      </div>
+
+
+    </form>
+    <div class="separador"></div>
+  </div>
+</div>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>

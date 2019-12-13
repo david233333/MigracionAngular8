@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-lg-12">
+
+    <p-table
+      #dataTable
+      [value]="data"
+      scrollable="true"
+      scrollHeight="200px">
+      <p-column
+        *ngFor="let col of cols"
+        [field]="col.field"
+        [header]="col.header"
+        [sortable]="true"
+        [filter]="true"
+        filterPlaceholder="{{ mensajes.resultadoBusqueda.buscar }}"
+        filterMatchMode="contains">
+      </p-column>
+      <p-footer>
+        {{ mensajes.resultadoBusqueda.numeroRegistros }} {{ dataTable.dataToRender.length }}
+      </p-footer>
+    </p-table>
+
+  </div>
+</div>

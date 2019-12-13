@@ -1,0 +1,219 @@
+  <mat-dialog-content>
+  <div *ngIf="ocultarInformacion">
+
+  <div>
+    <div>
+      <table class="tabla">
+        <tr>
+          <th class="pipe" (click)="cambiarDireccion()" >Cambiar dirección</th>
+          <th class="cerrar_table"  (click)="gestionarContacto()">Registrar contacto</th>
+        </tr>
+      </table>
+    </div>
+    <div class="formulario">
+      <form [formGroup]="formularioDetalle" >
+        <div class="primer_item" align="center">
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="identificación"  formControlName="identificacion" matInput placeholder="Identificación">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="nombre" matInput formControlName="nombre" placeholder="Nombre">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="panSAlud" matInput formControlName="planSalud" placeholder="Plan salud">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="primer_item" align="center">
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="Municipio" formControlName="municipio" matInput placeholder="Municipio">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="Barrio" matInput formControlName="barrio" placeholder="Barrio">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="Direccion" matInput formControlName="direccion" placeholder="Direccion">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="primer_item" align="center">
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="telefono" matInput formControlName="telefono1"  placeholder="Telefono">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="celular" matInput  formControlName="celular" placeholder="Celular">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+          <mat-form-field>
+            <input id="Cuidador" matInput formControlName="cuidador" placeholder="Cuidador">
+          </mat-form-field>
+        </div>
+        </div>
+  <!--      <div class="primer_item" align="center">
+
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="IpS" matInput formControlName="ips" placeholder="Ips">
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="fechaFin" matInput formControlName="fechaFin" placeholder="Fecha fin tratamiento">
+            </mat-form-field>
+          </div>
+        </div>-->
+      </form>
+    </div>
+    <div class="tabla_contenedor">
+      <p-table [columns]="cols" [value]="lineaModalUnicaModel.respuestaCita" [scrollable]="true"
+               scrollHeight="400px" [paginator]="true" (onPage)="onPageListaRemision($event)"
+               [rows]="10" [rowsPerPageOptions]="[10,20,30]" [responsive]="true" dataKey="idRemisionPK">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th class="tabla_header">
+              {{lineaModalUnicaModel.mensajes.tabla.fechaPrimercita}}
+              <p-sortIcon [field]="lineaModalUnicaModel.mensajes.tabla.fechaPrimercita"></p-sortIcon>
+            </th>
+            <th class="tabla_header">
+              {{lineaModalUnicaModel.mensajes.tabla.fechaFinCitaCampo}}
+              <p-sortIcon [field]="lineaModalUnicaModel.mensajes.tabla.fechaFinCita"></p-sortIcon>
+            </th>
+            <th class="tabla_header">
+              {{lineaModalUnicaModel.mensajes.tabla.especialista}}
+              <p-sortIcon [field]="lineaModalUnicaModel.mensajes.tabla.especialistaCampo"></p-sortIcon>
+            </th>
+            <th class="tabla_header">
+              {{lineaModalUnicaModel.mensajes.tabla.visualizar}}
+              <p-sortIcon [field]="lineaModalUnicaModel.mensajes.tabla.visualizar"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+            <td class="tabla_header">{{rowData.fechaInicioCita | date:'dd-MM-yyyy HH:mm a '}}</td>
+            <td class="tabla_header">{{rowData.fechaFinCita  | date:'dd-MM-yyyy HH:mm a '}}</td>
+            <td class="tabla_header">{{rowData.especialidad}}</td>
+            <td class="tabla_header" (click)="detalleVisita(rowData)">
+              <mat-icon>
+                visibility
+              </mat-icon>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" class="container" let-columns>
+          <tr>
+            <td class="center-header-table" [attr.colspan]="cols.length + 1">
+              {{ lineaModalUnicaModel.mensajes.tabla.noCitas }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table></div>
+  </div>
+  </div>
+  <!-- Actualizacón -->
+  <div *ngIf="!ocultarInformacion">
+    <div class="titulo-ventana">
+      <h4 mat-dialog-title> {{lineaModalUnicaModel.mensajes.campos.novedad}}</h4>
+    </div>
+    <div class="formulario">
+      <form [formGroup]="formularioCambioDatos" >
+        <div class="primer_item" align="center">
+          <div class="campo_item">
+            <mat-form-field >
+              <mat-select id="ciudad" placeholder="Ciudad"
+                          formControlName="ciudad" (change)="limpiarCamposMunicipio()">
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option  *ngFor="let ciudad of lineaModalUnicaModel.respuestaCiudades"
+                             [value]="ciudad.idCiudad">
+                  {{ ciudad.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="municipioActualizacion" matInput formControlName="municipio" placeholder="Municipio">
+            </mat-form-field>
+          </div>
+
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="barrioActualizacion" matInput formControlName="barrio" placeholder="Barrio">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="primer_item" align="center">
+          <div class="campo_item_ubicacion">
+            <mat-form-field>
+              <input id="direccionActualizacion"  formControlName="direccion" matInput placeholder="Dirección">
+            </mat-form-field>
+            <button
+              [disabled]="disableButton"
+              (click)="abrirModalDireccion()"
+              matTooltip="Buscar"
+              [matTooltipPosition]="'right'"
+              mat-icon-button>
+              <mat-icon>
+                location_on
+              </mat-icon>
+            </button>
+          </div>
+          <div class="subCampoUbicacion">
+            <mat-form-field>
+              <input id="CuidadorActualizacion" matInput formControlName="cuidador" placeholder="Cuidador">
+            </mat-form-field>
+          </div>
+          <div class="subCampoUbicacion">
+            <mat-form-field>
+              <input id="telefono1Actualizacion" matInput formControlName="telefono1" placeholder="Telefono">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="primer_item" align="center">
+          <div class="campo_item">
+            <mat-form-field>
+              <input id="celularActualizacion" matInput formControlName="celular" placeholder="Celular">
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button *ngIf="ocultarInformacion" mat-raised-button  id="cerrar" (click)="cerrar()">
+   Cerrar
+  </button>
+  <button *ngIf="!ocultarInformacion" mat-raised-button id="cancelar" (click)="cancelarActualizacion()">
+    Cancelar
+  </button>
+
+  <button *ngIf="ocultarInformacion"  mat-raised-button id="continuar" color="primary"  (click)="marcarComoExitoso()">
+    Marcar como Exitoso
+  </button>
+  <button  *ngIf="!ocultarInformacion" mat-raised-button id="guardar" color="primary" (click)="guardarActualizacion()">
+    Guardar
+  </button>
+</mat-dialog-actions>
+

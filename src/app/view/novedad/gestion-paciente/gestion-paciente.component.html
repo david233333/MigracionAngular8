@@ -1,0 +1,249 @@
+<mat-progress-bar [hidden]="!gestionPacienteViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+<div class="container">
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="texto-titulo">{{ gestionPacienteViewModel.mensajes.titulos.gestionarPacientes }}</div>
+  </div>
+  <hr class="linea-espacio">
+  <div class="flex-contenedor-busqueda">
+    <form [formGroup]="formularioFiltros" class="contenedor">
+      <div class="campo identificacion">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select formControlName="tipoDocumento" id="tipoDocumento"
+                        placeholder="{{ gestionPacienteViewModel.mensajes.campos.tipoDocumento }}">
+              <mat-option *ngFor="let tipo of gestionPacienteViewModel.respuestaTiposIdentificacion"
+                          [value]="tipo.idTipo">
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input [maxlength]="20" formControlName="numeroDocumento" id="numeroDocumento"
+                   matInput
+                   maxlength="20" placeholder="{{ gestionPacienteViewModel.mensajes.campos.numeroDocumento }}">
+
+            <button *ngIf="formularioFiltros.controls['numeroDocumento'].value" mat-button mat-icon-button
+                    matSuffix>
+              <mat-icon (click)="limpiarDocumento()">close</mat-icon>
+            </button>
+
+            <mat-error *ngIf="formularioFiltros.controls['numeroDocumento'].hasError('maxlength')">
+              {{ gestionPacienteViewModel.mensajes.errores.numeroDocumentoMaximaLongitud }}
+            </mat-error>
+
+            <mat-error *ngIf="formularioFiltros.controls['numeroDocumento'].hasError('pattern')">
+              {{ gestionPacienteViewModel.mensajes.errores.numeroDocumentoInvalido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select (selectionChange)="seleccionPiso($event.value);" formControlName="ciudad"
+                        id="ciudad" placeholder="{{ gestionPacienteViewModel.mensajes.campos.ciudad }}">
+              <mat-option *ngFor="let ciudad of gestionPacienteViewModel.respuestaCiudades" [value]="ciudad.idCiudad">
+                {{ ciudad.nombre }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="formularioFiltros.controls['ciudad'].hasError('required')">
+              {{ gestionPacienteViewModel.mensajes.errores.ciudadRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <mat-select formControlName="piso" id="piso"
+                        multiple placeholder="{{ gestionPacienteViewModel.mensajes.campos.piso }}">
+              <mat-option *ngFor="let piso of gestionPacienteViewModel.respuestaPisos" [value]="piso.idPiso">
+                {{ piso.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select formControlName="estado" id="estado"
+                        placeholder="{{ gestionPacienteViewModel.mensajes.campos.estado }}">
+              <mat-option *ngFor="let estado of gestionPacienteViewModel.respuestaEstados" [value]="estado.nombre">
+                {{ estado.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="campo-guardarFiltros">
+          <button (click)="guardarFiltros()" color="primary" id="guardarFiltro" mat-raised-button>
+            <mat-icon>save</mat-icon>
+            {{ gestionPacienteViewModel.mensajes.botones.guardarFiltros }}
+          </button>
+        </div>
+      </div>
+
+      <div class="botones">
+        <div class="boton">
+          <button (click)="limpiar()" color="default" id="limpiar" mat-raised-button>
+            <mat-icon>clear</mat-icon>
+            {{ gestionPacienteViewModel.mensajes.botones.limpiar }}
+          </button>
+        </div>
+
+        <div class="boton">
+          <button (click)="buscar()" color="primary" id="buscar" mat-raised-button>
+            <mat-icon>search</mat-icon>
+            {{ gestionPacienteViewModel.mensajes.botones.buscar }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="total-paciente">
+    <div class="total-estado">
+            <span class="titulo-total"> {{ gestionPacienteViewModel.mensajes.campos.activos }} {{
+                gestionPacienteViewModel.totalActivos }} </span>
+      <img alt="Total activos" class="img-total" src="./assets/img/activos.svg">
+    </div>
+    <div class="total-estado">
+            <span class="titulo-total"> {{ gestionPacienteViewModel.mensajes.campos.nuevo }} {{
+                gestionPacienteViewModel.totalNuevos }}</span>
+      <img alt="Total nuevos" class="img-total" src="./assets/img/nuevos.svg">
+    </div>
+    <div class="total-estado">
+            <span class="titulo-total"> {{ gestionPacienteViewModel.mensajes.campos.preAlta }} {{
+                gestionPacienteViewModel.totalPrealta }}</span>
+      <img alt="Total pre alta" class="img-total" src="./assets/img/pre-alta.svg">
+    </div>
+    <div class="total-estado">
+            <span class="titulo-total"> {{ gestionPacienteViewModel.mensajes.campos.alta }} {{
+                gestionPacienteViewModel.totalAlta }}</span>
+      <img alt="Total alta" class="img-total" src="./assets/img/alta.svg">
+    </div>
+
+  </div>
+  <div class="separador"></div>
+  <div class="table">
+    <p-table (onPage)="onPageGestionPaciente($event)" [columns]="columnas" [lazy]="true"
+             [paginator]="true" [responsive]="true" [rowsPerPageOptions]="[10,20,30]" [rows]="10" [scrollable]="true"
+             [totalRecords]="totalRegistros" [value]="gestionPacienteViewModel.respuestaPacientes" dataKey="idSolicitud"
+             scrollHeight="400px">
+      <ng-template let-columns pTemplate="header">
+        <tr>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.remision}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.identificacion}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.paciente}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.resumenRemision}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.novedad}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.equipoBiomedico}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.fechaAdmision}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.fechaPosibleAlta}}
+          </th>
+          <th class="texto-tabla">
+            {{gestionPacienteViewModel.mensajes.tabla.estado}}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template let-columns="columns" let-rowData pTemplate="body">
+        <tr [pSelectableRow]="rowData">
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">{{
+                            gestionPacienteViewModel.mensajes.tabla.remision
+                          }}</span>
+            {{rowData.idRemision }}
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">{{
+                            gestionPacienteViewModel.mensajes.tabla.identificacion
+                          }}</span>
+            {{ rowData.tipoDocumentoPaciente.idTipo }} - {{ rowData.numeroDocumentoPaciente }}
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">{{
+                            gestionPacienteViewModel.mensajes.tabla.paciente
+                          }}</span>
+            {{rowData.nombre}} {{rowData.apellido}}
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">{{
+                            gestionPacienteViewModel.mensajes.tabla.resumenRemision
+                          }}</span>
+            <span (click)='linkHistorialNovedad(rowData)' class="linkPaciente">{{
+                gestionPacienteViewModel.mensajes.tabla.linkHistorial
+              }}</span>
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">{{
+                            gestionPacienteViewModel.mensajes.tabla.novedad
+                          }}</span>
+            <span (click)='linkGestionarNovedad(rowData)' *ngIf="rowData.gestionar" class="linkPaciente">
+              {{ gestionPacienteViewModel.mensajes.tabla.linkGestionar }}</span>
+            <span *ngIf="rowData.gestionar">-</span>
+            <span (click)='linkCrearNovedad(rowData)' class="linkPaciente">
+              {{ gestionPacienteViewModel.mensajes.tabla.linkCrearNovedad }}</span>
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">
+                          {{ gestionPacienteViewModel.mensajes.tabla.equipoBiomedico }}</span>
+            <span (click)='linkEquipoBiomedico(rowData)' class="linkPaciente">
+              {{ gestionPacienteViewModel.mensajes.tabla.linkEquipoBiomedico }}</span>
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">
+                          {{ gestionPacienteViewModel.mensajes.tabla.fechaAdmision }}</span>
+            {{rowData.fechaIngresoPaciente | date: 'dd-MM-yyyy HH:mm'}}
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">
+                          {{ gestionPacienteViewModel.mensajes.tabla.fechaPosibleAlta }}</span>
+            {{rowData.fechaPosibleAlta | date: 'dd-MM-yyyy HH:mm' }}
+          </td>
+          <td class="texto-resultados-tabla">
+                        <span class="ui-column-title">
+                          {{ gestionPacienteViewModel.mensajes.tabla.estado }}</span>
+            {{rowData.estadoPaciente}}
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template class="container" let-columns pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columnas.length + 1" class="center-header-table">
+            {{ gestionPacienteViewModel.mensajes.tabla.noPacientes }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-footer>
+      <div class="total-registros">
+                <span class="total-registros-texto"> {{
+                    gestionPacienteViewModel.mensajes.tabla.totalRegistros }}</span>
+        <span class="total-registros-valor">{{ totalRegistros }}</span>
+      </div>
+    </p-footer>
+  </div>
+</div>
+<!--<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>-->

@@ -1,0 +1,19 @@
+.field{
+  width: 60%;
+}
+.mat{
+  width: 100%;
+}
+.form{
+  margin-left: 28%;
+  margin-top: 5%;
+}
+@media (max-width: 800px) {
+  .form{
+    margin-left: 0%;
+    margin-top: 5%;
+  }
+  .field{
+    width: 100%;
+  }
+}

@@ -1,0 +1,616 @@
+<section>
+  <div class="container">
+    <div class="titulo-ventana">
+      <h4 mat-dialog-title>{{ modalTratamientosViewModel.tituloVentana }}</h4>
+    </div>
+    <div class="ventana-container">
+      <div class="menu">
+        <p-tabView orientation="left" (onChange)="seleccionarPlan($event)">
+          <p-tabPanel *ngIf="habilitarMedicamentos" [header]="modalTratamientosViewModel.mensajes.opcionesMenu.medicamentos"
+            [selected]="seleccionMedicamentos">
+          </p-tabPanel>
+          <p-tabPanel *ngIf="habilitarNebulizaciones" [header]="modalTratamientosViewModel.mensajes.opcionesMenu.nebulizaciones"
+            [selected]="seleccionNebulizaciones">
+          </p-tabPanel>
+          <p-tabPanel *ngIf="habilitarOxigenoterapia" [header]="modalTratamientosViewModel.mensajes.opcionesMenu.oxigenoterapia"
+            [selected]="seleccionOxigenoterapia">
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+      <div class="form">
+        <mat-dialog-content class="dialog-medicamentos">
+          <div [ngSwitch]="nombreFormulario">
+            <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.medicamentos">
+              <form [formGroup]="formularioMedicamentos" class="contenedor-formulario">
+                <div class="secciones-formulario">
+
+                  <div class="campo">
+                    <mat-form-field class="campo-control-medicamento">
+                      <input id="medicamento" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.medicamento }}"
+                        [matAutocomplete]="auto" (keyup)="getMedicamentos(medicamentosData)" formControlName="medicamento">
+
+                      <mat-error *ngIf="formularioMedicamentos.controls['medicamento'].hasError('required')">
+                        {{ modalTratamientosViewModel.mensajes.errores.medicamentoRequerido }}
+                      </mat-error>
+
+                      <mat-error *ngIf="formularioMedicamentos.controls['medicamento'].hasError('maxlength')">
+                        {{ modalTratamientosViewModel.mensajes.errores.medicamentoMaximaLongitud }}
+                      </mat-error>
+
+                      <button mat-button *ngIf="formularioMedicamentos.controls['medicamento'].value" matSuffix
+                        mat-icon-button (click)="formularioMedicamentos.controls['medicamento'].setValue(null)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+
+                      <mat-hint>{{ modalTratamientosViewModel.mensajes.campos.medicamentoBuscar }}</mat-hint>
+
+                      <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarInformacion">
+                        <mat-option *ngFor="let opcion of modalTratamientosViewModel.respuestaMedicamentos" [value]="opcion">
+                          {{ opcion.codigoMedicamento }} {{ opcion.nombre }} {{ opcion.presentacion }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="seccion-formulario">
+
+                    <div class="campo">
+
+                      <mat-form-field class="control-pequeno">
+                        <input id="cantidadDosis" [maxlength]="8" class="center" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.dosis }}"
+                          formControlName="cantidadDosis">
+
+                        <mat-error *ngIf="formularioMedicamentos.controls['cantidadDosis'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadRequerido }}
+                        </mat-error>
+
+                        <mat-error *ngIf="formularioMedicamentos.controls['cantidadDosis'].hasError('maxlength')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadMaximaLongitud }}
+                        </mat-error>
+
+                        <mat-error *ngIf="formularioMedicamentos.controls['cantidadDosis'].hasError('pattern')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadInvalido }}
+                        </mat-error>
+                      </mat-form-field>
+
+                      <mat-form-field class="control-medio">
+                        <mat-select id="unidadDosis" placeholder="{{ modalTratamientosViewModel.mensajes.campos.dosisUnidades }}"
+                          formControlName="unidadDosis">
+
+                          <mat-option *ngFor="let unidad of modalTratamientosViewModel.respuestaUnidadesDosisMedicamentos"
+                            [value]="unidad.descripcion">
+                            {{ unidad.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioMedicamentos.controls['unidadDosis'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisUnidadesRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+
+                      <mat-form-field class="campo-control">
+                        <mat-select id="viaAdministracion" placeholder="{{ modalTratamientosViewModel.mensajes.campos.viaAdministracion }}"
+                          formControlName="viaAdministracion">
+
+                          <mat-option *ngFor="let via of modalTratamientosViewModel.respuestaViasAdministracionMedicamentos"
+                            [value]="via.descripcion">
+                            {{ via.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioMedicamentos.controls['viaAdministracion'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.viaAdministracionRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+                  <div class="seccion-formulario">
+
+                    <div class="campo">
+
+                      <mat-form-field class="campo-control">
+                        <mat-select id="frecuencia" placeholder="{{ modalTratamientosViewModel.mensajes.campos.frecuencia }}"
+                          formControlName="frecuencia">
+
+                          <mat-option *ngFor="let frecuencia of modalTratamientosViewModel.respuestaFrecuenciasMedicamentos"
+                            [value]="frecuencia.descripcion">
+                            {{ frecuencia.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioMedicamentos.controls['frecuencia'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.frecuenciaRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+
+                      <div class="cantidadDosis">
+                        <mat-form-field class="control-cantidad-dosis">
+                          <input id="duracion" class="center" [maxlength]="3" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.duracion }}"
+                            formControlName="duracion">
+
+                          <mat-error *ngIf="formularioMedicamentos.controls['duracion'].hasError('required')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionRequerido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioMedicamentos.controls['duracion'].hasError('maxlength')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMaximaLongitud }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioMedicamentos.controls['duracion'].hasError('pattern')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionInvalido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioMedicamentos.controls['duracion'].hasError('min')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMin }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioMedicamentos.controls['duracion'].hasError('max')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMax }}
+                          </mat-error>
+                        </mat-form-field>
+
+                        <p class="control-dosis-texto">{{ modalTratamientosViewModel.mensajes.campos.duracionDosis }}</p>
+                      </div>
+                    </div>
+
+                    <div class="campo control-para-iniciar">
+                      <mat-checkbox id="tieneUltimaAplicacion" #tieneUltimaAplicacion formControlName="tieneUltimaAplicacion"
+                        (change)="onChangeTieneUltimaAplicacion($event)">
+                        {{ modalTratamientosViewModel.mensajes.campos.tieneUltimaAplicacion }}
+                      </mat-checkbox>
+                    </div>
+
+                    <div class="campo ultimaAplicacion" [hidden]="!formularioMedicamentos.controls['tieneUltimaAplicacion'].value">
+
+                      <div class="controlUltimaAplicacion">
+
+                        <p-calendar inputStyleClass="ancho-control-input-calendario" panelStyleClass="tamano-control-calendario"
+                          [(ngModel)]="ultimaAplicacionMedicamentos" formControlName="ultimaAplicacion" [showTime]="true"
+                          [showIcon]="true" [locale]="configEspanolCalendario" placeholder="{{ modalTratamientosViewModel.mensajes.campos.ultimaAplicacion }}"
+                          dateFormat="dd/mm/yy" [maxDate]="fechaMaximaCalendarioActual" (onClose)="onCloseUltimaAplicacion()"
+                          [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" hourFormat="12" [readonlyInput]="true"></p-calendar>
+                        <div class="mat-error-clase" *ngIf="formularioMedicamentos.controls['ultimaAplicacion'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.fechaUltimaAplicacionRequerido }}
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="campo noPBS">
+                      <mat-checkbox id="noPBS" #noPBS formControlName="noPBS" (change)="onChangeNoPBS($event)">
+                        {{ modalTratamientosViewModel.mensajes.campos.noPBS }}
+                      </mat-checkbox>
+                    </div>
+
+                    <div class="campo" *ngIf="fechaFinTratamientoVisible()">
+                      <div class="fechaFinTratamiento">
+                        <p class="tituloFechaFinTratamiento">{{
+                          modalTratamientosViewModel.mensajes.campos.fechaFinTratamiento }}</p>
+                        <p class="valorFechaFinTratamiento">{{ modalTratamientosViewModel.valorFechaFinTratamiento }}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+            </ng-template>
+            <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.nebulizaciones">
+              <form [formGroup]="formularioNebulizaciones" class="contenedor-formulario">
+                <div class="secciones-formulario">
+
+                  <div class="campo">
+                    <mat-form-field class="campo-control-medicamento">
+                      <input id="medicamento" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.medicamento }}"
+                        [matAutocomplete]="auto" (keyup)="getMedicamentos(nebulizacionData)" formControlName="medicamento">
+
+                      <mat-error *ngIf="formularioNebulizaciones.controls['medicamento'].hasError('required')">
+                        {{ modalTratamientosViewModel.mensajes.errores.medicamentoRequerido }}
+                      </mat-error>
+
+                      <mat-error *ngIf="formularioNebulizaciones.controls['medicamento'].hasError('maxlength')">
+                        {{ modalTratamientosViewModel.mensajes.errores.medicamentoMaximaLongitud }}
+                      </mat-error>
+
+                      <button mat-button *ngIf="formularioNebulizaciones.controls['medicamento'].value" matSuffix
+                        mat-icon-button (click)="formularioNebulizaciones.controls['medicamento'].setValue(null)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+
+                      <mat-hint>{{ modalTratamientosViewModel.mensajes.campos.medicamentoBuscar }}</mat-hint>
+
+                      <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarInformacion">
+                        <mat-option *ngFor="let opcion of modalTratamientosViewModel.respuestaMedicamentos" [value]="opcion">
+                            {{ opcion.codigoMedicamento }} {{ opcion.nombre }} {{ opcion.presentacion }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="seccion-formulario">
+
+                    <div class="campo">
+
+                      <mat-form-field class="control-pequeno">
+                        <input id="cantidadDosis" class="center" [maxlength]="8" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.dosis }}"
+                          formControlName="cantidadDosis">
+
+                        <mat-error *ngIf="formularioNebulizaciones.controls['cantidadDosis'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadRequerido }}
+                        </mat-error>
+
+                        <mat-error *ngIf="formularioNebulizaciones.controls['cantidadDosis'].hasError('maxlength')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadMaximaLongitud }}
+                        </mat-error>
+
+                        <mat-error *ngIf="formularioNebulizaciones.controls['cantidadDosis'].hasError('pattern')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadInvalido }}
+                        </mat-error>
+                      </mat-form-field>
+
+                      <mat-form-field class="control-medio">
+                        <mat-select id="unidadDosis" [maxlength]="8" placeholder="{{ modalTratamientosViewModel.mensajes.campos.dosisUnidades }}"
+                          formControlName="unidadDosis">
+
+                          <mat-option *ngFor="let unidad of modalTratamientosViewModel.respuestaUnidadesDosisNebulizaciones"
+                            [value]="unidad.descripcion">
+                            {{ unidad.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioNebulizaciones.controls['unidadDosis'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisUnidadesRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="campo">
+
+                      <mat-form-field class="campo-control">
+                        <mat-select id="viaAdministracion" placeholder="{{ modalTratamientosViewModel.mensajes.campos.viaAdministracion }}"
+                          formControlName="viaAdministracion">
+
+                          <mat-option *ngFor="let via of modalTratamientosViewModel.respuestaViasAdministracionNebulizaciones"
+                            [value]="via.descripcion">
+                            {{ via.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioNebulizaciones.controls['viaAdministracion'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.viaAdministracionRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+
+                      <div class="fieldset-control">
+                        <p-fieldset class="left" [toggleable]="false" legend="{{ modalTratamientosViewModel.mensajes.campos.diluyente }}">
+                          <div>
+                            <mat-radio-group [(ngModel)]="modalTratamientosViewModel.diluyente" (change)="cambiarDiluyente($event)"
+                              formControlName="diluyente" layout="row">
+                              <mat-radio-button [value]="modalTratamientosViewModel.mensajes.campos.diluyenteSolucionSalina">
+                                {{ modalTratamientosViewModel.mensajes.campos.diluyenteSolucionSalina }}
+                              </mat-radio-button>
+                              <mat-radio-button [value]="modalTratamientosViewModel.mensajes.campos.diluyenteOtro">
+                                {{ modalTratamientosViewModel.mensajes.campos.diluyenteOtro }}
+                              </mat-radio-button>
+                              <mat-error class="diluyente-requerido" *ngIf="formularioNebulizaciones.controls['diluyente'].hasError('required')">
+                                {{ modalTratamientosViewModel.mensajes.errores.diluyenteOpcionRequerido }}
+                              </mat-error>
+                            </mat-radio-group>
+
+
+
+                            <div *ngIf="formularioNebulizaciones.controls['diluyente'].value == modalTratamientosViewModel.mensajes.campos.diluyenteOtro">
+                              <mat-form-field class="control-otro-cantidadDiluyente">
+                                <input id="otroDiluyente" [maxlength]="8" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.diluyenteOtro }}"
+                                  formControlName="otroDiluyente">
+                                <mat-error *ngIf="formularioNebulizaciones.controls['otroDiluyente'].hasError('required')">
+                                  {{ modalTratamientosViewModel.mensajes.errores.diluyenteRequerido }}
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+
+                            <div class="cantidadDiluyente">
+                              <mat-form-field class="control-otro-cantidadDiluyente">
+                                <input class="center" id="cantidadDiluyente" [maxlength]="8" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.diluyenteCantidad }}"
+                                  formControlName="cantidadDiluyente">
+                                <mat-error *ngIf="formularioNebulizaciones.controls['cantidadDiluyente'].hasError('required')">
+                                  {{ modalTratamientosViewModel.mensajes.errores.diluyenteCantidadRequerido }}
+                                </mat-error>
+
+                                <mat-error *ngIf="formularioNebulizaciones.controls['cantidadDiluyente'].hasError('maxlength')">
+                                  {{ modalTratamientosViewModel.mensajes.errores.diluyenteCantidadMaximaLongitud }}
+                                </mat-error>
+
+                                <mat-error *ngIf="formularioNebulizaciones.controls['cantidadDiluyente'].hasError('pattern')">
+                                  {{ modalTratamientosViewModel.mensajes.errores.diluyenteCantidadInvalido }}
+                                </mat-error>
+                              </mat-form-field>
+                              <p class="mlDiluyente">{{ modalTratamientosViewModel.mensajes.campos.ml }}</p>
+                            </div>
+                          </div>
+                        </p-fieldset>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <div class="seccion-formulario">
+
+
+                    <div class="campo">
+
+                      <mat-form-field class="campo-control">
+                        <mat-select id="frecuencia" placeholder="{{ modalTratamientosViewModel.mensajes.campos.frecuencia }}"
+                          formControlName="frecuencia">
+
+                          <mat-option *ngFor="let frecuencia of modalTratamientosViewModel.respuestaFrecuenciasNebulizaciones"
+                            [value]="frecuencia.descripcion">
+                            {{ frecuencia.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioNebulizaciones.controls['frecuencia'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.frecuenciaRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+
+                      <div class="cantidadDosis">
+                        <mat-form-field class="control-cantidad-dosis">
+                          <input id="duracion" class="center" [maxlength]="3" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.duracion }}"
+                            formControlName="duracion">
+
+                          <mat-error *ngIf="formularioNebulizaciones.controls['duracion'].hasError('required')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionRequerido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioNebulizaciones.controls['duracion'].hasError('maxlength')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMaximaLongitud }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioNebulizaciones.controls['duracion'].hasError('pattern')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionInvalido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioNebulizaciones.controls['duracion'].hasError('min')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMin }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioNebulizaciones.controls['duracion'].hasError('max')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMax }}
+                          </mat-error>
+                        </mat-form-field>
+
+                        <p class="control-dosis-texto">{{ modalTratamientosViewModel.mensajes.campos.duracionDosis }}</p>
+                      </div>
+                    </div>
+
+
+                    <div class="campo ultimaAplicacion">
+                      <div class="controlUltimaAplicacion">
+                        <p-calendar inputStyleClass="ancho-control-input-calendario" panelStyleClass="tamano-control-calendario"
+                          [(ngModel)]="ultimaAplicacionNebulizaciones" formControlName="ultimaAplicacion" [showTime]="true"
+                          [showIcon]="true" [locale]="configEspanolCalendario" placeholder="{{ modalTratamientosViewModel.mensajes.campos.ultimaAplicacion }}"
+                          dateFormat="dd/mm/yy" [maxDate]="fechaMaximaCalendarioActual" (onClose)="onCloseUltimaAplicacion()"
+                          [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" hourFormat="12" [readonlyInput]="true"
+                          [readonlyInput]="true"></p-calendar>
+                      </div>
+                    </div>
+
+
+                    <div class="campo noPBS">
+                      <mat-checkbox id="noPBS" #noPBS formControlName="noPBS" (change)="onChangeNoPBS($event)">
+                        {{ modalTratamientosViewModel.mensajes.campos.noPBS }}
+                      </mat-checkbox>
+                    </div>
+
+                    <div class="campo" *ngIf="formularioNebulizaciones.controls['frecuencia'].value && formularioNebulizaciones.controls['duracion'].value && formularioNebulizaciones.controls['ultimaAplicacion'].value">
+                      <div class="fechaFinTratamiento">
+                        <p class="tituloFechaFinTratamiento">{{
+                          modalTratamientosViewModel.mensajes.campos.fechaFinTratamiento }}</p>
+                        <p class="valorFechaFinTratamiento">{{ modalTratamientosViewModel.valorFechaFinTratamiento }}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+            </ng-template>
+            <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.oxigenoterapia">
+              <form [formGroup]="formularioOxigeno" class="contenedor-formulario">
+                <div class="secciones-formulario">
+
+                  <div class="campo">
+                    <mat-form-field class="campo-control-medicamento">
+                      <input id="medicamento" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.medicamento }}"
+                        [matAutocomplete]="auto" (keyup)="getMedicamentos(oxigenoTerapiaData)" formControlName="medicamento">
+
+                      <mat-error *ngIf="formularioOxigeno.controls['medicamento'].hasError('required')">
+                        {{ modalTratamientosViewModel.mensajes.errores.medicamentoRequerido }}
+                      </mat-error>
+
+                      <mat-error *ngIf="formularioOxigeno.controls['medicamento'].hasError('maxlength')">
+                        {{ modalTratamientosViewModel.mensajes.errores.medicamentoMaximaLongitud }}
+                      </mat-error>
+
+                      <button mat-button *ngIf="formularioOxigeno.controls['medicamento'].value" matSuffix
+                        mat-icon-button (click)="formularioOxigeno.controls['medicamento'].setValue(null)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+
+                      <mat-hint>{{ modalTratamientosViewModel.mensajes.campos.medicamentoBuscar }}</mat-hint>
+
+                      <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarInformacion">
+                        <mat-option *ngFor="let opcion of modalTratamientosViewModel.respuestaMedicamentos" [value]="opcion">
+                            {{ opcion.codigoMedicamento }} {{ opcion.nombre }} {{ opcion.presentacion }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="seccion-formulario">
+
+                    <div class="campo">
+
+                      <mat-form-field class="control-pequeno">
+                        <input id="cantidadDosis" [maxlength]="8" class="center" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.dosis }}"
+                          formControlName="cantidadDosis">
+
+                        <mat-error *ngIf="formularioOxigeno.controls['cantidadDosis'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadRequerido }}
+                        </mat-error>
+
+                        <mat-error *ngIf="formularioOxigeno.controls['cantidadDosis'].hasError('maxlength')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadMaximaLongitud }}
+                        </mat-error>
+
+                        <mat-error *ngIf="formularioOxigeno.controls['cantidadDosis'].hasError('pattern')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisCantidadInvalido }}
+                        </mat-error>
+                      </mat-form-field>
+
+                      <mat-form-field class="control-medio">
+                        <mat-select id="unidadDosis" placeholder="{{ modalTratamientosViewModel.mensajes.campos.dosisUnidades }}"
+                          formControlName="unidadDosis">
+
+                          <mat-option *ngFor="let unidad of modalTratamientosViewModel.respuestaUnidadesDosisOxigenoterapia"
+                            [value]="unidad.descripcion">
+                            {{ unidad.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioOxigeno.controls['unidadDosis'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.dosisUnidadesRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+
+                      <mat-form-field class="campo-control">
+                        <mat-select id="viaAdministracion" placeholder="{{ modalTratamientosViewModel.mensajes.campos.viaAdministracion }}"
+                          formControlName="viaAdministracion">
+
+                          <mat-option *ngFor="let via of modalTratamientosViewModel.respuestaViasAdministracionOxigenoterapia"
+                            [value]="via.descripcion">
+                            {{ via.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioOxigeno.controls['viaAdministracion'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.viaAdministracionRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+                  <div class="seccion-formulario">
+
+                    <div class="campo">
+
+                      <mat-form-field class="campo-control">
+                        <mat-select id="frecuencia" placeholder="{{ modalTratamientosViewModel.mensajes.campos.frecuencia }}"
+                          formControlName="frecuencia">
+
+                          <mat-option *ngFor="let frecuencia of modalTratamientosViewModel.respuestaFrecuenciasOxigenoterapia"
+                            [value]="frecuencia.descripcion">
+                            {{ frecuencia.descripcion }}
+                          </mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="!formularioOxigeno.controls['frecuencia'].hasError('required')">
+                          {{ modalTratamientosViewModel.mensajes.errores.frecuenciaRequerido }}
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+
+                      <div class="cantidadDosis">
+                        <mat-form-field class="control-cantidad-dosis">
+                          <input id="duracion" [maxlength]="3" class="center" matInput placeholder="{{ modalTratamientosViewModel.mensajes.campos.duracion }}"
+                            formControlName="duracion">
+
+                          <mat-error *ngIf="formularioOxigeno.controls['duracion'].hasError('required')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionRequerido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioOxigeno.controls['duracion'].hasError('maxlength')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMaximaLongitud }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioOxigeno.controls['duracion'].hasError('pattern')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionInvalido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioOxigeno.controls['duracion'].hasError('min')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMin }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioOxigeno.controls['duracion'].hasError('max')">
+                            {{ modalTratamientosViewModel.mensajes.errores.duracionMax }}
+                          </mat-error>
+                        </mat-form-field>
+
+                        <p class="control-dosis-texto">{{ modalTratamientosViewModel.mensajes.campos.duracionDosisOxigeno }}</p>
+                      </div>
+                    </div>
+
+                    <div class="campo noPBS">
+                      <mat-checkbox id="noPBS" #noPBS formControlName="noPBS" (change)="onChangeNoPBS($event)">
+                        {{ modalTratamientosViewModel.mensajes.campos.noPBS }}
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </ng-template>
+          </div>
+        </mat-dialog-content>
+      </div>
+    </div>
+    <mat-dialog-actions align="end">
+
+      <button  mat-raised-button id="cancelar" (click)="cerrarModal()">
+        {{ modalTratamientosViewModel.mensajes.botones.cancelar }}
+      </button>
+
+      <button *ngIf="!data.btnEditar" mat-raised-button id="agregar" color="primary" (click)="guardarPlanManejo()">
+        {{ modalTratamientosViewModel.mensajes.botones.agregar }}
+      </button>
+      <button *ngIf="data.btnEditar" mat-raised-button id="editar" color="primary" (click)="guardarPlanManejo()">
+        {{ modalTratamientosViewModel.mensajes.botones.editar }}
+      </button>
+
+    </mat-dialog-actions>
+    <!-- <div [ngSwitch]="nombreFormulario">
+      <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.medicamentos">
+        <p>Form value: {{ formularioMedicamentos.value | json }}</p>
+      </ng-template>
+      <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.nebulizaciones">
+        <p>Form value: {{ formularioNebulizaciones.value | json }}</p>
+      </ng-template>
+      <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.oxigenoterapia">
+        <p>Form value: {{ formularioOxigeno.value | json }}</p>
+      </ng-template>
+      <ng-template [ngSwitchCase]="modalTratamientosViewModel.mensajes.opcionesMenu.soporteNutricional">
+        <p>Form value: {{ formularioSoporteNutricional.value | json }}</p>
+      </ng-template>
+    </div> -->
+  </div>
+</section>

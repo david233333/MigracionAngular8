@@ -1,0 +1,250 @@
+
+  .flex-contenedor-busqueda {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+    .contenedor {
+      /*Pantalla pequenia*/
+      @media (max-width: 640px) {
+        width: 100%;
+      }
+      /*Pantalla Mediana*/
+      @media (min-width: 641px) {
+        width: 60%;
+      }
+      /*Pantalla grande*/
+      @media (min-width: 1006px) {
+        width: 60%;
+      }
+    }
+    .boton {
+        padding: 5px;
+        text-align: center;
+      }
+
+      mat-form-field {
+        width: 100%;
+      }
+}
+
+.center {
+  text-align: center;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+}
+
+.separador {
+    height: 30px;
+  }
+  
+  .mat-sort-header-container {
+    align-items: center;
+  }
+  
+  .example-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+  }
+  
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+  
+  .mat-header-cell.mat-sort-header-sorted {
+    color: black;
+  }
+  
+  .texto-tabla {
+    font-size: 10pt;
+    text-align: center;
+  }
+  
+  .center-header-table {
+    text-align: center;
+  }
+  
+  .accion {
+    cursor: pointer;
+  }
+  
+  .campo_identificacion{
+    display: flex;
+    width: 100%;
+  }
+  
+  .campo {
+    padding-bottom: 5px;
+    display: flex;
+  }
+
+  .planesGestionados {
+      margin-top: 3%;      
+  }
+
+  .campo-guardarFiltros {
+    margin-left: 5%;
+  }
+
+  .texto-accion {
+    font-size: 11pt;
+  }
+
+ 
+
+  .linea-espacio {
+    border: 0.5px solid #D5D5D5;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.texto-titulo {
+    text-align: center;
+    font-size: 20pt;    
+    margin-top: 0.5%;
+}
+
+.texto-resultados-tabla {
+ text-align: center;
+ font-size: 9.5pt;
+}
+
+.mat-error-clase {
+  display: block;
+  color: #f44336;
+  font-size: 80%;
+  text-align: center;
+  font-weight: 400;
+  line-height: 1.125;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin-top: 1%;
+}
+
+  /* Column Priorities */
+  @media only all {
+    th.ui-p-6,
+    td.ui-p-6,
+    th.ui-p-5,
+    td.ui-p-5,
+    th.ui-p-4,
+    td.ui-p-4,
+    th.ui-p-3,
+    td.ui-p-3,
+    th.ui-p-2,
+    td.ui-p-2,
+    th.ui-p-1,
+    td.ui-p-1 {
+      display: none;
+    }
+  }
+  
+  /* Show priority 1 at 320px (20em x 16px) */
+  @media screen and (min-width: 20em) {
+    th.ui-p-1,
+    td.ui-p-1 {
+      display: table-cell;
+    }
+  }
+  
+  /* Show priority 2 at 480px (30em x 16px) */
+  @media screen and (min-width: 30em) {
+    th.ui-p-2,
+    td.ui-p-2 {
+      display: table-cell;
+    }
+  }
+  
+  /* Show priority 3 at 640px (40em x 16px) */
+  @media screen and (min-width: 40em) {
+    th.ui-p-3,
+    td.ui-p-3 {
+      display: table-cell;
+    }
+  }
+  
+  /* Show priority 4 at 800px (50em x 16px) */
+  @media screen and (min-width: 50em) {
+    th.ui-p-4,
+    td.ui-p-4 {
+      display: table-cell;
+    }
+  }
+  
+  /* Show priority 5 at 960px (60em x 16px) */
+  @media screen and (min-width: 60em) {
+    th.ui-p-5,
+    td.ui-p-5 {
+      display: table-cell;
+    }
+  }
+  
+  /* Show priority 6 at 1,120px (70em x 16px) */
+  @media screen and (min-width: 70em) {
+    th.ui-p-6,
+    td.ui-p-6 {
+      display: table-cell;
+    }
+  }
+  .ah-side{
+    background: #0033a0;
+    width: 13%;
+    display: block;
+    cursor: pointer;
+    height: 2.5%;
+    margin-left: 42%;
+    border-radius: 12%;
+    text-align: center;
+  }
+  .ah-side2{
+    width: 100%;
+    display: list-item;
+  }
+  .arrow{
+    color: white;
+    /* top: 11%; */
+    /* position: absolute; */
+    /* left: 70.5%; */
+    margin-top: -2%;
+  }
+  .campo-izquierda{
+    width: 38%;
+    margin-right: 3%;   
+  }
+  .campo-derecha{
+    width: 32%;
+  }
+
+  @media (max-width: 800px) {
+    .contenedor {
+      display: block;
+    }
+    .campo-izquierda{
+      width: 100%;
+      margin-right: 0%;
+    }
+    .campo-derecha{      
+      width: 100%;
+    }
+    .fecha-fin {
+      margin-top: 5%;
+      margin-bottom: 5%;
+    }
+    .campo_identificacion{
+      display: block;
+    }
+    .campo {
+      padding-bottom: 5px;
+      display: block;
+    }
+    mat-form-field {
+      width: 100%;
+    }    
+
+  }

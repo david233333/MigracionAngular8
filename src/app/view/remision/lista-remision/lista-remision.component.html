@@ -1,0 +1,257 @@
+<mat-progress-bar [hidden]="!listaRemisionViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+
+<h4>Consulta remisiones</h4>
+
+<div (click)="ahSide()" class="ah-side bounceInDown">
+  <mat-icon _ngcontent-c21="" class="mat-icon material-icons arrow" role="img" aria-hidden="true">expand_more</mat-icon>
+</div>
+
+<div *ngIf="show" class="ah-side2" [@flyInOut]="states" [ngClass]="{'bounceInDown': show, 'bounceInDown': !show}">
+  <div class="container">
+    <div class="flex-contenedor-busqueda">
+      <form class="contenedor" [formGroup]="formulario">
+        <div class="campo identificacion">
+          <div class="first_field">
+            <mat-form-field>
+              <mat-select id="tipoDocumento" placeholder="{{ listaRemisionViewModel.mensajes.campos.tipoDocumento }}"
+                formControlName="tipoDocumento">
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option *ngFor="let tipo of listaRemisionViewModel.respuestaTiposIdentificacion" [value]="tipo.idTipo">
+                  {{ tipo.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="secound_field">
+            <mat-form-field>
+              <input id="numeroDocumentos" maxlength="20" matInput placeholder="{{ listaRemisionViewModel.mensajes.campos.identificacion }}"
+                formControlName="numeroDocumento">
+
+              <button mat-button *ngIf="formulario.controls['numeroDocumento'].value" matSuffix mat-icon-button>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('maxlength')">
+                {{ listaRemisionViewModel.mensajes.errores.numeroMaximaLongitud }}
+              </mat-error>
+
+              <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('pattern')">
+                {{ listaRemisionViewModel.mensajes.errores.numeroFormatoInvalido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="campo">
+          <div class="first_field">
+            <mat-form-field>
+              <mat-select id="ciudad" placeholder="{{ listaRemisionViewModel.mensajes.campos.ciudadPrincipal }}"
+                formControlName="ciudad" (selectionChange)="institucionRemitente($event.value);">
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option *ngFor="let ciudad of listaRemisionViewModel.respuestaCiudades" [value]="ciudad.idCiudad">
+                  {{ ciudad.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="secound_field">
+            <mat-form-field>
+              <mat-select id="institucion" placeholder="{{ listaRemisionViewModel.mensajes.campos.institucionRemitente }}"
+                formControlName="institucion">
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option *ngFor="let institucion of listaRemisionViewModel.respuestaInstituciones" [value]="institucion.id">
+                  {{ institucion.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="campo">
+          <div class="first_field">
+            <mat-form-field>
+              <mat-select id="estado" placeholder="{{ listaRemisionViewModel.mensajes.campos.estado }}" formControlName="estado">
+                <mat-option>
+                  {{SELECCIONAR}}
+                </mat-option>
+                <mat-option *ngFor="let estado of listaRemisionViewModel.estado" [value]="estado">
+                  {{ estado }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="secound_field">
+            <mat-form-field>
+              <mat-select id="planSalud" placeholder="{{ listaRemisionViewModel.mensajes.campos.planSalud }}"
+                formControlName="planSalud">
+
+                <mat-option *ngFor="let plan of listaRemisionViewModel.respuestaPlanesSalud" [value]="plan.idPlan">
+                  {{ plan.nombre }}
+                </mat-option>
+              </mat-select>
+
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="campo">
+
+          <div class="first_field">
+            <mat-form-field>
+              <input id="remision" matInput placeholder="{{ listaRemisionViewModel.mensajes.campos.remision }}"
+                formControlName="remision">
+
+              <button mat-button *ngIf="formulario.controls['remision'].value" matSuffix mat-icon-button>
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+
+          <div class="secound_field">
+            <mat-form-field>
+              <mat-select id="tipoAtencion" placeholder="{{ listaRemisionViewModel.mensajes.campos.tipoAtencion }}"
+                formControlName="tipoAtencion">
+
+                <mat-option *ngFor="let tipoAtencion of listaRemisionViewModel.tiposAtencion" [value]="tipoAtencion">
+                  {{ tipoAtencion }}
+                </mat-option>
+              </mat-select>
+
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="botones">
+          <div class="boton">
+            <button mat-raised-button id="limpiar" color="default" (click)="limpiar()">
+              <mat-icon>clear</mat-icon>
+              {{ listaRemisionViewModel.mensajes.botones.limpiar }}
+            </button>
+          </div>
+
+          <div class="boton">
+            <button mat-raised-button id="buscar" color="primary" (click)="buscar()">
+              <mat-icon>search</mat-icon>
+              {{ listaRemisionViewModel.mensajes.botones.buscar }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="separador"></div>
+<div [ngClass]="{'first2': show, 'third': show}">
+  <div class="table">
+    <p-table [columns]="cols" [value]="listaRemisionViewModel.respuestaRemisiones" [scrollable]="true" scrollHeight="400px"
+      [paginator]="true" (onPage)="onPageListaRemisiones($event)" [rows]="10" [rowsPerPageOptions]="[10,20,30]"
+      [responsive]="true" [lazy]="true" [totalRecords]="totalRegistros" dataKey="idRemision" sortMode="multiple">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="texto-tabla tab_numero_remision" [pSortableColumn]="listaRemisionViewModel.mensajes.tabla.numeroRemisionCampo">
+            {{listaRemisionViewModel.mensajes.tabla.numeroRemision}}
+            <p-sortIcon [field]="listaRemisionViewModel.mensajes.tabla.numeroRemisionCampo"></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_fecha_remision" [pSortableColumn]="listaRemisionViewModel.mensajes.tabla.fechaRemisionCampo">
+            {{listaRemisionViewModel.mensajes.tabla.fechaRemision}}
+            <p-sortIcon [field]="listaRemisionViewModel.mensajes.tabla.fechaRemisionCampo"></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_paciente" [pSortableColumn]="listaRemisionViewModel.mensajes.tabla.nombrePacienteCampo">
+            {{listaRemisionViewModel.mensajes.tabla.nombrePaciente}}
+            <p-sortIcon [field]="listaRemisionViewModel.mensajes.tabla.nombrePacienteCampo"></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_plan_salud" [pSortableColumn]="listaRemisionViewModel.mensajes.tabla.planSaludCampo">
+            {{listaRemisionViewModel.mensajes.tabla.planSalud}}
+            <p-sortIcon [field]="listaRemisionViewModel.mensajes.tabla.planSalud.planSaludCampo"></p-sortIcon>
+          </th>
+          <th class="texto-tabla estado_remision" [pSortableColumn]="listaRemisionViewModel.mensajes.tabla.estadoRemisionCampo">
+            {{listaRemisionViewModel.mensajes.tabla.estadoRemision}}
+            <p-sortIcon [field]="listaRemisionViewModel.mensajes.tabla.estadoRemisionCampo"></p-sortIcon>
+          </th>
+          <th class="texto-tabla tab_usuario" [pSortableColumn]="listaRemisionViewModel.mensajes.tabla.medicamentoCampo">
+            {{listaRemisionViewModel.mensajes.tabla.usuarioModifica}}
+            <p-sortIcon [field]="listaRemisionViewModel.mensajes.tabla.usuarioModifica"></p-sortIcon>
+          </th>
+          <th class="center-header-table">
+            {{ listaRemisionViewModel.mensajes.tabla.accion }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td class="tab_numero_remision">
+            <span class="ui-column-title">{{
+              listaRemisionViewModel.mensajes.tabla.numeroRemision }}</span>
+            {{rowData.idRemision }}
+          </td>
+          <td class="tab_fecha_remision">
+            <span class="ui-column-title">{{
+              listaRemisionViewModel.mensajes.tabla.fechaRemision }}</span>
+            {{rowData.fechaRemision | date:'dd-MM-yyyy hh:mm a' }}
+          </td>
+          <td class="tab_paciente">
+            <span class="ui-column-title">{{
+              listaRemisionViewModel.mensajes.tabla.nombrePaciente }}</span>
+            {{rowData.nombrePaciente}}
+          </td>
+          <td class="tab_plan_salud">
+            <span class="ui-column-title">{{
+              listaRemisionViewModel.mensajes.tabla.planSalud }}</span>
+            {{rowData.planSalud.nombre}}
+          </td>
+          <td class="estado_remision">
+            <span class="ui-column-title">{{
+              listaRemisionViewModel.mensajes.tabla.estadoRemision }}</span>
+            {{rowData.estadoRemision}}
+          </td>
+          <td class="tab_usuario">
+            <span class="ui-column-title">{{
+              listaRemisionViewModel.mensajes.tabla.usuarioModifica }}</span>
+            {{rowData.usuario}}
+          </td>
+          <td class="texto-tabla">
+            <mat-icon *ngIf="rowData.estadoRemision === 'PENDIENTE_ADMITIR' ||
+                        rowData.estadoRemision ===  'NUEVO'  || rowData.estadoRemision ===  'EMPALME'  "
+              class="accion" (click)="editarRemision(rowData)" matTooltip="{{ listaRemisionViewModel.mensajes.campos.editar }}"
+              [matTooltipPosition]="'above'">
+              edit
+            </mat-icon>
+            <mat-icon *ngIf="rowData.estadoRemision === 'ADMITIDO' ||
+                            rowData.estadoRemision === 'NO_ADMITIDO' ||
+                            rowData.estadoRemision === 'EGRESADO' ||
+                             rowData.estadoRemision === 'CANCELADO'"
+              class="accion" (click)="editarRemision(rowData)" matTooltip="{{ listaRemisionViewModel.mensajes.campos.editar }}"
+              [matTooltipPosition]="'above'">
+              visibility
+            </mat-icon>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" class="container" let-columns>
+        <tr>
+          <td class="center-header-table" [attr.colspan]="cols.length + 1">
+            {{ listaRemisionViewModel.mensajes.tabla.noRemisiones }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-footer>
+      <div class="total-registros">
+        <span class="total-registros-texto">{{
+            listaRemisionViewModel.mensajes.tabla.totalRegistros }}</span>
+        <span class="total-registros-valor">{{ totalRegistros }}</span>
+      </div>
+    </p-footer>
+  </div>
+
+</div>

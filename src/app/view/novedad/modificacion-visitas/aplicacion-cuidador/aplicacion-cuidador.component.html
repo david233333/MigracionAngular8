@@ -1,0 +1,119 @@
+<div class="novedad-aplicacion-cuidador">
+    <div class="contenedor">
+        <form class="contenedor" [formGroup]="formularioAplicacionCuidador">
+            <div class="separador"></div>
+ 
+ 
+            <div class="tablaPrincipal">
+                <div class="listas">
+                    <div class="campo-motivo">
+                        <mat-form-field class="control-motivo">
+                            <mat-select id="motivoCancelaCita" placeholder="{{ aplicacionCuidadorViewModel.mensajes.campos.motivoNovedad }}"
+                                formControlName="motivoNovedad" required>
+                                <mat-option *ngFor="let motivo of aplicacionCuidadorViewModel.respuestaMotivosNovedad"
+                                    [value]="motivo">
+                                    {{ motivo.descripcion }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formularioAplicacionCuidador.controls['motivoNovedad'].hasError('required')">
+                                {{ aplicacionCuidadorViewModel.mensajes.errores.motivoNovedadRequerido }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="campo-filtro-horas">
+                        <mat-form-field>
+                            <mat-select id="hora" placeholder="{{ aplicacionCuidadorViewModel.mensajes.tabla.horaVisita }}"
+                                formControlName="hora" (selectionChange)="seleccionHoras($event.value)" multiple>
+                                <mat-option *ngFor="let horaVisita of aplicacionCuidadorViewModel.respuestaCitasFiltro"
+                                    [value]="horaVisita.hora">
+                                    {{ horaVisita.hora | horaNumero }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="separador"></div>
+                <div class="tabla">
+                    <p-table #dt [columns]="columnas" [value]="aplicacionCuidadorViewModel.respuestaCitas"
+                        [(selection)]="aplicacionCuidadorViewModel.citasSeleccionadas" [scrollable]="true" scrollHeight="400px"
+                        [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" (onRowSelect)="seleccionaCita($event)"
+                        (onRowUnselect)="deseleccionaCita($event)" [responsive]="true" dataKey="idCitaNumber">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla tamano-columna">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                                <th class="seleccion-tabla  texto-tabla">
+                                    {{aplicacionCuidadorViewModel.mensajes.tabla.visualizar}}
+                                </th>
+                                <th class="seleccion-tabla">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                            </tr>
+                        </ng-template>
+ 
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td class="texto-tabla tamano-columna">
+                                    <span class="ui-column-title">{{
+                                        aplicacionCuidadorViewModel.mensajes.tabla.fechaVisita }}</span>
+                                    {{ rowData.fechaInicioCita | date:'dd-MM-yyyy'}}
+                                </td>
+                                <td class="texto-tabla tamano-columna">
+                                    <span class="ui-column-title">{{
+                                        aplicacionCuidadorViewModel.mensajes.tabla.horaVisitaTabla }}</span>
+                                    {{ rowData.horaInicioCita | horaNumero }}
+                                </td>
+                                <td class="texto-tabla tamano-columna">
+                                    <span class="ui-column-title">{{
+                                        aplicacionCuidadorViewModel.mensajes.tabla.especialidad }}</span>
+                                    {{ rowData.especialidad }}
+                                </td>
+                                <td class="texto-tabla tamano-columna">
+                                    <span class="ui-column-title">{{
+                                        aplicacionCuidadorViewModel.mensajes.tabla.motivo }}</span>
+                                    {{ rowData.motivoCuidador }}
+                                </td>
+                                <td class="seleccion-tabla detalle" (click)="detalleCita(rowData)">
+                                    <mat-icon>
+                                        visibility
+                                    </mat-icon>
+                                </td>
+                                <td class="seleccion-tabla">
+                                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                                </td>
+                            </tr>
+                        </ng-template>
+ 
+                        <ng-template pTemplate="emptymessage" class="container" let-columns>
+                            <tr>
+                                <td class="texto-tabla" [attr.colspan]="columnas.length + 1">
+                                    {{ aplicacionCuidadorViewModel.mensajes.tabla.noCitas }}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <p-footer>
+                        <div class="total-registros">
+                            <span class="total-registros-texto"> {{
+                                aplicacionCuidadorViewModel.mensajes.tabla.totalRegistros }}</span>
+                            <span class="total-registros-valor">{{ aplicacionCuidadorViewModel.respuestaCitas.length }}</span>
+                        </div>
+                    </p-footer>
+                </div>
+ 
+            </div>
+ 
+            <div class="separador"></div>
+ 
+            <div class="boton">
+                <button mat-raised-button id="aplicar" color="primary" (click)="aplicarAplicacionCuidador()" [disabled]="!aplicacionCuidadorViewModel.habilitarAplicar">
+                    {{ aplicacionCuidadorViewModel.mensajes.botones.aplicar }}
+                </button>
+            </div>
+ 
+            <div class="separador"></div>
+        </form>
+    </div>
+</div>

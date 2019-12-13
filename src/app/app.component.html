@@ -1,0 +1,23 @@
+<nb-layout [center]="false" windowMode>
+  <nb-layout-header fixed>
+    <sura-header
+      [nombreUsuario]="nombreUsuario"
+      [urlSeusCerrarSesion]="urlSeusCerrarSesion"
+    ></sura-header>
+  </nb-layout-header>
+
+  <nb-sidebar class="menu-sidebar" tag="menu-sidebar" left responsive>
+    <sura-menu></sura-menu>
+  </nb-sidebar>
+
+  <nb-layout-column class="main-content">
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>
+
+<sura-cargando></sura-cargando>
+
+<toaster-container [toasterconfig]="configuracionToaster"></toaster-container>
+
+
+

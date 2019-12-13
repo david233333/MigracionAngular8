@@ -1,0 +1,20 @@
+<h4 mat-dialog-title>
+    {{ modalCancelaRemisionNuevaViewModel.mensajes.campos.titulo }}
+</h4>
+
+<mat-dialog-content>
+    {{ modalCancelaRemisionNuevaViewModel.mensajes.campos.contenido }}
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button mat-raised-button id="cancelar" (click)="cancelar()">
+    <mat-icon>close</mat-icon>
+    {{ modalCancelaRemisionNuevaViewModel.mensajes.botones.cancelar }}
+  </button>
+
+    <button mat-raised-button id="continuar" color="primary" (click)="continuar()">
+    <mat-icon>done</mat-icon>
+    {{ modalCancelaRemisionNuevaViewModel.mensajes.botones.continuar }}
+  </button>
+</mat-dialog-actions>

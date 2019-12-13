@@ -1,0 +1,59 @@
+
+@mixin tamanos_div($tamaño) {
+  width: $tamaño ;
+}
+
+.conetedor {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.formularios {
+  width: 77%;
+  @include tamanos_div(77%);
+}
+
+.campos{
+  display: flex;
+  @include tamanos_div(100%);
+  max-width: 78%;
+  justify-content: flex-end;
+  flex: 1;
+  margin-left: 12%;
+  margin-top: 5%;
+
+}
+
+
+.estado{
+  @include tamanos_div(19%);
+  flex: 9;
+}
+
+.fecha_1{
+  @include tamanos_div(35%);
+  flex: 8;
+}
+
+.fecha_2 {
+  @include tamanos_div(19%);
+  flex: 9;
+}
+.button {
+  flex: 5;
+}
+.boton-descargar {
+  justify-content: center;
+  margin-top: 5%;
+}
+
+@media (max-width: 640px) {
+  .campos {
+    display: block;
+  }
+}
+/*Pantalla Mediana*/
+@media (min-width: 641px) {
+}

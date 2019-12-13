@@ -1,0 +1,126 @@
+<mat-progress-bar [hidden]="!citasViewModel.cargando" mode="indeterminate">
+</mat-progress-bar>
+
+<div class="container">
+
+  <form [formGroup]="formulario">
+
+    <div class="separador"></div>
+
+    <div class="boton-agregar">
+      <button (click)="abrirModalCitas()" color="primary" id="agregarCita" mat-raised-button>
+        <mat-icon>add</mat-icon>
+        {{ citasViewModel.mensajes.botones.agregarCita }}
+      </button>
+    </div>
+
+    <div class="separador"></div>
+    <div class="table">
+      <p-table [columns]="columnasCitas" [paginator]="true" [responsive]="true" [rowsPerPageOptions]="[10,20,30]"
+               [rows]="10" [scrollable]="true" [value]="citasViewModel.citas" dataKey="id" scrollHeight="400px">
+        <ng-template let-columns pTemplate="header">
+          <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field" class="texto-tabla">
+              {{col.header}}
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+            <th class="texto-tabla">
+              {{ this.citasViewModel.mensajes.tabla.accion }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template let-columns="columns" let-rowData pTemplate="body">
+          <tr [pSelectableRow]="rowData">
+            <td class="texto-tabla">
+              <span class="ui-column-title">{{ citasViewModel.mensajes.tabla.tipoCita }}</span>
+              {{ rowData.tipoCita.tipoCita }}
+            </td>
+            <td class="texto-tabla">
+              <span class="ui-column-title">{{ citasViewModel.mensajes.tabla.profesional }}</span>
+              {{ rowData.profesional }}
+            </td>
+            <td class="texto-tabla">
+              <span class="ui-column-title">{{ citasViewModel.mensajes.tabla.fecha }}</span>
+              {{ rowData.fecha | date:'dd-MM-yyyy hh:mm a' }}
+            </td>
+            <td class="texto-tabla">
+              <span class="ui-column-title">{{ citasViewModel.mensajes.tabla.sesionesFaltantes }}</span>
+              {{ rowData.sesionesFaltantes }}
+            </td>
+            <td class="texto-tabla">
+              <span class="ui-column-title">{{ citasViewModel.mensajes.tabla.totalSesiones }}</span>
+              {{ rowData.totalVisitasPeriodica }}
+            </td>
+            <td class="texto-tabla">
+              <button mat-icon-button (click)="editarCita(rowData)"
+                      [disabled]="this.citaIngresoCompletada === true && rowData.especialidad.includes('Medicina')
+&& rowData.tipoCita.idCita === '1' ">
+                <mat-icon [matTooltipPosition]="'above'"
+                          class="accion"
+                          matTooltip="{{ citasViewModel.mensajes.botones.editar }}">
+                  edit
+                </mat-icon>
+              </button>
+              <button mat-icon-button (click)="eliminarCita(rowData)"
+                      [disabled]="this.citaIngresoCompletada === true && rowData.especialidad.includes('Medicina')
+&& rowData.tipoCita.idCita === '1' ">
+                <mat-icon [matTooltipPosition]="'above'"
+                          class="accion"
+                          matTooltip="{{ citasViewModel.mensajes.botones.eliminar }}">
+                  delete
+                </mat-icon>
+              </button>
+              <button mat-icon-button (click)="citaAdicional(rowData)"
+                      *ngIf="rowData.tipoFecha === citasViewModel.mensajes.campos.tipoFechaCita.codigoPeriodica && rowData.estado == null"
+                      [disabled]="this.citaIngresoCompletada === true && rowData.especialidad.includes('Medicina')
+&& rowData.tipoCita.idCita === '1' ">
+                <mat-icon [matTooltipPosition]="'above'"
+                          class="accion"
+                          matTooltip="{{ citasViewModel.mensajes.botones.adicionarReprogramar }}">
+                  note_add
+                </mat-icon>
+              </button>
+              <button mat-icon-button (click)="restaurarCita(rowData)"
+                      *ngIf="rowData.tipoFecha === citasViewModel.mensajes.campos.tipoFechaCita.codigoPeriodica && rowData.estado == null && rowData.citaAdicional !== null && rowData.citaAdicional !== undefined"
+                      [disabled]="this.citaIngresoCompletada === true && rowData.especialidad.includes('Medicina')
+&& rowData.tipoCita.idCita === '1' ">
+                <mat-icon [matTooltipPosition]="'above'" class="accion"
+                          matTooltip="{{ citasViewModel.mensajes.botones.restaurar }}">
+                  restore_page
+                </mat-icon>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template class="container" let-columns pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="columnasCitas.length + 1" class="texto-resultados-grid">
+              {{ citasViewModel.mensajes.tabla.noCitas }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-footer>
+        <div class="total-registros">
+                    <span class="total-registros-texto"> {{
+                      citasViewModel.mensajes.tabla.totalRegistros }}</span>
+          <span class="total-registros-valor">{{ citasViewModel.citas.length }}</span>
+        </div>
+      </p-footer>
+    </div>
+
+
+    <div class="separador"></div>
+
+    <div class="boton-guardar">
+      <button (click)="guardarCitas()" color="primary" id="guardarCitas" mat-raised-button>
+        {{ citasViewModel.mensajes.botones.guardarCitas }}
+      </button>
+    </div>
+
+    <div class="separador"></div>
+  </form>
+</div>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>

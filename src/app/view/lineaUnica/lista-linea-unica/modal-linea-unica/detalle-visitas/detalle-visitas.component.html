@@ -1,0 +1,351 @@
+<section>
+  <mat-dialog-content>
+    <div class="especialidad">
+      <p class="espacio_texto">Especialidad:</p>
+      <p>{{visitasDetalleModel.especialidad |separarLetra }}</p>
+    </div>
+    <div>
+          <div class="contenedor_tablas">
+          <div *ngIf="mostrarCuraciones()" class="tablas">
+            <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.curaciones}}</p>
+            <p-table [columns]="colCuraciones" [value]="visitasDetalleModel.respuestaCuraciones" [scrollable]="true"
+                     scrollHeight="400px" [paginator]="false" [responsive]="true" dataKey="idRemisionPK">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th class="tabla_header">
+                    {{visitasDetalleModel.mensaje.tabla.procedimientos.curaciones.ubicacionHeridaCampo}}
+                  </th>
+                  <th class="tabla_header">
+                    {{visitasDetalleModel.mensaje.tabla.procedimientos.curaciones.tipoCuracion}}
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                  <td class="tabla_header">{{rowData.tipoPrestacion }}</td>
+                  <td class="tabla_header">{{rowData.tipoCuracion.descripcion}}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" class="container" let-columns>
+                <tr>
+                  <td  class="tabla_header" [attr.colspan]="colCuraciones.length + 1">
+                    {{ visitasDetalleModel.mensaje.campos.noHayDatos }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div *ngIf="mostrarTomaDeMuestras()" class="tablas">
+            <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.tomaDeMuestra}}</p>
+            <p-table [columns]="colTomaDeMuestras" [value]="visitasDetalleModel.respuestaTomaDeMuestra" [scrollable]="true"
+                     scrollHeight="400px" [paginator]="false"  [responsive]="true" dataKey="idRemisionPK">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th class="tabla_header">
+                    {{visitasDetalleModel.mensaje.tabla.procedimientos.tomaDeMuestra.tipoPrestacionCampo}}
+                  </th>
+                  <th class="tabla_header">
+                    {{ visitasDetalleModel.mensaje.tabla.procedimientos.tomaDeMuestra.tipoMuestraCampo}}
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                  <td class="tabla_header">{{rowData.tipoPrestacion }}</td>
+                  <td class="tabla_header">{{rowData.tipoMuestra.descripcion}}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" class="container" let-columns>
+                <tr>
+                  <td  class="tabla_header" [attr.colspan]="colTomaDeMuestras.length + 1">
+                    {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div *ngIf="mostrarSecreciones()" class="tablas">
+            <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.secreciones}}</p>
+            <p-table [columns]="colSecreciones" [value]="visitasDetalleModel.respuestaSecreciones" [scrollable]="true"
+                     scrollHeight="400px" [paginator]="false" [responsive]="true" dataKey="idRemisionPK">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th class="tabla_header">
+                    {{visitasDetalleModel.mensaje.tabla.procedimientos.secreciones.tipoPrestacion}}
+                    <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.procedimientos.secreciones.tipoPrestacionCampo">
+                    </p-sortIcon>
+                  </th>
+                  <th class="tabla_header">
+                    {{ visitasDetalleModel.mensaje.tabla.procedimientos.secreciones.tipoSonda}}
+                    <p-sortIcon [field]=" visitasDetalleModel.mensaje.tabla.procedimientos.secreciones.tipoSondaCampo">
+
+                    </p-sortIcon>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                  <td class="tabla_header">{{rowData.tipoPrestacion }}</td>
+                  <td class="tabla_header">{{rowData.tipoSonda}}</td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage" class="container" let-columns>
+                <tr>
+                  <td  class="tabla_header" [attr.colspan]="colSecreciones.length + 1">
+                    {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div *ngIf="mostrarFotoTerapia()" class="tablas">
+            <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.fotoTerapia}}</p>
+            <p-table [columns]="colFotoTerapia" [value]="visitasDetalleModel.respuestaFotoTerapia" [scrollable]="true"
+                     scrollHeight="400px" [paginator]="false"  [responsive]="true" dataKey="idRemisionPK">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th class="tabla_header">
+                    {{visitasDetalleModel.mensaje.tabla.procedimientos.fototerapias.tipoPrestacion}}
+                    <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.procedimientos.fototerapias.tipoPrestacionCampo">
+                    </p-sortIcon>
+                  </th>
+                  <th class="tabla_header">
+                    {{ visitasDetalleModel.mensaje.tabla.procedimientos.fototerapias.bilirrubinaTotal}}
+                    <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.procedimientos
+                        .fototerapias.bilirrubinaTotalCampo">
+
+                    </p-sortIcon>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                  <td class="tabla_header">{{rowData.tipoPrestacion }}</td>
+                  <td class="tabla_header">{{rowData.bilirrubinaTotal}}</td>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage" class="container" let-columns>
+                <tr>
+                  <td  class="tabla_header" [attr.colspan]="colFotoTerapia.length + 1">
+                    {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div *ngIf="mostrarSondajes()" class="tablas">
+            <div class="table">
+              <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.sondaje}}</p>
+              <p-table [columns]="colSondajes" [value]="visitasDetalleModel.respuestaSondajes" [scrollable]="true"
+                       scrollHeight="400px"   [responsive]="true" dataKey="id">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.tipoPresentacion }}
+                      <p-sortIcon
+                        [field]="visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.tipoPresentacionCampo">
+                      </p-sortIcon>
+                    </th>
+                    <th class="tabla_header">
+                      {{ visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.sondaje}}
+                      <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.sondajeCampo">
+
+                      </p-sortIcon>
+                    </th>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.fechaSondaje }}
+                      <p-sortIcon
+                        [field]="visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.fechaSondajeCampo">
+                      </p-sortIcon>
+                    </th>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.totalSesiones }}
+                      <p-sortIcon
+                        [field]="visitasDetalleModel.mensaje.tabla.procedimientos.sondaje.totalSesionesCampo">
+                      </p-sortIcon>
+                    </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                    <td class="tabla_header">
+                      {{ rowData.tipoPrestacion }}
+                    </td>
+                    <td class="tabla_header">
+                      {{ rowData.sondaje }}
+                    </td>
+                    <td class="tabla_header">
+                      {{ rowData.fechaSondaje  | date:'dd-MM-yyyy hh:mm a' }}
+                    </td>
+                    <td class="tabla_header">
+                      {{ rowData.totalSesiones }}
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" class="container" let-columns>
+                  <tr>
+                    <td class="tabla_header" [attr.colspan]="colSondajes.length + 1">
+                      {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+          <div *ngIf="mostrarCanalizaciones()" class="tablas">
+              <div class="table">
+                <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.canalizaciones}}</p>
+                <p-table [columns]="colCanalizacion" [value]="visitasDetalleModel.respuestaCanalizaciones"
+                         [scrollable]="true"
+                         scrollHeight="400px"   [responsive]="true" dataKey="id">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th class="tabla_header">
+                        {{ visitasDetalleModel.mensaje.tabla.procedimientos.canalizaciones.tipoCanalziacion}}
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                      <td class="tabla_header">
+                        {{ rowData.tipoCanalizacion }}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage" class="container" let-columns>
+                    <tr>
+                      <td class="tabla_header" [attr.colspan]="colCanalizacion.length + 1">
+                        {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          <div *ngIf="mostrarSoporteNutricional()" class="tablas">
+            <div class="table">
+              <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.soporteNutricional}}</p>
+              <p-table [columns]="colSoporteNutricional" [value]="visitasDetalleModel.respuestaSoporteNutricional"
+                       [scrollable]="true"
+                       scrollHeight="400px"   [responsive]="true" dataKey="id">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.soporteNutricional.nombreMedicamento }}
+                    </th>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.soporteNutricional.dosis }}
+                    </th>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.soporteNutricional.tipoNutricion }}
+                    </th>
+                    <th class="tabla_header">
+                      {{visitasDetalleModel.mensaje.tabla.procedimientos.soporteNutricional.nutricion }}
+                    </th>
+                    <th class="tabla_header">
+                      {{ visitasDetalleModel.mensaje.tabla.procedimientos.soporteNutricional.duracion}}
+                    </th>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                    <td class="tabla_header">
+                      {{ rowData.medicamento.nombre }}
+                    </td>
+                    <td class="tabla_header">
+                      {{ rowData.cantidadDosis + rowData.unidadDosis.descripcion }}
+                    </td>
+                    <td class="tabla_header">
+                      {{  rowData.tipoNutricion.tipo  }}
+                    </td>
+                    <td class="tabla_header">
+                      {{ rowData.tipoNutricion.descripcion }}
+                    </td>
+                    <td class="tabla_header">
+                      {{ rowData.duracion   }}   Dosis
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage" class="container" let-columns>
+                  <tr>
+                    <td class="tabla_header" [attr.colspan]="colSoporteNutricional.length + 1">
+                      {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+          <div *ngIf="mostrarMedicamentos()" class="tablas">
+            <p class="textos_subtitulo">{{visitasDetalleModel.mensaje.campos.tratamientos}}</p>
+                <p-table [columns]="colTratamientos" [value]="visitasDetalleModel.respuestaTratamientos" [scrollable]="true"
+                         scrollHeight="400px"   [responsive]="true" dataKey="id">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th class="tabla_header">
+                        {{visitasDetalleModel.mensaje.tabla.tratamientos.medicamento }}
+                        <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.tratamientos.medicamentoCampo"></p-sortIcon>
+                      </th>
+                      <th class="tabla_header">
+                        {{visitasDetalleModel.mensaje.tabla.tratamientos.dosis }}
+                        <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.dosisCampo"></p-sortIcon>
+                      </th>
+                      <th class="tabla_header">
+                        {{ visitasDetalleModel.mensaje.tabla.tratamientos.viaAdministracion }}
+                        <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.tratamientos.viaAdministracionCampo"></p-sortIcon>
+                      </th>
+                      <th class="tabla_header">
+                        {{visitasDetalleModel.mensaje.tabla.tratamientos.frecuencia }}
+                        <p-sortIcon [field]="visitasDetalleModel.mensaje.tabla.tratamientos.frecuenciaCampo"></p-sortIcon>
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                      <td class="tabla_header">
+                        {{ rowData.medicamento.nombre }}
+                      </td>
+                      <td class="tabla_header">
+                        {{ rowData.cantidadDosis }}
+                      </td>
+                      <td class="tabla_header">
+                        {{ rowData.viaAdministracion.descripcion }}
+                      </td>
+                      <td class="tabla_header">
+                        {{ rowData.frecuencia.descripcion | listaFrecuencia | truncar: 20}}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template pTemplate="emptymessage" class="container" let-columns>
+                    <tr>
+                      <td class="tabla_header" [attr.colspan]="colTratamientos.length + 1">
+                        {{  visitasDetalleModel.mensaje.campos.noHayDatos  }}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+          </div>
+        </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+
+      <button  mat-raised-button  id="cerrar" (click)="cerrar()">
+        Cerrar
+      </button>
+  </mat-dialog-actions>
+</section>

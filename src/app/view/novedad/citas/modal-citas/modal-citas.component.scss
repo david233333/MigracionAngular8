@@ -1,0 +1,320 @@
+.container {
+  width: 100%;
+  padding-left: 0px !important;
+}
+
+
+.ventana-container {
+display: flex;
+}
+
+.menu {
+margin-top: 3%;
+width: 24%;
+}
+
+.form {
+  width: 100%;
+  border: 1px solid #D5D5D5;  
+}
+
+
+.contenedor-formulario {
+   width: 100%;
+   display: flex;
+}
+
+.titulo-ventana {
+  text-align: left;
+  margin-bottom: 2%;
+}
+
+.campo {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1%;
+}
+
+.campo-control {
+  width: 40%
+}
+
+.campo-total-visitas {
+  width: 45%
+}
+
+.campo-control-sondaje {
+width: 35%
+}
+
+.campo-control-fototerapia {
+width: 27%;
+}
+
+
+.seccion-formulario {
+width: 50%;
+}
+
+.secciones-formulario {
+width: 100%;
+display: flex;
+flex-flow: row wrap;
+justify-content: space-evenly;
+}
+
+
+.ui-tabview .ui-tabview-panel {
+padding: 0 !important;
+}
+
+.titulo-campo {
+text-align: center;
+margin-bottom: 0;
+}
+
+
+.fechaFinTratamiento {
+display: flex;
+flex-direction: row;
+justify-content: center;
+margin-left: 2.5%;
+}
+
+
+.controlUltimaTomaMuestra {
+margin-right: 4%;
+}
+
+
+.mat-error-clase {
+display: block;
+color: #f44336;
+font-size: 75%;
+text-align: center;
+font-weight: 400;
+line-height: 1.125;
+font-family: Roboto, "Helvetica Neue", sans-serif;
+margin-top: 1%;
+}
+
+
+.controlUltimaAplicacion {
+text-align: center;
+margin-right: 7%;
+}
+
+.control-checkbox-envio-visita {
+  width: 21%;
+}
+
+.edadGestacional {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+.control-leyenda {
+width: 60%;
+display: inline-grid
+}
+
+.semanas-dias {
+display: flex;
+}
+
+.campo-edad-gestacional {
+width: 47%;
+}
+
+.texto-edad-gestacional {
+margin-top: 7%;
+margin-left: 3%;
+}
+
+.contenedor-edad-gestacional {
+display: flex;
+justify-content: center;
+height: 5em;
+}
+
+.dialog-valoraciones {
+height: 27em;
+}
+
+.peso-gramos {
+display: flex;
+justify-content: center;
+}
+
+.texto-gramos {
+margin-top: 2%;
+}
+
+.control-fecha-periodica {
+  display: flex;
+}
+
+.campo-control-dias {
+  width: 80%;
+}
+
+
+.texto-fecha-periodica {
+  margin-right: 2%;
+  margin-top: 4%;
+}
+
+.calendario-citas {
+  margin-top: 3%;
+}
+
+.separador {
+  height: 1em;
+}
+
+.control-tabla-dias {
+  width: 75%;
+  text-align: center;
+}
+
+.ui-state-highlight {
+  background-color: transparent !important;
+  color: #222222 !important;
+}
+
+.ui-table .ui-table-tbody > tr:nth-child(even).ui-state-highlight {
+  background-color: #fafafb !important;
+  color: #222222 !important;
+}
+
+.ui-table .ui-table-tbody > tr.ui-state-highlight {
+  background-color: transparent !important;
+  color: #222222 !important;
+}
+
+
+.no-fecha-periodica {
+  
+  .seccion-campos {
+    // width: 65em;
+    width: 100%;
+  }
+
+  .control-leyenda {
+    width: 40%;
+  }
+
+}
+
+.si-fecha-periodica {
+  
+  .seccion-campos {
+    width: 60%;
+  }
+  
+  .control-dias {
+    width: 40%;
+  }
+
+  .campo-control {
+    width: 60%;
+  }
+}
+
+.texto-sesiones {
+  font-size: 10pt;
+}
+
+.centro {
+  text-align: center;
+}
+
+.campo-control-cita-existente {
+  width: 50%
+}
+
+@media (max-width: 800px) {
+  .ventana-container {
+    display: grid;
+    justify-items: center;
+  }
+
+  .menu {
+    width: 65%;
+    font-size: 9pt;
+    height: 12em;
+  }
+
+  .secciones-formulario {
+    width: 100%;
+    display: block;    
+    justify-content: center;
+  }
+
+  .seccion-formulario {
+    width: 100%;
+  }
+
+  .campo {
+    font-size: 9pt;
+  }
+
+  .control-radio {
+    width: 65%;   
+  }
+
+  .menu {
+    height: 14em;
+  }
+
+
+  .no-fecha-periodica {
+  
+    .seccion-campos {
+      width: 100%;
+    }
+  
+    .control-leyenda {
+      width: 100%;
+    }
+
+    .campo-control {
+      width: 100%;
+    }
+  
+  }
+  
+  .si-fecha-periodica {
+
+    .contenedor-formulario {       
+      display: inline;
+    }
+    
+    .seccion-campos {
+      width: 100%;
+    }
+    
+    .campo-control-dias {
+      width: 50%;
+    }
+
+    .campo-control {
+      width: 100%;
+    }
+
+    .control-leyenda {
+      width: 100%;
+    }
+
+    .control-dias {
+      width: 100%;
+      margin-top: 10%;
+      margin-left: 10%;
+    }
+  }
+
+  .campo-control-cita-existente {
+    width: 80%;
+  }
+}

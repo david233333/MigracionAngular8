@@ -1,0 +1,37 @@
+<mat-progress-bar
+  [hidden]="!informeSeguridadViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+
+<div class="container">
+  <div class="flex-contenedor-busqueda">
+    <form class="contenedor">
+      <hr class="linea-espacio">
+      <div class="campo boton-cargar">
+        <input #subir (change)="onArchivoSeleccionado($event)" accept="application/vnd.ms-excel, .xlsx" hidden
+               type="file">
+        <button (click)="subir.click()" color="accent" mat-raised-button>
+          <mat-icon>attachment</mat-icon>
+        </button>
+      </div>
+      <div class="campo boton-cargar">
+        <p *ngIf="archivoSeleccionado">Archivo Seleccionado:<span> {{archivoSeleccionado.name}}</span></p>
+      </div>
+      <hr class="linea-espacio">
+      <div class="campo boton-cargar">
+        <button
+          (click)="onSubir()"
+          [disabled]="!archivoSeleccionado"
+          color="primary"
+          id="consultarInforme"
+          mat-raised-button>
+          {{ informeSeguridadViewModel.mensajes.boton }}
+          <mat-icon>
+            cloud_upload
+          </mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

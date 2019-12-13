@@ -1,0 +1,337 @@
+<mat-progress-bar
+  [hidden]="!gestionNovedadViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+<div class="container">
+  <hr class="linea-espacio"/>
+  <div class="opcion-container">
+    <div class="texto-titulo">
+      {{ gestionNovedadViewModel.mensajes.titulos.gestionarNovedades }}
+    </div>
+  </div>
+  <hr class="linea-espacio"/>
+  <div class="flex-contenedor-busqueda">
+    <form [formGroup]="formularioFiltros" class="contenedor">
+      <div class="campo identificacion">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              formControlName="tipoDocumento"
+              id="tipoDocumento"
+              placeholder="{{gestionNovedadViewModel.mensajes.campos.tipoDocumento}}">
+              <mat-option
+                *ngFor="let tipo of gestionNovedadViewModel.respuestaTiposIdentificacion"
+                [value]="tipo.idTipo">
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input
+              [maxlength]="20"
+              formControlName="numeroDocumento"
+              id="numeroDocumento"
+              matInput
+              maxlength="20"
+              placeholder="{{
+                gestionNovedadViewModel.mensajes.campos.numeroDocumento
+              }}"
+            />
+
+            <button
+              *ngIf="formularioFiltros.controls['numeroDocumento'].value"
+              mat-button
+              mat-icon-button
+              matSuffix
+            >
+              <mat-icon (click)="limpiarDocumento()">close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['numeroDocumento'].hasError(
+                  'maxlength'
+                )
+              "
+            >
+              {{
+              gestionNovedadViewModel.mensajes.errores
+                .numeroDocumentoMaximaLongitud
+              }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['numeroDocumento'].hasError(
+                  'pattern'
+                )
+              "
+            >
+              {{
+              gestionNovedadViewModel.mensajes.errores.numeroDocumentoInvalido
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              (change)="seleccionPiso($event)"
+              formControlName="ciudad"
+              id="ciudad"
+              placeholder="{{ gestionNovedadViewModel.mensajes.campos.ciudad }}"
+            >
+              <mat-option
+                *ngFor="let ciudad of gestionNovedadViewModel.respuestaCiudades"
+                [value]="ciudad.idCiudad"
+              >
+                {{ ciudad.nombre }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error
+              *ngIf="formularioFiltros.controls['ciudad'].hasError('required')"
+            >
+              {{ gestionNovedadViewModel.mensajes.errores.ciudadRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <mat-select
+              formControlName="piso"
+              id="piso"
+              multiple
+              placeholder="{{ gestionNovedadViewModel.mensajes.campos.piso }}"
+            >
+              <mat-option
+                *ngFor="let piso of gestionNovedadViewModel.respuestaPisos"
+                [value]="piso.idPiso"
+              >
+                {{ piso.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              formControlName="estado"
+              id="estado"
+              placeholder="{{ gestionNovedadViewModel.mensajes.campos.estado }}"
+            >
+              <mat-option
+                *ngFor="let estado of gestionNovedadViewModel.Estados"
+                [value]="estado"
+              >
+                {{ estado }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input
+              formControlName="remision"
+              id="remision"
+              matInput
+              placeholder="{{
+                gestionNovedadViewModel.mensajes.campos.remision
+              }}"
+            />
+
+            <button
+              *ngIf="formularioFiltros.controls['remision'].value"
+              mat-button
+              mat-icon-button
+              matSuffix
+            >
+              <mat-icon (click)="limpiarRemision()">close</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="campo-guardarFiltros">
+          <button
+            (click)="guardarFiltros()"
+            color="primary"
+            id="guardarFiltro"
+            mat-raised-button
+          >
+            <mat-icon>save</mat-icon>
+            {{ gestionNovedadViewModel.mensajes.botones.guardarFiltros }}
+          </button>
+        </div>
+      </div>
+
+      <div class="botones">
+        <div class="boton">
+          <button
+            (click)="limpiar()"
+            color="default"
+            id="limpiar"
+            mat-raised-button
+          >
+            <mat-icon>clear</mat-icon>
+            {{ gestionNovedadViewModel.mensajes.botones.limpiar }}
+          </button>
+        </div>
+
+        <div class="boton">
+          <button
+            (click)="buscar()"
+            color="primary"
+            id="buscar"
+            mat-raised-button
+          >
+            <mat-icon>search</mat-icon>
+            {{ gestionNovedadViewModel.mensajes.botones.buscar }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="separador"></div>
+  <div class="">
+    <p-table
+      (onPage)="onPageGestionNovedad($event)"
+      [columns]="columnas"
+      [lazy]="true"
+      [paginator]="true"
+      [responsive]="true"
+      [rowsPerPageOptions]="[10, 20, 30]"
+      [rows]="10"
+      [scrollable]="true"
+      [totalRecords]="totalRegistros"
+      [value]="gestionNovedadViewModel.respuestaNovedades"
+      otedataKey="idSolicitud"
+      scrollHeight="420px"
+      sortMode="multiple"
+    >
+      <ng-template let-columns pTemplate="header">
+        <tr class="texto-resultados-tabla">
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.tipoNovedadCampo" class="tipo-novedad">
+            {{ gestionNovedadViewModel.mensajes.tabla.tipoNovedad }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.tipoNovedadCampo"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.nombrePacienteCampo" class="paciente">
+            {{ gestionNovedadViewModel.mensajes.tabla.nombrePaciente }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.nombrePacienteCampo"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.numeroIdentificacionCampo"
+              class="identificacion">
+            {{ gestionNovedadViewModel.mensajes.tabla.numeroIdentificacion }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.numeroIdentificacionCampo"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.pisoCampo" class="piso">
+            {{ gestionNovedadViewModel.mensajes.tabla.piso }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.pisoCampo"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.usuarioReportaCampo" class="usuario">
+            {{ gestionNovedadViewModel.mensajes.tabla.usuarioReporta }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.usuarioReportaCampo"></p-sortIcon>
+          </th>
+          <th class="usuario">
+            {{gestionNovedadViewModel.mensajes.tabla.usuarioGestion}}
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.fechaSolicitudCampo" class="fecha">
+            {{ gestionNovedadViewModel.mensajes.tabla.fechaSolicitud }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.fechaSolicitudCampo"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.fechaGestionCampo" class="fecha">
+            {{ gestionNovedadViewModel.mensajes.tabla.fechaGestion }}
+            <p-sortIcon [field]="gestionNovedadViewModel.mensajes.tabla.fechaGestionCampo"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="gestionNovedadViewModel.mensajes.tabla.estadoSolicitudNovedadCampo"
+              class="estado">
+            {{ gestionNovedadViewModel.mensajes.tabla.estadoSolicitudNovedad }}
+            <p-sortIcon [field]=" gestionNovedadViewModel.mensajes.tabla.estadoSolicitudNovedadCampo"></p-sortIcon>
+          </th>
+          <th class="accion">
+            {{ gestionNovedadViewModel.mensajes.tabla.accion }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template let-columns="columns" let-rowData pTemplate="body">
+        <tr [pSelectableRow]="rowData" class="texto-resultados-tabla">
+          <td class="tipo-novedad">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.tipoNovedad}}</span>
+            {{ rowData.tipoNovedad }}
+            {{ rowData.especialidad }}
+          </td>
+          <td class="paciente">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.nombrePaciente}}</span>
+            {{ rowData.nombrePaciente }}
+          </td>
+          <td class="identificacion">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.numeroIdentificacion}}</span>
+            {{ rowData.numeroIdentificacion }}
+          </td>
+          <td class="piso">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.piso}}</span>
+            {{ rowData.piso.nombre }}
+          </td>
+          <td class="usuario">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.usuarioReporta}}</span>
+            {{ rowData.usuarioSolicita }}
+          </td>
+          <td class="usuario">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.usuarioGestion}}</span>
+            {{ rowData.estadoSolicitudNovedad == 'PENDIENTE_GESTION' ? '' : rowData.usuarioGestion ? rowData.usuarioGestion : 'Automático' }}
+          </td>
+          <td class="fecha">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.fechaSolicitud}}</span>
+            {{ rowData.fechaSolicitud | date: "dd-MM-yyyy hh:mm a" }}
+          </td>
+          <td class="fecha">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.fechaGestion}}</span>
+            {{ rowData.estadoSolicitudNovedad == 'PENDIENTE_GESTION' ? '' : !rowData.fechaGestionSolicitud ? 'Automático' : rowData.fechaGestionSolicitud | date: "dd-MM-yyyy hh:mm a" }}
+          </td>
+          <td class="estado">
+            <span class="ui-column-title">{{gestionNovedadViewModel.mensajes.tabla.estadoSolicitudNovedad}}</span>
+            {{ rowData.estadoSolicitudNovedad }}
+          </td>
+          <td class="accion">
+            <mat-icon (click)="gestionarNovedad(rowData)" *ngIf="rowData.tipoNovedad !== 'ACTIVACION' && rowData.estadoSolicitudNovedad !== 'PENDIENTE_GESTION' "
+                      [matTooltipPosition]="'above'" class="accion"
+                      matTooltip="Ver detalle">
+              visibility
+            </mat-icon>
+            <mat-icon (click)="gestionarNovedad(rowData)" *ngIf="rowData.estadoSolicitudNovedad === 'PENDIENTE_GESTION' "
+                      [matTooltipPosition]="'above'" class="accion"
+                      matTooltip="{{gestionNovedadViewModel.mensajes.tabla.gestionar}}">
+              sync
+            </mat-icon>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template class="container" let-columns pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columnas.length + 1" class="center-header-table">
+            {{ gestionNovedadViewModel.mensajes.tabla.noNovedades }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-footer>
+      <div class="total-registros">
+        <span class="total-registros-texto">
+          {{ gestionNovedadViewModel.mensajes.tabla.totalRegistros }}</span
+        >
+        <span class="total-registros-valor">{{ totalRegistros }}</span>
+      </div>
+    </p-footer>
+  </div>
+</div>
+<!--<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>-->

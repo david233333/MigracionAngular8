@@ -1,0 +1,122 @@
+<div class="container">
+    <div class="titulo-ventana">
+        <h4 mat-dialog-title>{{ modalGestionBandejaDinamicaViewModel.mensajes.titulos.detalleAyudaDiagnostica }}</h4>
+    </div>
+    <div class="flex-contenedor-busqueda">
+        <form [formGroup]="formulario" class="contenedor-formulario">
+            <mat-dialog-content class="dialog-equipos">
+
+                <div class="seccion">
+
+                    <div class="campoNombreCompleto">
+                        <mat-form-field>
+                            <input id="nombreCompleto" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.nombreCompleto }}"
+                                formControlName="nombreCompleto" maxLength="15">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="campoTipoDocumento">
+                        <mat-form-field>
+                            <input id="tipoDocumento" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.tipoDocumento }}"
+                                formControlName="tipoDocumento" maxLength="20">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="campoNumeroDocumento">
+                        <mat-form-field>
+                            <input id="numeroDocumento" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.numeroDocumento }}"
+                                formControlName="numeroDocumento" maxLength="15">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="campoGenero">
+                        <mat-form-field>
+                            <input id="genero" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.genero }}"
+                                formControlName="genero" maxLength="15">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="seccion">
+                    <div class="campoDireccion">
+                        <mat-form-field>
+                            <input id="direccion" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.direccion }}"
+                                formControlName="direccion" maxLength="200">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+                        <mat-form-field>
+                            <input id="barrio" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.barrio }}"
+                                formControlName="barrio" maxLength="50">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="seccion">
+
+                    <div class="campo">
+                        <mat-form-field>
+                            <input id="telefonoContacto" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.telefonoContacto }}"
+                                formControlName="telefonoContacto" maxLength="15">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+                        <mat-form-field>
+                            <input id="laboratorio" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.laboratorio }}"
+                                formControlName="laboratorio" maxLength="15">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="campo">
+                        <mat-form-field>
+                            <input id="medicoSolicita" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.medicoSolicita }}"
+                                formControlName="medicoSolicita" maxLength="15">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="seccion">
+
+                    <div class="campo">
+                        <div class="fecha">
+                            <span class="titulo-fecha">{{
+                                modalGestionBandejaDinamicaViewModel.mensajes.campos.fechaSolicitud }}</span>
+                                <p-calendar [locale]="configEspanolCalendario" inputStyleClass="input-calendario-gestion-dinamica" panelStyleClass="modal-calendario-biomedico" formControlName="fechaSolicitud"
+                                [showIcon]="true"  placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.fechaSolicitud }}"
+                                dateFormat="dd/mm/yy" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
+                                [readonlyInput]="true" hourFormat="12"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <div class="fecha fecha-fin">
+                            <span class="titulo-fecha">{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.fechaProgramacion
+                                }}</span>
+                                <p-calendar [locale]="configEspanolCalendario" inputStyleClass="input-calendario-gestion-dinamica" panelStyleClass="modal-calendario-biomedico" formControlName="fechaProgramacion"
+                                [showIcon]="true"  placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.fechaProgramacion }}"
+                                dateFormat="dd/mm/yy" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
+                                [readonlyInput]="true" hourFormat="12"></p-calendar>
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <mat-form-field>
+                            <input id="usuarioSolicita" matInput placeholder="{{ modalGestionBandejaDinamicaViewModel.mensajes.campos.usuarioSolicita }}"
+                                formControlName="usuarioSolicita" maxLength="50">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+            </mat-dialog-content>
+        </form>
+    </div>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button id="cerrar" (click)="cerrarModal()">
+            {{ modalGestionBandejaDinamicaViewModel.mensajes.botones.cerrar }}
+        </button>
+    </mat-dialog-actions>
+</div>

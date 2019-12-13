@@ -1,0 +1,64 @@
+<div class="container">
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="texto-titulo">Informes</div>
+  </div>
+  <hr class="linea-espacio">
+  <div class="container">
+    <div class="flex-contenedor-busqueda">
+      <form [formGroup]="formulario" class="contenedor">
+        <div class="campo identificacion">
+          <mat-form-field>
+            <mat-select
+              (selectionChange)="mostrarMenuInforme($event.value)"
+              formControlName="informe"
+              id="especialidad"
+              placeholder="{{informeModel.mensajes.campos.especialidad}}"
+              required>
+              <mat-option *ngFor=" let info of informeModel.listaInformes"
+                          [value]="info.codigo">
+                {{ info.nombre }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="!formulario.controls['informe'].hasError('required')">
+              {{ informeModel.mensajes }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div *ngIf="informeModel.informe === 1">
+    <sura-paliativos></sura-paliativos>
+  </div>
+
+  <div *ngIf="informeModel.informe === 2">
+    <sura-informe-remisiones></sura-informe-remisiones>
+  </div>
+
+  <div *ngIf="informeModel.informe === 3">
+    <sura-informe-seguridad></sura-informe-seguridad>
+  </div>
+
+  <div *ngIf="informeModel.informe === 4">
+    <sura-informe-vehicular></sura-informe-vehicular>
+  </div>
+
+  <div *ngIf="informeModel.informe === 5">
+    <sura-informe-egreso></sura-informe-egreso>
+  </div>
+
+  <div *ngIf="informeModel.informe === 6">
+    <sura-informe-curaciones></sura-informe-curaciones>
+  </div>
+
+  <div *ngIf="informeModel.informe === 7">
+    <sura-informe-equipos-biomedicos></sura-informe-equipos-biomedicos>
+  </div>
+
+  <div *ngIf="informeModel.informe === 8">
+    <sura-informe-pacientes></sura-informe-pacientes>
+  </div>
+
+</div>

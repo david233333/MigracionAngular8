@@ -1,0 +1,52 @@
+<div class="novedad-cambio-piso">
+    <hr class="linea-espacio">
+    <div class="opcion-container">
+        <div class="img-opcion">
+            <img src="./assets/img/cambio-piso.svg" alt="cambio-piso">
+        </div>
+        <div class="subtitulo">
+            <strong>{{ cambioPisoViewModel.mensajes.titulos.cambioPiso }}</strong>
+        </div>
+    </div>
+    <hr class="linea-espacio">
+    <div class="flex-contenedor-busqueda">
+        <form class="contenedor" [formGroup]="formularioCambioPiso">
+            <div class="campo">
+                <mat-form-field>
+                    <mat-select id="piso" placeholder="{{ cambioPisoViewModel.mensajes.campos.piso }}" formControlName="piso" required>
+                        <mat-option *ngFor="let piso of cambioPisoViewModel.respuestaPisos" [value]="piso.idPiso">
+                            {{ piso.nombre }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="!formularioCambioPiso.controls['piso'].hasError('required')">
+                        {{ cambioPisoViewModel.mensajes.errores.pisoRequerido }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="campo">
+                <mat-form-field>
+                    <textarea class="alto-campo" formControlName="observacion" #observacion matInput placeholder="{{  cambioPisoViewModel.mensajes.campos.observacion }}"></textarea>
+                    <mat-hint align="end">{{ observacion.value.length }} / 4000</mat-hint>
+                    <mat-error *ngIf="!formularioCambioPiso.controls['observacion'].hasError('required')">
+                        {{ cambioPisoViewModel.mensajes.errores.observacionRequerido }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="boton">
+                <button mat-raised-button id="asignarPiso" color="primary" (click)="asignarPiso()"
+                [disabled]="!formularioCambioPiso.valid">
+                    {{ cambioPisoViewModel.mensajes.botones.asignarPiso }}
+                </button>
+            </div>
+
+
+        </form>
+        <div class="separador"></div>
+    </div>
+</div>

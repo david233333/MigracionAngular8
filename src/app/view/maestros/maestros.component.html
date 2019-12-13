@@ -1,0 +1,41 @@
+<div class="container">
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="texto-titulo">{{maestrosViewModel.mensajes.title}}</div>
+  </div>
+  <hr class="linea-espacio">
+  <div class="container">
+    <div class="flex-contenedor-busqueda">
+      <form [formGroup]="formulario" class="contenedor">
+        <div class="campo
+        identificacion">
+          <mat-form-field>
+            <mat-select
+              [ngModel]="maestroSelecc" (ngModelChange)="cambioTabla($event)" formControlName="maestro" id="maestro"
+              placeholder="{{maestrosViewModel.mensajes.maestro}}" required>
+              <mat-option *ngFor=" let maestro of maestrosViewModel.listaMaestros"
+                          [value]="maestro.codigo">
+                {{ maestro.nombre }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="!formulario.controls['maestro'].hasError('required')">
+              {{ maestrosViewModel.mensajes }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div>
+    <sura-tabla-maestro
+      *ngIf="formulario.valid"
+      [value]='maestroSelecc'
+    ></sura-tabla-maestro>
+  </div>
+
+ <!-- <div *ngIf="maestrosViewModel.maestro === 3">
+    <sura-ciudad></sura-ciudad>
+  </div>-->
+
+</div>

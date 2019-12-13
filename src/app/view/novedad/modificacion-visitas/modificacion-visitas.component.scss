@@ -1,0 +1,33 @@
+.flex-contenedor-busqueda {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  text-align: center;
+  margin-top: 3%;
+  .contenedor {
+
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 60% !important;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 60% !important;
+    }
+  }
+  mat-form-field {
+    width: 50%;
+  }
+
+  mat-select-value {
+    text-align: center !important;
+  }
+
+}

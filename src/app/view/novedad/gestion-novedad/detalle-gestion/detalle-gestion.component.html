@@ -1,0 +1,2448 @@
+<mat-progress-bar
+  [hidden]="!detalleGestionViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+<div class="container">
+  <hr class="linea-espacio"/>
+  <div class="opcion-container">
+    <div class="img-opcion">
+      <img
+        (click)="volverAtras()"
+        alt="plan-manejo"
+        src="./assets/img/atras-icon.svg"
+      />
+    </div>
+    <div (click)="volverAtras()" class="texto-volver">
+      <strong>Volver atrás</strong>
+    </div>
+    <div class="texto-titulo">Gestionar Novedades</div>
+  </div>
+  <hr class="linea-espacio"/>
+</div>
+<div class="sesiones">
+  <div class="separador-ancho"></div>
+  <div class="detalleNovedad">
+
+    <div *ngIf="detalleGestionViewModel.esPlanManejoDetalle" class="plan-manejo">
+      <div
+      
+        *ngIf="detalleGestionViewModel.esTratamientosDetalle"
+        class="tratamientos"
+      >
+        <div class="opcion-container">
+          <div class="opcion-seleccionada">
+            <img alt="plan-manejo" src="./assets/img/tratamientos.svg"/>
+          </div>
+          <div class="titulo-opcion">
+            {{ detalleGestionViewModel.mensajesPlanManejo.campos.tratamientos }}
+          </div>
+        </div>
+
+        <div class="separador"></div>
+
+        <div class="table">
+          <p-table
+            [columns]="columnasTratamientos"
+           
+            [paginator]="true"
+            [responsive]="true"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [rows]="10"
+            [scrollable]="true"
+            [value]="detalleGestionViewModel.tratamientos"
+            dataKey="id"
+            scrollHeight="400px"
+          >
+            <ng-template let-columns pTemplate="header">
+              <tr>
+                <th class="texto-tabla medicamentoTitulo">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.tabla.medicamento
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      detalleGestionViewModel.mensajesPlanManejo.tabla
+                        .medicamentoCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th class="texto-tabla dosisTitulo">
+                  {{ detalleGestionViewModel.mensajesPlanManejo.tabla.dosis }}
+                  <p-sortIcon
+                    [field]="
+                      detalleGestionViewModel.mensajesPlanManejo.tabla
+                        .dosisCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th class="texto-tabla frecuenciaTitulo">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.tabla.frecuencia
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      detalleGestionViewModel.mensajesPlanManejo.tabla
+                        .frecuenciaCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th class="texto-tabla duracionTitulo">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.tabla.duracion
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      detalleGestionViewModel.mensajesPlanManejo.tabla
+                        .duracionCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th class="texto-tabla dosisFaltantesTitulo">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.tabla
+                    .dosisFaltantes
+                  }}
+                  <p-sortIcon
+                    [field]="
+                      detalleGestionViewModel.mensajesPlanManejo.tabla
+                        .dosisFaltantesCampo
+                    "
+                  ></p-sortIcon>
+                </th>
+                <th class="texto-tabla accionTitulo">
+                  {{
+                  detalleGestionViewModel.mensajesDetalleGestion.tabla.detalle
+                  }}
+                </th>
+              </tr>
+            </ng-template>
+
+            <ng-template let-columns="columns" let-rowData pTemplate="body">
+              <tr [pSelectableRow]="rowData">
+                <td class="texto-tabla medicamentoValor">
+                  <span class="ui-column-title">{{
+                    detalleGestionViewModel.mensajesPlanManejo.tabla.medicamento
+                    }}</span>
+                  {{ rowData.medicamento.nombre }}
+                  {{ rowData.medicamento.presentacion }}
+                </td>
+                <td class="texto-tabla dosisValor">
+                  <span class="ui-column-title">{{
+                    detalleGestionViewModel.mensajesPlanManejo.tabla.dosis
+                    }}</span>
+                  {{ rowData.cantidadDosis }}
+                  {{ rowData.unidadDosis.descripcion }}
+                </td>
+                <td class="texto-tabla frecuenciaValor">
+                  <span class="ui-column-title">{{
+                    detalleGestionViewModel.mensajesPlanManejo.tabla.frecuencia
+                    }}</span>
+                  {{
+                  rowData.frecuencia.descripcion
+                    | listaFrecuencia
+                    | truncar: 20
+                  }}
+                </td>
+                <td class="texto-tabla duracionValor">
+                  <span class="ui-column-title">{{
+                    detalleGestionViewModel.mensajesPlanManejo.tabla.duracion
+                    }}</span>
+                  {{ rowData.duracion }}
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.tratamientos
+                    .campos.duracionDosis
+                  }}
+                </td>
+                <td class="texto-tabla dosisFaltantesValor">
+                  <span class="ui-column-title">{{
+                    detalleGestionViewModel.mensajesPlanManejo.tabla
+                      .dosisFaltantes
+                    }}</span>
+                  {{ rowData.dosisFaltantes }}
+                  <span *ngIf="rowData.dosisFaltantes !== null">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.tratamientos
+                      .campos.duracionDosis
+                    }}</span
+                  >
+                </td>
+                <td class="texto-tabla">
+                  <mat-icon
+                    (click)="abrirModalTratamiento(rowData)"
+                    [matTooltipPosition]="'above'"
+                    class="accion"
+                    matTooltip="Ver detalle"
+                  >
+                    visibility
+                  </mat-icon>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template class="container" let-columns pTemplate="emptymessage">
+              <tr>
+                <td
+                  [attr.colspan]="columnasTratamientos.length + 1"
+                  class="texto-tabla"
+                >
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.tabla
+                    .noTratamientos
+                  }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-footer>
+            <div class="total-registros">
+              <span class="total-registros-texto">
+                {{
+                detalleGestionViewModel.mensajesPlanManejo.tabla
+                  .totalRegistros
+                }}</span
+              >
+              <span class="total-registros-valor">{{
+                detalleGestionViewModel.tratamientos.length
+                }}</span>
+            </div>
+          </p-footer>
+        </div>
+      </div>
+
+      <div
+        *ngIf="detalleGestionViewModel.esProcedimientosDetalle"
+        class="procedimientos"
+      >
+        <div class="separador"></div>
+        <div class="opcion-container">
+          <div class="opcion-seleccionada">
+            <img alt="plan-manejo" src="./assets/img/procedimientos.svg"/>
+          </div>
+          <div class="titulo-opcion">
+            {{
+            detalleGestionViewModel.mensajesPlanManejo.campos.procedimientos
+            }}
+          </div>
+        </div>
+        <div class="separador"></div>
+        <div *ngIf="verCuraciones()" class="curaciones">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                .opcionesMenu.curaciones
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasCuraciones"
+              
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.curaciones"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    [pSortableColumn]="col.field"
+                    class="texto-tabla"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .curaciones.tabla.tipoCuracion
+                      }}</span>
+                    {{ rowData.tipoCuracion.descripcion }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .curaciones.tabla.diasSemana
+                      }}</span>
+                    {{ rowData.dias | listaNombreDia }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .curaciones.tabla.sesiones
+                      }}</span>
+                    {{ rowData.sesiones }}
+                  </td>
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.CURACIONES
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="columnasCuraciones.length + 1"
+                    class="texto-tabla"
+                  >
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .curaciones.tabla.noCuraciones
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .curaciones.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.curaciones.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+
+        <div *ngIf="verSondajes()" class="sondajes">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                .opcionesMenu.sondajes
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasSondajes"
+             
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.sondajes"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    [pSortableColumn]="col.field"
+                    class="texto-tabla"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .sondajes.tabla.tipoSondajeIngreso
+                      }}</span>
+                    {{ rowData.tipoSondajeIngreso }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .sondajes.tabla.sondaje
+                      }}</span>
+                    {{ rowData.sondaje }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .sondajes.tabla.fechaSondaje
+                      }}</span>
+                    {{ rowData.fechaSondaje | date: "dd-MM-yyyy hh:mm a" }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .sondajes.tabla.totalSesiones
+                      }}</span>
+                    {{ rowData.totalSesiones }}
+                  </td>
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.SONDAJES
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="columnasSondajes.length + 1"
+                    class="texto-tabla"
+                  >
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.tabla
+                      .noSondajes
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .sondajes.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.sondajes.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+
+        <div *ngIf="verFototerapias()" class="fototerapias">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.campos.fototerapias
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasFototerapias"
+              
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.fototerapias"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    [pSortableColumn]="col.field"
+                    class="texto-tabla"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .fototerapias.tabla.diasTratamiento
+                      }}</span>
+                    {{ rowData.diasTratamiento }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .fototerapias.tabla.tipoFrecuencia
+                      }}</span>
+                    {{ rowData.tipoFrecuencia }}
+                  </td>
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.FOTOTERAPIAS
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="columnasFototerapias.length + 1"
+                    class="texto-tabla"
+                  >
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .fototerapias.tabla.noFototerapias
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .fototerapias.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.fototerapias.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+
+        <div *ngIf="verTomaMuestras()" class="tomaMuestras">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.campos.tomaMuestras
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasTomaMuestras"
+          
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.tomaMuestras"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    [pSortableColumn]="col.field"
+                    class="texto-tabla"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .tomaMuestra.tabla.tipoMuestra
+                      }}</span>
+                    {{ rowData.tipoMuestra.descripcion }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .tomaMuestra.tabla.fechaMuestra
+                      }}</span>
+                    {{ rowData.fechaMuestra | date: "dd-MM-yyyy hh:mm a" }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .tomaMuestra.tabla.requiereAyuno
+                      }}</span>
+                    {{ rowData.requiereAyuno | textoBooleano }}
+                  </td>
+
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.TOMA_MUESTRAS
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="columnasTomaMuestras.length + 1"
+                    class="texto-tabla"
+                  >
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .tomaMuestra.tabla.noTomaMuestras
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .tomaMuestra.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.tomaMuestras.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+
+        <div *ngIf="verSecreciones()" class="secreciones">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.campos.secreciones
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasSecreciones"
+             
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.secreciones"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th class="texto-tabla diasTratamientoTitulo">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.diasTratamiento
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.secreciones.tabla.diasTratamiento
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla envioAspiradorTitulo">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.envioAspirador
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.secreciones.tabla.envioAspiradorCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla visitaEnfermeriaTitulo">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.visitaEnfermeria
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.secreciones.tabla
+                          .visitaEnfermeriaCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla tipoSondaTitulo">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.tipoSonda
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.secreciones.tabla.tipoSondaCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla nasalTitulo">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.nasal
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.secreciones.tabla.nasalCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla traqueostomiaTitulo">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.traqueostomia
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.secreciones.tabla.traqueostomiaCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla diasTratamientoValor">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .secreciones.tabla.diasTratamiento
+                      }}</span>
+                    {{ rowData.diasTratamiento }}
+                  </td>
+                  <td class="texto-tabla envioAspiradorValor">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .secreciones.tabla.envioAspirador
+                      }}</span>
+                    {{ rowData.envioAspirador | textoBooleano }}
+                  </td>
+                  <td class="texto-tabla visitaEnfermeriaValor">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .secreciones.tabla.visitaEnfermeria
+                      }}</span>
+                    {{ rowData.visitaEnfermeria | textoBooleano }}
+                  </td>
+                  <td class="texto-tabla tipoSondaValor">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .secreciones.tabla.tipoSonda
+                      }}</span>
+                    {{ rowData.tipoSonda }}
+                  </td>
+                  <td class="texto-tabla nasalValor">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .secreciones.tabla.nasal
+                      }}</span>
+                    {{ rowData.nasal | textoBooleano }}
+                  </td>
+                  <td class="texto-tabla traqueostomiaValor">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .secreciones.tabla.traqueostomia
+                      }}</span>
+                    {{ rowData.traqueostomia | textoBooleano }}
+                  </td>
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.SECRECIONES
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="columnasSecreciones.length + 1"
+                    class="texto-tabla"
+                  >
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .secreciones.tabla.noSecreciones
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .secreciones.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.secreciones.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+
+        <div *ngIf="verCanalizaciones()" class="canalizaciones">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.campos.canalizaciones
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasCanalizaciones"
+              
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.canalizaciones"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    [pSortableColumn]="col.field"
+                    class="texto-tabla"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .canalizaciones.tabla.tipoCanalizacion
+                      }}</span>
+                    {{ rowData.tipoCanalizacion }}
+                  </td>
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.CANALIZACIONES
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="columnasCanalizaciones.length + 1"
+                    class="texto-tabla"
+                  >
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .canalizaciones.tabla.noCanalizaciones
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .canalizaciones.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.canalizaciones.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+
+        <div *ngIf="verSoporteNutricionales()" class="soporteNutricionales">
+          <div class="separador"></div>
+          <div class="subtitulo-procedimiento">
+            <strong>{{
+              detalleGestionViewModel.mensajesPlanManejo.campos
+                .soporteNutricional
+              }}</strong>
+          </div>
+          <div class="separador"></div>
+          <div class="table">
+            <p-table
+              [columns]="columnasSoporteNutricional"
+              
+              [paginator]="true"
+              [responsive]="true"
+              [rowsPerPageOptions]="[10, 20, 30]"
+              [rows]="10"
+              [scrollable]="true"
+              [value]="detalleGestionViewModel.soporteNutricionales"
+              dataKey="id"
+              scrollHeight="400px"
+            >
+              <ng-template let-columns pTemplate="header">
+                <tr>
+                  <th class="texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .soporteNutricional.tabla.medicamento
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.soporteNutricional.tabla
+                          .medicamentoCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .soporteNutricional.tabla.dosis
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.soporteNutricional.tabla.dosisCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .soporteNutricional.tabla.tipoNutricion
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.soporteNutricional.tabla
+                          .tipoNutricionCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .soporteNutricional.tabla.nutricion
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.soporteNutricional.tabla
+                          .nutricionCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .soporteNutricional.tabla.duracion
+                    }}
+                    <p-sortIcon
+                      [field]="
+                        detalleGestionViewModel.mensajesPlanManejo
+                          .procedimientos.soporteNutricional.tabla.duracionCampo
+                      "
+                    ></p-sortIcon>
+                  </th>
+                  <th class="texto-tabla">
+                    {{
+                    detalleGestionViewModel.mensajesDetalleGestion.tabla
+                      .detalle
+                    }}
+                  </th>
+                </tr>
+              </ng-template>
+
+              <ng-template let-columns="columns" let-rowData pTemplate="body">
+                <tr [pSelectableRow]="rowData">
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .soporteNutricional.tabla.medicamento
+                      }}</span>
+                    {{ rowData.medicamento.nombre }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .soporteNutricional.tabla.dosis
+                      }}</span>
+                    {{ rowData.cantidadDosis }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .soporteNutricional.tabla.tipoNutricion
+                      }}</span>
+                    {{ rowData.tipoNutricionDescripcion }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .soporteNutricional.tabla.nutricion
+                      }}</span>
+                    {{ rowData.nutricionDescripcion }}
+                  </td>
+                  <td class="texto-tabla">
+                    <span class="ui-column-title">{{
+                      detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                        .soporteNutricional.tabla.duracion
+                      }}</span>
+                    {{ rowData.duracion }}
+                  </td>
+                  <td class="texto-tabla">
+                    <mat-icon
+                      (click)="
+                        abrirModalProcedimientos(
+                          rowData,
+                          tipoProcedimiento.SOPORTE_NUTRICIONALES
+                        )
+                      "
+                      [matTooltipPosition]="'above'"
+                      class="accion"
+                      matTooltip="Ver detalle"
+                    >
+                      visibility
+                    </mat-icon>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                class="container"
+                let-columns
+                pTemplate="emptymessage"
+              >
+                <tr>
+                  <td [attr.colspan]="columnas.length + 1" class="centro">
+                    {{
+                    detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                      .soporteNutricional.tabla.noSoporteNutricional
+                    }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-footer>
+              <div class="total-registros">
+                <span class="total-registros-texto">
+                  {{
+                  detalleGestionViewModel.mensajesPlanManejo.procedimientos
+                    .soporteNutricional.tabla.totalRegistros
+                  }}</span
+                >
+                <span class="total-registros-valor">{{
+                  detalleGestionViewModel.soporteNutricionales.length
+                  }}</span>
+              </div>
+            </p-footer>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esDatosPacienteDetalle" class="datos-paciente">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/info-paciente.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          {{
+          detalleGestionViewModel.mensajesDatosAtencion.titulos.datosPaciente
+          }}
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioDatosPaciente">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+           
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="ciudad"
+                  formControlName="ciudad"
+                  id="ciudad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos.ciudad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+            <div class="campo flex-item-atencion">
+              <mat-form-field class="direccion">
+                <textarea
+                  formControlName="direccion"
+                  id="direccion"
+                  matAutosizeMaxRows="5"
+                  matAutosizeMinRows="1"
+                  matInput
+                  matTextareaAutosize
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .direccion
+                  }}"
+                  value="{{
+                    formularioDatosPaciente.controls['direccion'].value
+                  }}"
+                ></textarea>
+              </mat-form-field>
+
+              <button
+                (click)="abrirModalDireccion()"
+                [matTooltipPosition]="'right'"
+                mat-icon-button
+                matTooltip="{{
+                  detalleGestionViewModel.mensajesDatosAtencion.campos
+                    .agregarDireccion
+                }}"
+              >
+                <mat-icon>
+                  location_on
+                </mat-icon>
+              </button>
+            </div>
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="barrio"
+                  id="barrio"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos.barrio
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="municipio"
+                  formControlName="municipio"
+                  id="municipio"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .municipio
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombreCuidador"
+                  id="nombreCuidador"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .nombreCuidador
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombreResponsable"
+                  id="nombreResponsable"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .nombreResponsable
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="telefonoPaciente"
+                  id="telefonoPaciente"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .telefonoPaciente
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field class="celular">
+                <input
+                  formControlName="celularPaciente"
+                  id="celularPaciente"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .celularPaciente
+                  }}"
+                />
+              </mat-form-field>
+              <mat-form-field class="celular">
+                <input
+                  formControlName="celularPaciente2"
+                  id="celularPaciente2"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .celularPaciente2
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esCitasDetalle" class="citas">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/citas-medicas.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          {{ detalleGestionViewModel.mensajesCitas.titulos.citas }}
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="table">
+        <p-table
+          [columns]="columnasCitas"
+          [paginator]="true"
+          [responsive]="true"
+          [rowsPerPageOptions]="[10, 20, 30]"
+          [rows]="10"
+          [scrollable]="true"
+          [value]="detalleGestionViewModel.citasTabla"
+          dataKey="id"
+          scrollHeights="400px"
+        >
+          <ng-template let-columns pTemplate="header">
+            <tr>
+              <th
+                *ngFor="let col of columns"
+                [pSortableColumn]="col.field"
+                class="texto-tabla"
+              >
+                {{ col.header }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+              <th class="texto-tabla">
+                {{ detalleGestionViewModel.mensajesCitas.tabla.accion }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template let-columns="columns" let-rowData pTemplate="body">
+            <tr [pSelectableRow]="rowData">
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  detalleGestionViewModel.mensajesCitas.tabla.especialidad
+                  }}</span>
+                {{ rowData.profesional }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  detalleGestionViewModel.mensajesCitas.tabla.estado
+                  }}</span>
+                {{ rowData.estado }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  detalleGestionViewModel.mensajesCitas.tabla.tipoCita
+                  }}</span>
+                {{ rowData.tipoCita.tipoCita }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  detalleGestionViewModel.mensajesCitas.tabla.profesional
+                  }}</span>
+                {{ rowData.profesional }}
+              </td>
+              <td class="texto-tabla">
+                <span class="ui-column-title">{{
+                  detalleGestionViewModel.mensajesCitas.tabla.fecha
+                  }}</span>
+                {{ rowData.fecha | date: "dd-MM-yyyy hh:mm a" }}
+              </td>
+              <td class="texto-tabla">
+                <mat-icon
+                  (click)="abrirModalCita(rowData)"
+                  [matTooltipPosition]="'above'"
+                  class="mat-icon material-icons accion"
+                  matTooltip="Ver detalle"
+                >
+                  visibility
+                </mat-icon>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template class="container" let-columns pTemplate="emptymessage">
+            <tr>
+              <td
+                [attr.colspan]="columnasCitas.length + 1"
+                class="texto-resultados-grid"
+              >
+                {{ detalleGestionViewModel.mensajesCitas.tabla.noCitas }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-footer>
+          <div class="total-registros">
+            <span class="total-registros-texto">
+              {{
+              detalleGestionViewModel.mensajesCitas.tabla.totalRegistros
+              }}</span
+            >
+            <span class="total-registros-valor">{{
+              detalleGestionViewModel.citasTabla.length
+              }}</span>
+          </div>
+        </p-footer>
+      </div>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esCuidador" class="cuidador">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          Cuidador
+        </div>
+      </div>
+      <div class="separador"></div>
+      <form [formGroup]="formularioCuidador" >
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombreCuidador"
+                  id="nombreCuidador"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .nombreCuidador
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombreResponsable"
+                  id="nombreResponsable"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .nombreResponsable
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="telefonoPaciente"
+                  id="telefonoPaciente"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .telefonoPaciente
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field >
+                <input
+                  formControlName="celularPaciente"
+                  id="celularPaciente"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .celularPaciente
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+              
+              <div class="campo flex-item-atencion">
+              <mat-form-field >
+                <input
+                  formControlName="celularPaciente2"
+                  id="celularPaciente2"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .celularPaciente2
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esDiagnostico" class="diagnostico">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          Diagnostico
+        </div>
+      </div>
+      
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioDiagnostico" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="codigo"
+                  id="codigo"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.diagnosticos
+                      .codigo
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombre"
+                  id="nombre"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.diagnosticos
+                      .nombre
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esAlertaCita" class="alertaCita">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          Alerta cita
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioAlertaCita" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="textoAlerta"
+                  id="textoAlerta"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.AlertaCita
+                      .textoAlerta
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="duracion"
+                  id="duracion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.AlertaCita
+                    .duracion
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esEquiposBiomedicos" class="equipoBiomedicos">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          Equipo Biomedico
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioEquipoBiomedico" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="descripcion"
+                  id="descripcion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.equipoBiomedico
+                      .tipoEquipo
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="estadoDescripcion"
+                  id="estadoDescripcion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.equipoBiomedico
+                    .estado
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field *ngIf="ocultar">
+                <input 
+                  formControlName="proveedor"
+                  id="proveedor"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesDatosAtencion.campos
+                      .Proveedor
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+    <div *ngIf="detalleGestionViewModel.esCancelacionCita" class="Cancelacion cita">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          Cancelacion Cita
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioCancelacionCita" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="especialidad"
+                  id="especialidad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.cancelarCita
+                    .especialidad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="descripcion"
+                  id="descripcion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.cancelarCita
+                    .motivo
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input 
+                  formControlName="observacion"
+                  id="observacion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.cancelarCita
+                    .observacion
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esAplicacionCuidador" class="aplicacionCuidador">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+         Aplicacion Cuidador
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioAplicacionCuidador" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="especialidad"
+                  id="especialidad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.aplicacionCuidador
+                    .especialidad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="descripcion"
+                  id="descripcion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.aplicacionCuidador
+                    .motivo
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input 
+                  [value]="formularioAplicacionCuidador.get('fechaInicioCita').value | date:'mediumDate'"
+                  formControlName="fechaInicioCita"
+                  id="fechaInicioCita"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.aplicacionCuidador
+                    .fechaInicioCita
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input 
+                  formControlName="horaInicioCita"
+                  id="horaInicioCita"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.aplicacionCuidador
+                    .horaInicioCita
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+   
+    <div *ngIf="detalleGestionViewModel.esCitaFijada" class="fijarCita">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+         Cita Fijada
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioFijarCita" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="especialidad"
+                  id="especialidad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.fijarCita
+                    .especialidad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  [value]="formularioFijarCita.get('fechaInicioCita').value | date:'mediumDate'"
+                  formControlName="fechaInicioCita"
+                  id="fechaInicioCita"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.fijarCita
+                    .fechaInicioCita
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input 
+                  formControlName="horaFijadaInicio"
+                  id="horaFijadaInicio"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.fijarCita
+                    .horaFijadaInicio
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input 
+                  formControlName="horaFijadaFin"
+                  id="horaFijadaFin"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.fijarCita
+                    .horaFijadaFin
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esCitaDesfijada" class="citaDesfijada">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+         Cita desfijada
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioDesfijarCita" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+           
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="especialidad"
+                  id="especialidad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.desfijarCita
+                    .especialidad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  [value]="formularioDesfijarCita.get('fechaInicioCita').value | date:'mediumDate'"
+                  formControlName="fechaInicioCita"
+                  id="fechaInicioCita"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.desfijarCita
+                    .fechaInicioCita
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esProfesionalAsignado" class="ProfesionalAsignado">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+         Profesional asignado
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioAsignarProfesional" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+           
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="especialidad"
+                  id="especialidad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .especialidad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombreCompleto"
+                  id="nombreCompleto"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .nombreCompleto
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="region"
+                  id="region"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .region
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="distrito"
+                  id="distrito"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .distrito
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="direccion"
+                  id="direccion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .direccion
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esProfesionalDesAsiganado" class="ProfesionalDesAsignado">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+         Profesional desasignado
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <form [formGroup]="formularioDesAsignarProfesional" class="contenedor">
+        <div class="flex-contenedor-atencion">
+          <div class="contenedor-item-atencion">
+           
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="especialidad"
+                  id="especialidad"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .especialidad
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="nombreCompleto"
+                  id="nombreCompleto"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .nombreCompleto
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="region"
+                  id="region"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .region
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="distrito"
+                  id="distrito"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .distrito
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="campo flex-item-atencion">
+              <mat-form-field>
+                <input
+                  formControlName="direccion"
+                  id="direccion"
+                  matInput
+                  placeholder="{{
+                    detalleGestionViewModel.mensajesNovedades.profesionalAsignado
+                    .direccion
+                  }}"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esCambioPisoDetalle"  class="cambio-piso"
+    >
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/cambio-piso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          {{ detalleGestionViewModel.mensajesCambioPiso.titulos.cambioPiso }}
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="flex-contenedor">
+        <form [formGroup]="formularioCambioPiso" class="contenedor">
+          <div class="campo">
+            <mat-form-field>
+              <input
+                formControlName="piso"
+                formControlName="piso"
+                id="piso"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesCambioPiso.campos.piso
+                }}"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="separador"></div>
+
+          <div class="campo">
+            <mat-form-field>
+              <textarea
+                #observacion
+                class="alto-observacion"
+                formControlName="observacion"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesCambioPiso.campos.observacion
+                }}"
+              ></textarea>
+              <mat-hint align="end">
+              >{{ observacion.value.length }} / 4000
+              </mat-hint
+              >
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="separador"></div>
+      </div>
+    </div>
+
+    <div *ngIf="detalleGestionViewModel.esEgresoDetalle" class="egreso">
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/egreso.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          {{ detalleGestionViewModel.mensajesEgreso.titulos.egreso }}
+        </div>
+      </div>
+
+      <div class="flex-contenedor">
+        <form [formGroup]="formularioEgreso" class="contenedor">
+          <div class="campo">
+            <mat-form-field>
+              <input
+                formControlName="motivoEgreso"
+                id="motivoEgreso"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesEgreso.campos.motivoEgreso
+                }}"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                formControlName="fechaEgreso"
+                id="fechaEgreso"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesEgreso.campos.fechaAltaDetalle
+                }}"
+              />
+            </mat-form-field>
+          </div>
+          <div class="separador"></div>
+          <div class="campo">
+            <mat-form-field>
+              <textarea
+                #observacion
+                class="alto-observacion"
+                formControlName="observacion"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesEgreso.campos.observacion
+                }}"
+              ></textarea>
+              <mat-hint align="end"
+              >{{ observacion.value.length }} / 4000
+              </mat-hint
+              >
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="separador"></div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="detalleGestionViewModel.esAdicionReprogramarCitaDetalle"
+      class="adicionar-reprogramar-cita"
+    >
+      <div class="opcion-container">
+        <div class="opcion-seleccionada">
+          <img alt="plan-manejo" src="./assets/img/citas-medicas.svg"/>
+        </div>
+        <div class="titulo-opcion">
+          {{ detalleGestionViewModel.tituloAgregarReprogramarCita }}
+        </div>
+      </div>
+      <div class="separador"></div>
+
+      <div class="flex-contenedor">
+        <form
+          [formGroup]="formularioAdicionarReprogramarCita"
+          class="contenedor"
+        >
+          <div class="campo">
+            <mat-form-field>
+              <input
+                formControlName="especialidad"
+                formControlName="especialidad"
+                id="especialidad"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesCitas.campos.especialidad
+                }}"
+              />
+            </mat-form-field>
+          </div>
+          <div class="separador"></div>
+          <div class="campo">
+            <mat-form-field>
+              <input
+                formControlName="tipoCambioCita"
+                formControlName="tipoCambioCita"
+                id="tipoCambioCita"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesCitas.campos.tipoCambioCita
+                }}"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="separador"></div>
+          <div class="campo">
+            <mat-form-field>
+              <input
+                formControlName="tipoCita"
+                formControlName="tipoCita"
+                id="tipoCita"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesCitas.campos.tipoCita
+                }}"
+              />
+            </mat-form-field>
+          </div>
+          <div class="separador"></div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input
+                formControlName="fechaCita"
+                formControlName="fechaCita"
+                id="fechaCita"
+                matInput
+                placeholder="{{
+                  detalleGestionViewModel.mensajesCitas.campos.fechaCita
+                }}"
+              />
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="separador"></div>
+      </div>
+    </div>
+  </div>
+  <div class="separador-ancho"></div>
+  <div class="novedades">
+    <div class="tabla">
+      <p-table
+        (onRowSelect)="novedadSeleccionada($event.data)"
+        [(selection)]="detalleGestionViewModel.novedadSeleccionada"
+        [columns]="columnasNovedades"
+        [paginator]="true"
+        [responsive]="true"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [rows]="10"
+        [scrollable]="true"
+        [value]="detalleGestionViewModel.respuestaNovedades"
+        dataKey="idSolicitud"
+        scrollHeight="400px"
+        selectionMode="single"
+      >
+        <ng-template let-columns="columns" let-rowData pTemplate="body">
+          <tr [pSelectableRow]="rowData">
+            <td class="texto-tabla columna-estado">
+              <div *ngIf="rowData.estadoSolicitudNovedad == 'GESTIONADA'">
+                <mat-icon
+                  [matTooltipPosition]="'above'"
+                  class="accion"
+                  matTooltip="Gestionada"
+                >
+                  done
+                </mat-icon>
+              </div>
+              <div
+                *ngIf="rowData.estadoSolicitudNovedad == 'PENDIENTE_GESTION'"
+              ></div>
+              <div *ngIf="rowData.estadoSolicitudNovedad == 'ESCALADA'">
+                <mat-icon
+                  [matTooltipPosition]="'above'"
+                  class="accion"
+                  matTooltip="No gestionada"
+                >
+                  not_interested
+                </mat-icon>
+              </div>
+            </td>
+            <td class="texto-tabla columna-novedad">
+              {{ rowData.fechaSolicitud | date: "dd-MM-yyyy hh:mm a" }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template class="container" let-columns pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="columnasNovedades.length + 1" class="centro">
+              {{
+              detalleGestionViewModel.mensajesDetalleGestion.tabla.noNovedades
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="separador"></div>
+    <div class="opcionesNovedad">
+      <div class="usuariosNovedad">
+        <div class="infoUsuario">
+          <div class="usuario-texto">
+            {{
+            detalleGestionViewModel.mensajesDetalleGestion.titulos
+              .usuarioRegistra
+            }}
+          </div>
+          <div class="usuario-valor">
+            {{detalleGestionViewModel.usuarioRegistra}}
+          </div>
+        </div>
+        <div class="separador"></div>
+        <div class="infoUsuario">
+          <div class="usuario-texto">
+            {{
+            detalleGestionViewModel.mensajesDetalleGestion.titulos
+              .usuarioGestiona
+            }}
+          </div>
+          <div class="usuario-valor">
+            {{detalleGestionViewModel.usuarioGestiona}}
+          </div>
+        </div>
+      </div>
+      <div class="botones">
+        <div class="boton">
+          <button
+            (click)="gestionar()"
+            [disabled]="!detalleGestionViewModel.esPendienteGestionar"
+            color="primary"
+            id="limpiar"
+            mat-raised-button
+          >
+            {{
+            detalleGestionViewModel.mensajesDetalleGestion.botones.gestionar
+            }}
+          </button>
+        </div>
+
+        <div class="boton">
+          <button
+            (click)="escalar()"
+            [disabled]="!detalleGestionViewModel.esPendienteGestionar"
+            color="primary"
+            id="buscar"
+            mat-raised-button
+          >
+            {{ detalleGestionViewModel.mensajesDetalleGestion.botones.escalar }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

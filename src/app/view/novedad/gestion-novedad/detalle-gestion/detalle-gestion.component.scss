@@ -1,0 +1,384 @@
+
+
+.linea-espacio {
+    border: 0.5px solid #D5D5D5;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.opcion-container {
+    display: flex;
+    width: 100%;
+}
+
+.img-opcion {
+    width: 3%;
+    cursor: pointer;
+}
+
+
+.texto-volver {
+    margin-top: 0.8%;
+    margin-left: 1%;
+    font-size: 12pt;
+    width: 15%;
+    color: #0033a0;
+    cursor: pointer;
+}
+
+.texto-titulo {
+    text-align: center;
+    font-size: 20pt;
+    width: 60%; 
+    margin-top: 0.5%;
+}
+
+.sesiones {
+    display: flex;
+    width: 100%;
+}
+
+.detalleNovedad {
+    width: 78%;
+}
+
+.novedades {
+    width: 22%;
+}
+
+.center-header-table {
+    text-align: center;
+}
+
+.columna-estado {
+    width: 3%;
+}
+
+.columna-id {
+    width: 3%;
+}
+
+.columna-novedad {
+    width: 10%;
+}
+
+.separador {
+    height: 1em;
+}
+
+.separador-ancho {
+    width: 2%;
+}
+
+.planesManejo {
+    color: #0033a0 !important;
+    text-align: center;
+}
+
+.usuariosNovedad {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.infoUsuario {
+    display: flex;    
+}
+
+.usuario-texto {
+    font-weight: bold;
+    color: #0033a0;
+}
+
+.usuario-valor {
+    margin-left: 2%;
+}
+
+.botones {
+    display: inline-table;
+}
+
+.boton {
+    margin-top: 10% 
+}
+
+.accion {
+    cursor: pointer;
+}
+
+.infoUsuario {
+    display: flex;
+}
+
+.ui-table .ui-table-tbody > tr.ui-state-highlight {
+    background-color: #0033a0 !important;
+    color: #FFFFFF;
+}
+
+//************************** Detalle - Plan manejo **************//
+
+.linea-espacio {
+    border: 0.5px solid #D5D5D5;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.opcion-container {
+    display: flex;
+}
+
+.opcion-seleccionada {
+    width: 8%;
+}
+
+
+.titulo-opcion {
+    font-size: 20pt;
+    margin-top: 2%;
+}
+
+.subtitulo-procedimiento {
+    font-size: 15pt;
+    color: #0033a0;
+}
+
+
+.separador {
+    height: 1em;
+}
+
+.texto-tabla {
+    font-size: 10pt;
+    text-align: center;
+}
+
+.medicamentoTitulo {
+    width: 23em;
+}
+
+.medicamentoValor {
+    width: 23em;
+}
+
+.dosisTitulo {
+    width: 8em;
+}
+
+.dosisValor {
+    width: 8em;
+}
+
+
+.duracionTitulo {
+    width: 8em;
+}
+
+.duracionValor {
+    width: 8em;
+}
+
+.dosisFaltantesTitulo {
+    width: 10em;
+}
+
+.dosisFaltantesValor {
+    width: 10em;
+}
+
+.center-header-table {
+    text-align: center;
+}
+
+//**************Procedimientos************//
+
+.diasTratamientoTitulo {
+    width: 12em;
+}
+
+.diasTratamientoValor {
+    width: 12em;
+}
+
+.envioAspiradorTitulo {
+    width: 11em;
+}
+
+.envioAspiradorValor {
+    width: 11em;
+}
+
+
+.visitaEnfermeriaTitulo {
+    width: 12em;
+}
+
+.visitaEnfermeriaValor {
+    width: 12em;
+}
+
+.tipoSondaTitulo {
+    width: 9em;
+}
+
+.tipoSondaValor {
+    width: 9em;
+}
+
+.nasalTitulo {
+    width: 6em;
+}
+
+.nasalValor {
+    width: 6em;
+}
+
+.traqueostomiaTitulo {
+    width: 10em;
+}
+
+.traqueostomiaValor {
+    width: 10em;
+}
+
+
+
+//************************* * Detalle - Datos de atención ***************//
+
+
+.flex-contenedor-atencion {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    .contenedor-item-atencion {
+      /*Pantalla pequenia*/
+      @media (max-width: 800px) {
+        width: 100%;
+      }
+      /*Pantalla Mediana*/
+      @media (min-width: 801px) {
+        width: 50%;
+      }
+      /*Pantalla grande*/
+      @media (min-width: 1006px) {
+        width: 50%;
+      }
+      .flex-item-atencion {
+        width: 100%;
+        mat-form-field {
+          width: 80%;
+        }
+        .direccion {
+         width: 72%;
+        }
+      }
+    }
+
+    .campo {
+        padding-bottom: 5px;
+      .celular {
+        width: 37% !important;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+
+
+  //****************** Detalle cambio piso ***************//
+
+  .flex-contenedor {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+    margin-top: 3%;
+    .contenedor {
+        /*Pantalla pequenia*/
+        @media (max-width: 640px) {
+            width: 100%;
+        }
+        /*Pantalla Mediana*/
+        @media (min-width: 641px) {
+            width: 50%;
+        }
+        /*Pantalla grande*/
+        @media (min-width: 1006px) {
+            width: 50%;
+        }
+    }
+    .campo {
+        padding-bottom: 5px;
+    }
+    .boton {
+        padding: 5px;
+        text-align: center;
+    }
+    mat-form-field {
+        width: 90%;
+    }
+}
+
+.alto-observacion {
+    height: 5em;
+}
+
+///////////////////////////////////////////////////
+ 
+
+
+
+
+@media (max-width: 800px) {
+
+.usuario-texto {
+    font-size: 10pt;
+}
+
+.usuario-valor {
+    font-size: 10pt;
+    margin-bottom: 5%;
+}
+
+.infoUsuario {
+    display: inline;
+}
+
+.texto-tabla {
+    font-size: 8pt !important;
+}
+
+//************************** Detalle - Plan manejo **************//    
+
+    .texto{
+        font-size: 7pt;
+    }
+
+    .img-opcion {    
+        width: 7%;
+    }
+
+    .titulo-opcion {
+        font-size: 12pt;
+        margin-top: 5%;
+    }
+
+    .texto-volver {
+        font-size: 7pt;
+    }
+
+    .texto-titulo {
+        font-size: 15pt;
+    }
+
+    .img-titulo {
+        width: 100%;
+    }
+
+    .opcion-seleccionada {
+        width: 15%;
+    }
+
+//****************************************************************//
+
+}

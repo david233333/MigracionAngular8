@@ -1,0 +1,302 @@
+<section>
+  <div class="container">
+    <div class="titulo-ventana">
+      <h4>{{ modalCitasViewModel.tituloVentana }}</h4>
+    </div>
+    <div class="ventana-container">
+
+      <mat-dialog-content class="dialog-citas">
+        <div [className]="modalCitasViewModel.verFechaPeriodica || modalCitasViewModel.verProgramacionSemana ?
+                 'si-fecha-periodica' : 'no-fecha-periodica'">
+
+          <form [formGroup]="formularioCitas" class="contenedor-formulario">
+            <div class="seccion-campos">
+
+              <div class="campo">
+                <mat-form-field class="campo-control">
+                  <mat-select (selectionChange)="seleccionProfesional($event.value);" formControlName="profesional"
+                              id="profesional" placeholder="{{ modalCitasViewModel.mensajes.campos.profesional }}"
+                              required>
+                    <mat-option *ngFor="let profesional of infoComunes.datosProfesionales"
+                                [value]="profesional.profesion">
+                      {{ profesional.profesion }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formularioCitas.controls['profesional'].hasError('required')">
+                    {{ modalCitasViewModel.mensajes.errores.profesionalRequerido }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!--<div class="separador"></div>
+              <div class="campo">
+                <div class="control-leyenda">
+                  <p-fieldset [toggleable]="false" legend="{{ modalCitasViewModel.mensajes.campos.tipo }}">
+                    <mat-radio-group [disabled]="deshabilitarCheckBoxTipoCita" (change)="seleccionTipo($event)" [(ngModel)]="modalCitasViewModel.tipo"
+                                     formControlName="tipo" layout="row">
+                      <mat-radio-button [value]="modalCitasViewModel.mensajes.campos.tipoAtencion.codigoValoracion">
+                        {{ modalCitasViewModel.mensajes.campos.tipoAtencion.valoracion }}
+                      </mat-radio-button>
+                      <mat-radio-button [value]="modalCitasViewModel.mensajes.campos.tipoAtencion.codigoManejo">
+                        {{ modalCitasViewModel.mensajes.campos.tipoAtencion.manejo }}
+                      </mat-radio-button>
+                      <mat-error *ngIf="formularioCitas.controls['tipo'].hasError('required')" class="mat-error-clase">
+                        {{ modalCitasViewModel.mensajes.errores.tipoRequerido }}
+                      </mat-error>
+                    </mat-radio-group>
+                  </p-fieldset>
+                </div>
+              </div>-->
+
+              <div *ngIf="modalCitasViewModel.verTipoCita" class="campo">
+                <mat-form-field class="campo-control">
+                  <mat-select [disabled]="deshabilitarTipoCitaSelect" (selectionChange)="seleccionTipoCita($event.value)" formControlName="tipoCita"
+                              id="tipoCita" placeholder="{{ modalCitasViewModel.mensajes.campos.tipoCita }}" required>
+                    <mat-option *ngFor="let cita of modalCitasViewModel.respuestaTiposCita" [value]="cita.idCita">
+                      {{ cita.tipoCita }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formularioCitas.controls['tipoCita'].hasError('required')">
+                    {{ modalCitasViewModel.mensajes.errores.tipoCitaRequerido }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="separador"></div>
+
+              <div *ngIf="verProfesionalPreferido" class="campo">
+                <mat-form-field class="campo-control">
+                  <mat-select (selectionChange)="filtrarProfesional($event.value)" formControlName="recursoPreferido"
+                              id="recursoPreferido" placeholder="{{ modalCitasViewModel.mensajes.campos.recursoPreferido }}"
+                              required [disabled]="deshabilitarRecursoPreferidoInput">
+
+                    <mat-option *ngFor="let profesional of profesionalesList" [value]="profesional.idProfesional">
+                      {{ profesional.nombreCompleto }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="formularioCitas.controls['recursoPreferido'].hasError('recursoPreferido')">
+                    {{ modalCitasViewModel.mensajes.errores.recursoPreferido }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div *ngIf="modalCitasViewModel.verOpcionManejo">
+                <div class="campo">
+                  <div class="control-leyenda">
+                    <p-fieldset [toggleable]="false" legend="{{ modalCitasViewModel.tituloGrupoFecha }}">
+                      <div *ngIf="modalCitasViewModel.verGrupoFecha">
+                        <mat-radio-group (change)="seleccionFecha($event.value)"
+                                         [(ngModel)]="modalCitasViewModel.tipoFecha" formControlName="tipoFecha"
+                                         layout="row">
+                          <mat-radio-button
+                            *ngIf="formularioCitas.controls['profesional'].value == modalCitasViewModel.mensajes.profesiones.enfermeria.nombre"
+                            [value]="modalCitasViewModel.mensajes.campos.tipoFechaCita.codigoCitaExistente">
+                            {{
+                            modalCitasViewModel.mensajes.campos.tipoFechaCita.citaExistente
+                            }}
+                          </mat-radio-button>
+                          <mat-radio-button [value]="modalCitasViewModel.mensajes.campos.tipoFechaCita.codigoFija">
+                            {{ modalCitasViewModel.mensajes.campos.tipoFechaCita.fija }}
+                          </mat-radio-button>
+                          <mat-radio-button
+                            *ngIf="formularioCitas.controls['profesional'].value != modalCitasViewModel.mensajes.profesiones.enfermeria.nombre
+                            && formularioCitas.controls['tipoCita'].value != '1'"
+                            [value]="modalCitasViewModel.mensajes.campos.tipoFechaCita.codigoPeriodica">
+                            {{ modalCitasViewModel.mensajes.campos.tipoFechaCita.periodica
+                            }}
+                          </mat-radio-button>
+                          <mat-error *ngIf="formularioCitas.controls['tipoFecha'].hasError('required')"
+                                     class="mat-error-clase">
+                            {{ modalCitasViewModel.mensajes.errores.tipoRequerido }}
+                          </mat-error>
+                        </mat-radio-group>
+                      </div>
+                      <div *ngIf="modalCitasViewModel.verFechaFija">
+                        <p-calendar [(ngModel)]="fechaFija" [locale]="configEspanolCalendario"
+                                    [minDate]="fechaMinimaCalendarioActual" [monthNavigator]="true"
+                                    [readonlyInput]="true"
+                                    [showIcon]="true" [showTime]="true"
+                                    [yearNavigator]="true"
+                                    dateFormat="dd/mm/yy" formControlName="fechaFija"
+                                    hourFormat="12" inputStyleClass="input-calendario-citas"
+                                    panelStyleClass="modal-calendario-citas"
+                                    placeholder="{{ modalCitasViewModel.mensajes.campos.fechaFija }}"
+                                    yearRange="1900:2100"></p-calendar>
+                        <div *ngIf="formularioCitas.controls['fechaFija'].hasError('required')" class="mat-error-clase">
+                          {{ modalCitasViewModel.mensajes.errores.fechaFijaRequerido }}
+                        </div>
+                      </div>
+                      <div *ngIf="modalCitasViewModel.verCitaExistente">
+                        <div class="campo">
+                          <mat-form-field class="campo-control-cita-existente">
+                            <mat-select formControlName="citaExistente"
+                                        id="citaExistente"
+                                        placeholder="{{ modalCitasViewModel.mensajes.campos.citaExistente }}" required>
+                              <mat-option *ngFor="let cita of modalCitasViewModel.respuestaCitasExistentes"
+                                          [value]="cita.fechaInicioCita ? cita.fechaInicioCita : cita.fechaInicialAsignadaCS">
+                                {{ cita.fechaInicialAsignadaCS ?
+                                (cita.fechaInicialAsignadaCS | date:'dd-MM-yyyy HH:mm a')
+                                : (cita.fechaInicioCita | date:'dd-MM-yyyy HH:mm a') }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="formularioCitas.controls['citaExistente'].hasError('required')">
+                              {{
+                              modalCitasViewModel.mensajes.errores.citaExistenteRequerido
+                              }}
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div *ngIf="modalCitasViewModel.verSemanas" class="semanas">
+                        <mat-form-field class="campo-semanas">
+                          <input class="centro" formControlName="semanas" id="semanas"
+                                 matInput
+                                 placeholder="{{ modalCitasViewModel.mensajes.campos.semanas }}">
+
+                          <mat-error *ngIf="formularioCitas.controls['semanas'].hasError('required')">
+                            {{ modalCitasViewModel.mensajes.errores.semanasRequerido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioCitas.controls['semanas'].hasError('pattern')">
+                            {{ modalCitasViewModel.mensajes.errores.semanasInvalido }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioCitas.controls['semanas'].hasError('min')">
+                            {{ modalCitasViewModel.mensajes.errores.semanasMinimoValor }}
+                          </mat-error>
+
+                          <mat-error *ngIf="formularioCitas.controls['semanas'].hasError('max')">
+                            {{ modalCitasViewModel.mensajes.errores.semanasMaximoValor }}
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div *ngIf="modalCitasViewModel.verFechaPeriodica">
+                        <div class="control-fecha-periodica">
+                          <div class="texto-fecha-periodica">
+                            A partir de
+                          </div>
+                          <div class="calendario-citas">
+                            <p-calendar [(ngModel)]="fechaPeriodica"
+                                        [locale]="configEspanolCalendario" [minDate]="fechaMinimaCalendarioActual"
+                                        [monthNavigator]="true" [readonlyInput]="true"
+                                        [showIcon]="true" [showTime]="true"
+                                        [yearNavigator]="true"
+                                        dateFormat="dd/mm/yy" formControlName="fechaPeriodica"
+                                        hourFormat="12" inputStyleClass="input-calendario-citas"
+                                        panelStyleClass="modal-calendario-citas"
+                                        placeholder="{{ modalCitasViewModel.mensajes.campos.fechaPeriodica }}"
+                                        yearRange="1900:2100"></p-calendar>
+                            <div *ngIf="formularioCitas.controls['fechaPeriodica'].hasError('required')"
+                                 class="mat-error-clase">
+                              {{
+                              modalCitasViewModel.mensajes.errores.fechaPeriodicaRequerido
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="separador"></div>
+                        <div class="total-visitas">
+                          <mat-form-field class="campo-total-visitas">
+                            <input [maxlength]="2" class="centro" formControlName="totalSesiones" id="totalSesiones"
+                                   matInput
+                                   placeholder="{{ modalCitasViewModel.mensajes.campos.totalVisitas }}">
+
+                            <mat-error *ngIf="formularioCitas.controls['totalSesiones'].hasError('required')">
+                              {{
+                              modalCitasViewModel.mensajes.errores.totalSesionesRequerido
+                              }}
+                            </mat-error>
+
+                            <mat-error *ngIf="formularioCitas.controls['totalSesiones'].hasError('pattern')">
+                              {{
+                              modalCitasViewModel.mensajes.errores.totalSesionesInvalido
+                              }}
+                            </mat-error>
+
+                            <mat-error *ngIf="formularioCitas.controls['totalSesiones'].hasError('min')">
+                              {{
+                              modalCitasViewModel.mensajes.errores.totalSesionesMinimoValor
+                              }}
+                            </mat-error>
+
+                            <mat-error *ngIf="formularioCitas.controls['totalSesiones'].hasError('max')">
+                              {{
+                              modalCitasViewModel.mensajes.errores.totalSesionesMaximoValor
+                              }}
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </p-fieldset>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div *ngIf="modalCitasViewModel.verProgramacionSemana" class="control-dias">
+
+              <div class="control-tabla-dias">
+                <p-table [(selection)]="modalCitasViewModel.diasSeleccionados" [responsive]="true"
+                         [value]="modalCitasViewModel.listaDias" dataKey="id" scrollHeight="400px">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>
+
+                      </th>
+                      <th class="seleccion-tabla">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                      </th>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template let-rowData pTemplate="body">
+                    <tr [pSelectableRow]="rowData">
+                      <td class="texto-tabla tamano-columna">
+                        {{ rowData.dia }}
+                      </td>
+                      <td class="seleccion-tabla">
+                        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                  <ng-template class="container" pTemplate="emptymessage">
+                    <tr>
+                      <td [attr.colspan]="2" class="centro">
+                        {{ modalCitasViewModel.mensajes.tabla.noDias }}
+                      </td>
+                    </tr>
+                  </ng-template>
+
+                </p-table>
+                <p *ngIf="verValidacionProgramacion()" class="mat-error-clase">
+                  {{ modalCitasViewModel.mensajes.tabla.validaciones.seleccionDias }}
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </mat-dialog-content>
+    </div>
+    <mat-dialog-actions align="end">
+
+      <!-- Formulario valido: {{ formularioCitas.valid }}              -->
+
+      <button (click)="cerrarModal()" id="cancelar" mat-raised-button>
+        {{ modalCitasViewModel.mensajes.botones.cancelar }}
+      </button>
+      <div *ngIf="!modalCitasViewModel.esDetalle">
+        <button (click)="crearCita()" *ngIf="!data.btnEditar" color="primary" id="agregar" mat-raised-button>
+          {{ modalCitasViewModel.mensajes.botones.agregar }}
+        </button>
+        <button (click)="crearCita()" *ngIf="data.btnEditar" color="primary" id="editar" mat-raised-button>
+          {{ modalCitasViewModel.mensajes.botones.editar }}
+        </button>
+      </div>
+
+
+    </mat-dialog-actions>
+  </div>
+</section>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>

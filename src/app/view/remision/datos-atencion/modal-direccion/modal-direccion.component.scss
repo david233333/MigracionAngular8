@@ -1,0 +1,87 @@
+.campo_direccion_final {
+  font-size: 10pt;
+}
+.direccion {
+  display: grid;
+  text-align: center;
+}
+.container {
+  display: inline-block !important;
+}
+
+.contenido_formulario_direccion {
+  display: flex;
+  margin-left: 5%;
+}
+
+.separador_campo {
+  margin-right: 5%;
+}
+.parrafo_informacion {
+  margin-bottom: 0%;
+}
+.descripcion {
+  width: 45%;
+}
+.top_boton {
+  margin-bottom: 2%;
+}
+@media (max-width: 800px) {
+  .contenido_formulario_direccion {
+    display: table !important;
+    margin-left: 0%;
+  }
+  .container {
+    display: table !important;
+  }
+  .descripcion {
+    width: 100%;
+    font-size: 10pt;
+    margin-top: 7%;
+  }
+}
+
+agm-map {
+  height: 250px;
+}
+.contenedor_sinNomenclatura {
+  display: flex;
+  width: 100%;
+}
+
+.municipio_sinNomenclatura {
+  margin-left: 5%;
+  width: 29%;
+}
+
+.descripcion_sinNomenclatura {
+  margin-left: 2%;
+  width: 60%;
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.check_sinNomenclatura {
+  margin-top: 2%;
+  margin-left: 4%;
+}
+
+.contenedor-direccion-complementaria {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.info-direccion {
+  width: 65%;
+  text-align: right;
+}
+
+.opcion-ubicar {
+  width: 35%;
+}
+
+.expression {
+  height: 35em;
+}

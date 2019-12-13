@@ -1,0 +1,49 @@
+.flex-contenedor-cancelacion {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+    .contenedor {
+        /*Pantalla pequenia*/
+        @media (max-width: 640px) {
+            width: 100%;
+        }
+        /*Pantalla Mediana*/
+        @media (min-width: 641px) {
+            width: 76%;
+        }
+        /*Pantalla grande*/
+        @media (min-width: 1006px) {
+            width: 76%;
+        }
+    }
+    .campo {
+        padding-bottom: 5px;
+    }
+    .boton {
+        padding: 5px;
+        text-align: center;
+    }
+    mat-form-field {
+        width: 100%;
+        font-size: 10pt;
+    }
+}
+
+.panel {
+    padding-top: 20px;
+}
+
+.mat-list .mat-list-item .mat-line,
+.mat-nav-list .mat-list-item .mat-line,
+.mat-selection-list .mat-list-item .mat-line {
+    white-space: inherit;
+}
+@media (max-width: 800px) {
+  mat-form-field {
+    width: 100%;
+    font-size: 10pt;
+  }
+}

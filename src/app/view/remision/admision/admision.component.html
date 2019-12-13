@@ -1,0 +1,223 @@
+<form [formGroup]="formulario" class="contenedor">
+  <div class="flex-contenedor-admision">
+    <div class="contenido_admision">
+     
+      <div class="contenedor_campos">
+        <div class="campo campo_titulo">
+          <span>{{ admisionViewModel.mensajes.campos.fechaAdmision }}</span> 
+          <div class="fecha">       
+            <p-calendar #admCalendar (onFocus)="updateCalendarUI(admCalendar)"
+                        [locale]="configEspanolCalendario"
+                        [minDate]="fechaMinimaCalendarioActual" [monthNavigator]="true" [readonlyInput]="true"
+                        [showIcon]="true"
+                        [yearNavigator]="true"
+                        dateFormat="dd/mm/yy" formControlName="fechaAdmision" hourFormat="12"
+                        inputStyleClass="tamano-control-calendario-admision-ini"
+                        placeholder="{{ admisionViewModel.mensajes.campos.fechaAdmision }}"
+                        yearRange="1900:2100">
+            </p-calendar>           
+          </div>
+        </div>
+      </div>
+
+      <div class="contenedor_campos">
+        <div class="campo campo_titulo">
+          <span>{{ admisionViewModel.mensajes.campos.usuarioResponsable }}</span>
+        </div>
+        <div class="campo">
+          <mat-form-field [hidden]="true">
+            <input formControlName="usuarioResponsable" id="usuarioResponsable" matInput required>
+          </mat-form-field>
+          <span>{{ this.usuarioResponsable }}</span>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="campo_tipos">
+      <div>
+
+        <div class="campo">
+          <mat-checkbox #esEmpalme (change)="activarValidadores($event)" formControlName="empalme" [disabled]="activeEmpalme"
+                        class="example-margin"
+                        id="esEmpalme">
+            {{ admisionViewModel.mensajes.campos.empalme }}
+          </mat-checkbox>
+        </div>
+        <div *ngIf="esEmpalme.checked" class="campo">
+          <p-calendar [(ngModel)]="fechaEmpalme" [locale]="configEspanolCalendario"
+                      [monthNavigator]="true"
+                      [showIcon]="true" [showTime]="false"
+                      [yearNavigator]="true"
+                      dateFormat="dd/mm/yy" formControlName="fechaEmpalme" formControlName="fechaEmpalme"
+                      hourFormat="12"
+                      inputStyleClass="ancho-control-input-calendario"
+                      panelStyleClass="tamano-control-calendario-admision"
+                      placeholder="{{ admisionViewModel.mensajes.campos.fechaEmpalme }}"
+                      yearRange="2018:2100"></p-calendar>
+          <mat-error *ngIf="formulario.controls['fechaEmpalme'].hasError('required')">
+            {{ admisionViewModel.mensajes.errores.fechaEmpalme }}
+          </mat-error>
+          <div class="admision_button">
+            <button (click)="enviarEmpalme()" [disabled]="!formulario.valid" color="primary" id="buscar"
+                    mat-raised-button>
+              <mat-icon> {{esEmpalme.checked ? 'record_voice_over' : 'assignment_turned_in'}} </mat-icon>
+              {{ admisionViewModel.mensajes.botones.empalme}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!esEmpalme.checked">
+        <div class="campo">
+          <span>{{ admisionViewModel.mensajes.campos.tipoAtencion }}</span>
+        </div>
+        <div class="campo">
+          <mat-radio-group (change)="activarValidadoresTipoAtencion($event)" class="example-radio-group"
+                           formControlName="tipoAtencion" required>
+            <mat-radio-button [disabled]="activeAmbulatorio" [value]="false">
+              {{admisionViewModel.mensajes.campos.tipoAtencionAmbulatoria}}
+            </mat-radio-button>
+            <mat-radio-button [disabled]="activeDomiciliario" [value]="true">
+              {{admisionViewModel.mensajes.campos.tipoAtencionDomiciliario}}
+            </mat-radio-button>
+            <mat-error *ngIf="formulario.controls['tipoAtencion'].hasError('required')">
+              {{ admisionViewModel.mensajes.errores.tipoAtencion }}
+            </mat-error>
+          </mat-radio-group>
+        </div>
+        <div *ngIf="formulario.value.tipoAtencion === true ||
+                  formulario.value.tipoAtencion === false" class="campo campo_titulo">
+          <span>{{ admisionViewModel.mensajes.campos.entregadoA }}</span>
+        </div>
+
+     
+        <div *ngIf="formulario.value.tipoAtencion === false" class="campo">
+          <mat-form-field>
+
+            <mat-select (selectionChange)="cargarSedes($event)" formControlName="pisoAmbulatorio"
+                        placeholder="{{admisionViewModel.mensajes.campos.piso}}">
+
+              <mat-option>
+                {{ admisionViewModel.mensajes.campos.seleccionar }}
+              </mat-option>
+
+              <mat-option *ngFor="let piso of admisionViewModel.respuestaPisos" [value]="piso.idPiso">
+                {{ piso.nombre }}
+
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="formulario.controls['pisoAmbulatorio'].hasError('required')">
+              {{ admisionViewModel.mensajes.errores.pisoAmbulatorio }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+   
+
+    
+        <div *ngIf="verSedes()" class="campo">
+          <mat-form-field>
+            <mat-select (selectionChange)="modificarInfoUbicacionPaciente($event)" formControlName="sede"
+                        placeholder="{{admisionViewModel.mensajes.campos.sede}}">
+
+              <mat-option>
+                {{ admisionViewModel.mensajes.campos.seleccionar }}
+              </mat-option>
+
+              <mat-option *ngFor="let sede of admisionViewModel.respuestaSedes" [value]="sede.id">
+                {{ sede.descripcion }}
+
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formulario.controls['sede'].hasError('required')">
+              {{ admisionViewModel.mensajes.errores.sede }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+   
+        
+ 
+        <div *ngIf="formulario.value.tipoAtencion === true">
+          <div class="campo">
+            <mat-form-field>
+              <mat-select (selectionChange)="seleccionPrograma($event.value)"
+                          formControlName="programa"
+                          placeholder="{{admisionViewModel.mensajes.campos.programa}}">
+
+                <mat-option>
+                  {{ admisionViewModel.mensajes.campos.seleccionar }}
+                </mat-option>
+
+                <mat-option *ngFor="let programa of admisionViewModel.respuestaProgramas" [value]="programa.idPrograma">
+                  {{ programa.nombre }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formulario.controls['programa'].hasError('required')">
+                {{ admisionViewModel.mensajes.errores.programa }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+      
+
+     
+          <div class="campo">
+            <mat-form-field>
+              <mat-select formControlName="pisoDomiciliario" placeholder="{{admisionViewModel.mensajes.campos.piso}}">
+
+                <mat-option>
+                  {{ admisionViewModel.mensajes.campos.seleccionar }}
+                </mat-option>
+
+                <mat-option *ngFor="let piso of admisionViewModel.respuestaPisos" [value]="piso.idPiso">
+                  {{ piso.nombre }}
+
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formulario.controls['pisoDomiciliario'].hasError('required')">
+                {{ admisionViewModel.mensajes.errores.pisoDomiciliario }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+        </div>
+
+        <div class="campo">
+          <span>{{ admisionViewModel.mensajes.campos.gestionAdmision }}</span>
+        </div>
+        
+        <div class="flex-contenedor-gestion">
+          <div class="flex-item-left">
+          </div>
+          <div class="flex-item-atencion">
+            <mat-form-field class="labelFull">
+              <textarea #message formControlName="gestionAdmision" matInput maxlength="4000" rows="4"></textarea>
+              <mat-hint align="end">{{message.value.length}} / 4000</mat-hint>
+            </mat-form-field>
+          </div>
+          <div class="flex-item-right">
+            <mat-checkbox (change)="abrirModalCentroEstadia();" formControlName="estadiaTemporal" id="estadiaTemporal">
+              <span>{{ admisionViewModel.mensajes.campos.estadiaTemporal }}</span>
+            </mat-checkbox>
+          </div>
+        </div>
+        </div>
+        <div *ngIf="!activeButton" class="boton">
+          <button (click)="admitir('admitir')" [disabled]="!formulario.valid" [hidden]="ocultarAdmision" color="primary" id="admitir" mat-raised-button>
+            <mat-icon> {{esEmpalme.checked ? 'record_voice_over' : 'assignment_turned_in'}} </mat-icon>
+            {{ admisionViewModel.mensajes.botones.admitir }}
+          </button>
+        </div>
+        
+        <div class="botom">
+            <button (click)="admitir('dispo')"  [disabled]="!formulario.valid" [hidden]="isMedicamentos" color="primary" mat-raised-button>
+             Verificar Disponibilidad</button>
+        </div>
+
+      </div>
+    </div>
+  <div class="separador_campo">
+
+  </div>
+</form>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>

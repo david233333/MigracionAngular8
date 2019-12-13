@@ -1,0 +1,231 @@
+<section>
+  <h4>{{datosPacienteViewModel.mensajes.campos.formularioPaciente}}</h4>
+  <form [formGroup]="formulario">
+    <div class="container">
+      <div class="flex-contenedor-busqueda">
+        <div class="campo">
+          <mat-form-field (click)="getTiposIdentificacion()">
+            <mat-select
+              id="tipoDocumento"
+              placeholder="{{ datosPacienteViewModel.mensajes.campos.tipo }}"
+              formControlName="tipoDocumento"
+              required >
+
+              <mat-option>
+                {{seleccion}}
+              </mat-option>
+
+              <mat-option
+                *ngFor="let tipo of datosPacienteViewModel.respuestaTiposIdentificacion"
+                [value]="tipo.idTipo">
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!formulario.controls['tipoDocumento'].hasError('required')">
+              {{ datosPacienteViewModel.mensajes.errores.tipoRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="campo">
+          <mat-form-field>
+            <input
+              id="numeroDocumento"
+              matInput placeholder="{{ datosPacienteViewModel.mensajes.campos.numero }}"
+              formControlName="numeroDocumento"
+              required pattern="[0-9]{1,11}" maxlength="11" >
+
+
+            <button mat-button
+                    *ngIf="formulario.controls['numeroDocumento'].value"
+                    matSuffix
+                    mat-icon-button
+                    (click)="formulario.controls['numeroDocumento'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="formulario.controls['numeroDocumento'].hasError('required')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroRequerido }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="formulario.controls['numeroDocumento'].hasError('maxlength')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroMaximaLongitud }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="formulario.controls['numeroDocumento'].hasError('pattern')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroFormatoInvalido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="campo flex-item-atencion">
+          <mat-form-field>
+            <input
+              id="primerNombre"
+              matInput   placeholder="{{ datosPacienteViewModel.mensajes.campos.primerNombre }}"
+              formControlName="primerNombre"
+              required>
+            <button
+              mat-button
+              *ngIf="formulario.controls['primerNombre'].value"
+              matSuffix
+              mat-icon-button
+              (click)="formulario.controls['primerNombre'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="!formulario.controls['primerNombre'].hasError('required')">
+              {{ datosPacienteViewModel.mensajes.errores.primerNombre }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex-contenedor-busqueda">
+        <div class="campo flex-item-atencion">
+          <mat-form-field>
+            <input
+              id="primerApellido"
+              matInput   placeholder="{{ datosPacienteViewModel.mensajes.campos.primerApellido }}"
+              formControlName="primerApellido"
+              required>
+            <button
+              mat-button
+              *ngIf="formulario.controls['primerApellido'].value"
+              matSuffix
+              mat-icon-button
+              (click)="formulario.controls['primerApellido'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="!formulario.controls['primerApellido'].hasError('required')">
+              {{ datosPacienteViewModel.mensajes.errores.primerNombre }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="campo ultimaAplicacion">
+          <p-calendar
+            [monthNavigator]="true"
+            [yearNavigator]="true" yearRange="1900:2030" hourFormat="12"
+            [(ngModel)]="fecha"
+            formControlName="fechaNacimiento"  [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{ datosPacienteViewModel.mensajes.campos.fechaNacimiento }}"
+            dateFormat="yy/mm/dd" [readonlyInput]="true">
+          </p-calendar>
+          <div class="mat-error-clase" *ngIf="formulario.controls['fechaNacimiento'].hasError('required')">
+          </div>
+        </div>
+
+        <div class="campo">
+          <mat-form-field (click)="getTiposIdentificacion()">
+            <mat-select
+              id="sexo"
+              placeholder="{{ datosPacienteViewModel.mensajes.campos.genero }}"
+              formControlName="sexo"
+              required >
+              <mat-option>
+                {{ seleccion }}
+              </mat-option>
+              <mat-option
+                *ngFor="let genero of datosPacienteViewModel.datosGenero"
+                [value]="genero.id">
+                {{ genero.descripcion }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="!formulario.controls['sexo'].hasError('required')">
+              {{ datosPacienteViewModel.mensajes.errores.tipoRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex-contenedor-busqueda">
+        <div class="campo">
+          <mat-form-field>
+            <input
+              id="edad"
+              matInput placeholder="{{ datosPacienteViewModel.mensajes.campos.edad }}"
+              formControlName="edad">
+            <button mat-button
+                    *ngIf="formulario.controls['edad'].value"
+                    matSuffix
+                    mat-icon-button
+                    (click)="formulario.controls['edad'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="formulario.controls['edad'].hasError('maxlength')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroMaximaLongitud }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="formulario.controls['edad'].hasError('pattern')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroFormatoInvalido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="campo">
+          <mat-form-field>
+            <input
+              id="ocupacion"
+              matInput placeholder="{{ datosPacienteViewModel.mensajes.campos.ocupacion }}"
+              formControlName="ocupacion">
+            <button mat-button
+                    *ngIf="formulario.controls['ocupacion'].value"
+                    matSuffix
+                    mat-icon-button
+                    (click)="formulario.controls['ocupacion'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="formulario.controls['ocupacion'].hasError('maxlength')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroMaximaLongitud }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="formulario.controls['ocupacion'].hasError('pattern')">
+              {{ datosPacienteViewModel.mensajes.errores.numeroFormatoInvalido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="campo flex-item-atencion">
+          <mat-form-field>
+            <input
+              id="email"
+              matInput   placeholder="{{ datosPacienteViewModel.mensajes.campos.email }}"
+              formControlName="email">
+            <button
+              mat-button
+              *ngIf="formulario.controls['email'].value"
+              matSuffix
+              mat-icon-button
+              (click)="formulario.controls['email'].setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error
+              *ngIf="!formulario.controls['email'].hasError('required')">
+              {{ datosPacienteViewModel.mensajes.errores.emailERrror }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="boton">
+        <button
+          mat-raised-button
+          id="buscar"
+          color="primary"
+          [disabled]="!formulario.valid">
+          <mat-icon>search</mat-icon>
+          {{ datosPacienteViewModel.mensajes.botones.crear }}
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

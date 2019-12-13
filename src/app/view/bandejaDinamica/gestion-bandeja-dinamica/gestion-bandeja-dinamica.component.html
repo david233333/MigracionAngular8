@@ -1,0 +1,410 @@
+<mat-progress-bar
+  [hidden]="!bandejaDinamicaViewModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+<div class="container">
+  <hr class="linea-espacio" />
+  <div class="opcion-container">
+    <div class="texto-titulo">
+      {{ bandejaDinamicaViewModel.mensajes.titulos.gestionarBandejaDinamica }}
+    </div>
+  </div>
+  <hr class="linea-espacio" />
+  <div class="flex-contenedor-busqueda">
+    <form class="contenedor" [formGroup]="formularioFiltros">
+      <div class="campo identificacion">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              id="tipoDocumento"
+              placeholder="{{
+                bandejaDinamicaViewModel.mensajes.campos.tipoDocumento
+              }}"
+              formControlName="tipoDocumento"
+            >
+              <mat-option
+                *ngFor="
+                  let tipo of bandejaDinamicaViewModel.respuestaTiposIdentificacion
+                "
+                [value]="tipo.idTipo"
+              >
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input
+              id="numeroDocumento"
+              matInput
+              placeholder="{{
+                bandejaDinamicaViewModel.mensajes.campos.numeroDocumento
+              }}"
+              formControlName="numeroDocumento"
+              maxLength="15"
+            />
+
+            <button
+              mat-button
+              *ngIf="formularioFiltros.controls['numeroDocumento'].value"
+              matSuffix
+              mat-icon-button
+            >
+              <mat-icon (click)="limpiarDocumento()">close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['numeroDocumento'].hasError(
+                  'maxlength'
+                )
+              "
+            >
+              {{
+                bandejaDinamicaViewModel.mensajes.errores
+                  .numeroDocumentoMaximaLongitud
+              }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['numeroDocumento'].hasError(
+                  'pattern'
+                )
+              "
+            >
+              {{
+                bandejaDinamicaViewModel.mensajes.errores
+                  .numeroDocumentoInvalido
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              id="ciudad"
+              placeholder="{{
+                bandejaDinamicaViewModel.mensajes.campos.ciudad
+              }}"
+              formControlName="ciudad"
+            >
+              <mat-option
+                *ngFor="
+                  let ciudad of bandejaDinamicaViewModel.respuestaCiudades
+                "
+                [value]="ciudad.idCiudad"
+              >
+                {{ ciudad.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="campo-derecha">
+          <mat-form-field>
+            <input
+              id="remision"
+              matInput
+              placeholder="{{
+                bandejaDinamicaViewModel.mensajes.campos.remision
+              }}"
+              formControlName="remision"
+              maxLength="50"
+            />
+
+            <button
+              mat-button
+              *ngIf="formularioFiltros.controls['remision'].value"
+              matSuffix
+              mat-icon-button
+            >
+              <mat-icon (click)="limpiarRemision()">close</mat-icon>
+            </button>
+
+            <mat-error
+              *ngIf="
+                formularioFiltros.controls['remision'].hasError('maxlength')
+              "
+            >
+              {{
+                bandejaDinamicaViewModel.mensajes.errores.remisionMaximaLongitud
+              }}
+            </mat-error>
+
+            <mat-error
+              *ngIf="formularioFiltros.controls['remision'].hasError('pattern')"
+            >
+              {{ bandejaDinamicaViewModel.mensajes.errores.remisionInvalido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="campo">
+        <div class="campo-izquierda">
+          <mat-form-field>
+            <mat-select
+              id="estado"
+              placeholder="{{
+                bandejaDinamicaViewModel.mensajes.campos.estado
+              }}"
+              formControlName="estado"
+            >
+              <mat-option
+                *ngFor="let estado of bandejaDinamicaViewModel.respuestaEstados"
+                [value]="estado.idEstado"
+              >
+                {{ estado.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="campo">
+        <div class="campo-izquierda">
+          <p-calendar
+            inputStyleClass="input-calendario-filtro-biomedico"
+            formControlName="fechaInicio"
+            [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{
+              bandejaDinamicaViewModel.mensajes.campos.fechaInicio
+            }}"
+            dateFormat="dd/mm/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1900:2100"
+            [readonlyInput]="true"
+            hourFormat="12"
+            (onSelect)="SeleccionFechaInicio()"
+          ></p-calendar>
+          <div
+            class="mat-error-clase"
+            *ngIf="
+            formularioFiltros.controls['fechaInicio'].hasError('required')
+            "
+          >
+            {{
+                bandejaDinamicaViewModel.mensajes.errores.fechaInicioRequerido
+            }}
+          </div>
+        </div>
+        <div class="campo-derecha fecha-fin">
+          <p-calendar
+            inputStyleClass="input-calendario-filtro-biomedico"
+            formControlName="fechaFin"
+            [showIcon]="true"
+            [locale]="configEspanolCalendario"
+            placeholder="{{
+              bandejaDinamicaViewModel.mensajes.campos.fechaFin
+            }}"
+            dateFormat="dd/mm/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1900:2100"
+            [readonlyInput]="true"
+            hourFormat="12"
+            (onSelect)="SeleccionFechaFin()"
+          ></p-calendar>
+          <div
+            class="mat-error-clase"
+            *ngIf="
+            formularioFiltros.controls['fechaFin'].hasError('required')
+            "
+          >
+            {{
+              bandejaDinamicaViewModel.mensajes.errores.fechaFinRequerido
+            }}
+          </div>
+        </div>
+
+        <div class="campo-guardarFiltros">
+          <button
+            mat-raised-button
+            id="guardarFiltro"
+            color="primary"
+            (click)="guardarFiltros()"
+          >
+            <mat-icon>save</mat-icon>
+            {{ bandejaDinamicaViewModel.mensajes.botones.guardarFiltros }}
+          </button>
+        </div>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="botones">
+        <div class="boton">
+          <button
+            mat-raised-button
+            id="limpiar"
+            color="default"
+            (click)="limpiar()"
+          >
+            <mat-icon>clear</mat-icon>
+            {{ bandejaDinamicaViewModel.mensajes.botones.limpiar }}
+          </button>
+        </div>
+
+        <div class="boton">
+          <button
+            mat-raised-button
+            id="buscar"
+            color="primary"
+            (click)="buscar()"
+          >
+            <mat-icon>search</mat-icon>
+            {{ bandejaDinamicaViewModel.mensajes.botones.buscar }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="separador"></div>
+  <div class="table">
+    <p-table
+      [columns]="columnas"
+      [value]="bandejaDinamicaViewModel.respuestaBandejaDinamica"
+      [(selection)]="bandejaDinamicaViewModel.ayudasSeleccionadas"
+      [scrollable]="true"
+      scrollHeight="400px"
+      [lazy]="true"
+      [totalRecords]="totalRegistros"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 30]"
+      [responsive]="true"
+      dataKey="id"
+      (onPage)="onPageGestionBandejaDinamica($event)"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="texto-tabla remision">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.nombrePaciente }}
+          </th>
+          <th class="texto-tabla tab_equipoBiomedico">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.identificacion }}
+          </th>
+          <th class="texto-tabla tab_fechaInicio">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.laboratorio }}
+          </th>
+          <th class="texto-tabla tab_fechaFin">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.fechaSolicitud }}
+          </th>
+          <th class="texto-tabla tab_estado">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.fechaTomaMuestra }}
+          </th>
+          <th class="texto-tabla tab_usuario">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.usuarioSolicitud }}
+          </th>
+          <th class="texto-tabla tab_fechaRegistro">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.estadoSolicitud }}
+          </th>
+          <th class="texto-tabla texto-accion">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.accion }}
+          </th>
+          <th class="center">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td class="texto-resultados-tabla tab_remision">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.nombrePaciente
+            }}</span>
+            {{ rowData.nombrePaciente }}
+          </td>
+          <td class="texto-resultados-tabla tab_equipoBiomedico">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.identificacion
+            }}</span>
+            {{ rowData.numeroIdentificacion}}
+          </td>
+          <td class="texto-resultados-tabla tab_equipoBiomedico">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.laboratorio
+            }}</span>
+            {{ rowData.laboratorio}}
+          </td>
+          <td class="texto-resultados-tabla tab_fechaInicio">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.fechaSolicitud
+            }}</span>
+            {{ rowData.fechaSolicitud | date: "dd-MM-yyyy HH:mm a" }}
+          </td>
+          <td class="texto-resultados-tabla tab_fechaInicio">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.fechaTomaMuestra
+            }}</span>
+            {{ rowData.fechaTomaMuestra | date: "dd-MM-yyyy HH:mm a" }}
+          </td>
+          <td class="texto-resultados-tabla tab_fechaFin">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.usuarioSolicitud
+            }}</span>
+            {{ rowData.usuarioSolicita }}
+          </td>
+          <td class="texto-resultados-tabla tab_estado">
+            <span class="ui-column-title">{{
+              bandejaDinamicaViewModel.mensajes.tabla.estadoSolicitud
+            }}</span>
+            {{ rowData.estadoSolicitud }}
+          </td>
+          <td class="texto-resultados-tabla">
+            <mat-icon
+              class="accion"
+              (click)="verDetalleAyudaDiagnostica(rowData)"
+              matTooltip="{{
+                bandejaDinamicaViewModel.mensajes.tabla.detalle
+              }}"
+              [matTooltipPosition]="'above'"
+            >
+              visibility
+            </mat-icon>
+          </td>
+          <td class="center">
+            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" class="container" let-columns>
+        <tr>
+          <td class="center-header-table" [attr.colspan]="columnas.length + 1">
+            {{ bandejaDinamicaViewModel.mensajes.tabla.noAyudasDiagnosticas }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-footer>
+      <div class="total-registros">
+        <span class="total-registros-texto">{{
+          bandejaDinamicaViewModel.mensajes.tabla.totalRegistros
+        }}</span>
+        <span class="total-registros-valor">{{
+          bandejaDinamicaViewModel.respuestaBandejaDinamica.length
+        }}</span>
+      </div>
+    </p-footer>
+    <div class="botones">
+      <button
+        mat-raised-button
+        id="gestionar"
+        color="primary"
+        (click)="gestionar()"
+        [disabled]="habilitarGestionar()"        
+      >
+        <mat-icon>sync</mat-icon>
+        {{ bandejaDinamicaViewModel.mensajes.botones.gestionar }}
+      </button>
+    </div>
+  </div>  
+</div>

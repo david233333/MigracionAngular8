@@ -1,0 +1,84 @@
+<mat-progress-bar
+  [hidden]="!informeEgresoModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+<div class="conetedor">
+  <form [formGroup]="formulario" class="formularios">
+
+    <div class="campos">
+      <div class="fecha_1">
+        <p-calendar
+          [locale]="configEspanolCalendario"
+          [maxDate]="hoy"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [showIcon]="true"
+          [yearNavigator]="true"
+          dateFormat="dd/mm/yy"
+          formControlName="fechaInicio"
+          inputStyleClass="tamano-control-informe-vehicular"
+          placeholder="{{ informeEgresoModel.mensajes.fechaInicio }}"
+          yearRange="1900:2100"
+        ></p-calendar>
+      </div>
+
+      <div class="fecha_2">
+        <p-calendar
+          [locale]="configEspanolCalendario"
+          [minDate]="formulario.controls['fechaInicio'].value"
+          [monthNavigator]="true"
+          [readonlyInput]="true"
+          [showIcon]="true"
+          [yearNavigator]="true"
+          dateFormat="dd/mm/yy"
+          formControlName="fechaFin"
+          inputStyleClass="tamano-control-informe-vehicular"
+          placeholder="{{ informeEgresoModel.mensajes.fechaFin }}"
+          yearRange="1900:2100"
+        ></p-calendar>
+      </div>
+    </div>
+
+    <div class="campos">
+      <div class="estado">
+        <mat-form-field>
+          <mat-select
+
+            formControlName="estado"
+            id="programa"
+            placeholder="{{informeEgresoModel.mensajes.estado}}"
+            required>
+            <mat-option [value]="1">
+              {{ informeEgresoModel.mensajes.todosProgramas }}
+            </mat-option>
+            <mat-option *ngFor=" let programa of estados"
+                        [value]="programa">
+              {{ programa }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="campos">
+      <div class="button">
+        <button
+          (click)="descargarInforme()"
+          [disabled]="!formulario.valid"
+          color="primary"
+          id="consultarInforme"
+          mat-raised-button
+        >
+          {{ informeEgresoModel.mensajes.botones.descargarInforme }}
+          <mat-icon>
+            cloud_download
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+
+
+  </form>
+</div>
+

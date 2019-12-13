@@ -1,0 +1,81 @@
+<div class="container">
+    <div class="form">
+        <form [formGroup]="formulario" class="contenedor-formulario">
+            <mat-dialog-content class="dialog-citas">
+                <mat-radio-group [(ngModel)]="modalCitaGestionViewModel.tipoFecha" formControlName="tipoFecha" (change)="seleccionFecha($event)">
+                    <mat-radio-button [value]="modalCitaGestionViewModel.mensajes.campos.listaCita">
+                        {{ modalCitaGestionViewModel.mensajes.campos.seleccionListaCita }}
+                    </mat-radio-button>
+
+                    <mat-radio-button [value]="modalCitaGestionViewModel.mensajes.campos.fechaCita">
+                        {{ modalCitaGestionViewModel.mensajes.campos.seleccionFechaCita }}
+                    </mat-radio-button>
+                    <div class="tabla" *ngIf="formulario.controls['tipoFecha'].value == modalCitaGestionViewModel.mensajes.campos.listaCita">
+                        <p-table [columns]="columnasCitas" [value]="modalCitaGestionViewModel.respuestaCitas"
+                            selectionMode="single" [(selection)]="modalCitaGestionViewModel.novedadSeleccionada"
+                            [scrollable]="true" scrollHeight="400px" [paginator]="true" [rows]="10"
+                            [rowsPerPageOptions]="[10,20,30]" [responsive]="true" dataKey="secuencia">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th class="texto-tabla" *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th class="seleccion-tabla  texto-tabla">
+                                        {{modalCitaGestionViewModel.mensajes.tabla.visualizar}}
+                                    </th>
+                                </tr>
+
+
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="texto-tabla">
+                                        {{ rowData.especialidad }}
+                                    </td>
+                                    <td class="texto-tabla">
+                                        {{ rowData.fechaInicioCita | date:'dd-MM-yyyy hh:mm a'}}
+                                    </td>
+                                    <td class="texto-tabla" (click)="detalleCita(rowData)">
+                                        <mat-icon>
+                                            visibility
+                                        </mat-icon>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" class="container" let-columns>
+                                <tr>
+                                    <td class="center-header-table" [attr.colspan]="columnasCitas.length + 1">
+                                        {{ modalCitaGestionViewModel.mensajes.validaciones.noCitas }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="control-fecha" *ngIf="formulario.controls['tipoFecha'].value == modalCitaGestionViewModel.mensajes.campos.fechaCita">
+                        <div class="espacio"></div>
+                        <p-calendar inputStyleClass="ancho-control-input-calendario" panelStyleClass="modal-calendario-gestion-cita"
+                            [(ngModel)]="fechaCita" formControlName="fechaVisita" [showTime]="true" [showIcon]="true"
+                            [locale]="configEspanolCalendario" placeholder="Fecha" dateFormat="dd/mm/yy"
+                            [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100" hourFormat="12" [minDate]="fechaMinimaCalendarioActual"
+                            [readonlyInput]="true"></p-calendar>
+                        <div class="mat-error-clase" *ngIf="formulario.controls['fechaVisita'].hasError('required')">
+                            {{ modalCitaGestionViewModel.mensajes.validaciones.fechaRequerido }}
+                        </div>
+
+                    </div>
+                </mat-radio-group>
+            </mat-dialog-content>
+        </form>
+    </div>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button id="cancelar" (click)="cerrarModal()">
+            {{ modalCitaGestionViewModel.mensajes.botones.cancelar }}
+        </button>
+
+        <button mat-raised-button id="guardar" color="primary" (click)="aplicarCita()" [disabled]="habilitarAplicar()">
+            {{ modalCitaGestionViewModel.mensajes.botones.aplicar }}
+        </button>
+
+    </mat-dialog-actions>
+</div>

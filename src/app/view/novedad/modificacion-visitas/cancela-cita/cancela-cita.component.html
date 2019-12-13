@@ -1,0 +1,161 @@
+<div class="novedad-cancela-cita">
+  <div class="flex-contenedor">
+    <form class="contenedor" [formGroup]="formularioCancelaCita">
+      <div class="campo">
+        <mat-form-field>
+          <mat-select
+            id="motivoCancelaCita"
+            placeholder="{{
+              cancelaCitaViewModel.mensajes.campos.motivoCancelaCita
+            }}"
+            formControlName="motivoCancelaCita"
+            required
+          >
+            <mat-option
+              *ngFor="
+                let motivo of cancelaCitaViewModel.respuestaMotivosCancelaCita
+              "
+              [value]="motivo"
+            >
+              {{ motivo.descripcion }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              !formularioCancelaCita.controls['motivoCancelaCita'].hasError(
+                'required'
+              )
+            "
+          >
+            {{
+              cancelaCitaViewModel.mensajes.errores.motivoCancelaCitaRequerido
+            }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="separador"></div>
+
+      
+      <div class="table">
+        <p-table 
+          [columns]="columnas" [value]="cancelaCitaViewModel.respuestaCitas" [(selection)]="cancelaCitaViewModel.citasSeleccionadas"
+          [scrollable]="true"
+          scrollHeight="400px"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[10, 20, 30]"
+          [responsive]="true"
+          dataKey="id"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width: 3%"></th>
+              <th style="width: 12%"
+                *ngFor="let col of columns"
+                [pSortableColumn]="col.field"
+                class="texto-tabla tamano-columna"
+              >
+                {{ col.header }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+              </th>
+
+              <th style="width: 3%" class="seleccion-tabla  texto-tabla">
+                <mat-icon>
+                  visibility
+                </mat-icon>
+              </th>
+              <!-- <th class="seleccion-tabla">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th> -->
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+              <td style="width: 3%" class="seleccion-tabla">
+                <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+              </td>
+              <td style="width: 12%" class="texto-tabla tamano-columna">
+                <span class="ui-column-title">{{ cancelaCitaViewModel.mensajes.tabla.fechaVisita}}</span>
+                {{ rowData.idTipoCita  }}
+              </td>
+
+              <td style="width: 12%" class="texto-tabla tamano-columna">
+                <span class="ui-column-title">{{ cancelaCitaViewModel.mensajes.tabla.fechaVisita}}</span>
+                {{ rowData.fechaInicioCita | date: "dd-MM-yyyy hh:mm a" }}
+              </td>
+              <td   style="width: 12%" class="texto-tabla tamano-columna">
+                <span class="ui-column-title">{{
+                  cancelaCitaViewModel.mensajes.tabla.especialidad
+                }}</span>
+                {{ rowData.especialidad }}
+              </td>
+              <td style="width: 3%"
+                class="seleccion-tabla detalle"
+                (click)="detalleCita(rowData)"
+              >
+                <mat-icon>
+                  visibility
+                </mat-icon>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage" class="container" let-columns>
+            <tr>
+              <td class="texto-tabla" [attr.colspan]="columnas.length + 1">
+                {{ cancelaCitaViewModel.mensajes.tabla.noCitas }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-footer>
+          <div class="total-registros">
+            <span class="total-registros-texto">
+              {{ cancelaCitaViewModel.mensajes.tabla.totalRegistros }}</span
+            >
+            <span class="total-registros-valor">{{
+              cancelaCitaViewModel.respuestaCitas.length
+            }}</span>
+          </div>
+        </p-footer>
+      </div>
+      <p class="mat-error-clase" *ngIf="verValidacionCita()">
+        {{ cancelaCitaViewModel.mensajes.errores.seleccionCitaRequerido }}
+      </p>      
+
+      <div class="separador"></div>
+
+      <div class="campo">
+        <mat-form-field>
+          <textarea
+            [maxlength]="4000"
+            class="alto-campo"
+            formControlName="observacion"
+            #observacion
+            matInput
+            placeholder="{{ cancelaCitaViewModel.mensajes.campos.observacion }}"
+          ></textarea>
+          <mat-hint align="end">{{ observacion.value.length }} / 4000</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="separador"></div>
+
+      <div class="boton">
+        <button
+          mat-raised-button
+          id="egresar"
+          color="primary"
+          (click)="cancelarCitas()"
+          [disabled]="habilitarGuardar()"
+        >
+          {{ cancelaCitaViewModel.mensajes.botones.cancelarCitas }}
+        </button>
+      </div>
+
+      <div class="separador"></div>
+    </form>
+  </div>
+</div>

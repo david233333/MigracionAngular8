@@ -1,0 +1,95 @@
+<p-toolbar>
+  <div class="menu-superior">
+   
+    <div class="contenedor-paciente">
+      <div class="info-paciente">
+        <div class="grupo">
+          <div class="campo-izquierda" *ngIf="numeroRemision">
+            <span class="texto-info-paciente">{{ accionesViewModel.mensajes.numeroRemision}}</span>
+            <span class="valor-info-paciente">
+              {{numeroRemision }}
+            </span>
+          </div>
+          <div class="espacio"></div>
+          <div class="campo-derecha" *ngIf="estado">
+            <span class="texto-info-paciente"> {{ accionesViewModel.mensajes.estadoRemision }}</span>
+            <span class="valor-info-paciente">
+              {{ estado }}
+            </span>
+          </div>
+        </div>
+        <div class="espacio"></div>
+        <div class="grupo">
+          <div class="campo-izquierda" *ngIf="nombre">
+            <span class="texto-info-paciente">{{ accionesViewModel.mensajes.nombre}}</span>
+            <span class="valor-info-paciente">{{nombre}}</span>
+          </div>
+          <div class="campo-derecha" *ngIf="asegurador">
+            <span class="texto-info-paciente">{{ accionesViewModel.mensajes.tipoAsegurador}}</span>
+            <span class="valor-info-paciente">{{asegurador}}</span>
+          </div>
+        </div>
+        <div class="espacio"></div>
+        <div class="grupo">
+          <div class="campo-izquierda" *ngIf="edadPaciente">
+            <span class="texto-info-paciente">{{ accionesViewModel.mensajes.edad}}</span>
+            <span class="valor-info-paciente">{{edadPaciente}}</span>
+          </div>
+          <div class="campo-derecha" *ngIf="pacienteSexo">
+            <span class="texto-info-paciente">{{ accionesViewModel.mensajes.sexo}}</span>
+            <span class="valor-info-paciente">{{pacienteSexo}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="opciones">
+     
+      <div>
+
+
+        <button class="btn_enviar_disable" [disabled]="!accionesViewModel.habilitarEnviar"
+                matTooltip="{{ accionesViewModel.mensajes.enviar }}"
+          [matTooltipPosition]="'below'" mat-icon-button (click)="enviarRemision()">
+          <mat-icon>send</mat-icon>
+        </button>
+        <button id="guardar" [disabled]="!accionesViewModel.habilitarGuardar" matTooltip="{{ accionesViewModel.mensajes.guardar }}"
+          [matTooltipPosition]="'below'" mat-icon-button (click)="guardarRemision()">
+          <mat-icon>save</mat-icon>
+        </button>
+
+        <button [disabled]="validarGuardarRemision()" matTooltip="{{ accionesViewModel.mensajes.cancelar }}"
+          [matTooltipPosition]="'below'" mat-icon-button (click)="abrirModalCancelar()">
+        <mat-icon>block</mat-icon>
+        </button>
+
+        <button [disabled]="validarCrearPaciente()" matTooltip="{{ accionesViewModel.mensajes.crearPaciente }}"
+          [matTooltipPosition]="'below'" mat-icon-button (click)="crearPaciente()">
+          <mat-icon>add</mat-icon>
+        </button>
+
+      </div>
+
+      <div>
+
+        <button matTooltip="{{ accionesViewModel.mensajes.cargarAnexos }}" [matTooltipPosition]="'below'"
+          mat-icon-button>
+          <mat-icon>attachment</mat-icon>
+        </button>
+        <button matTooltip="{{ accionesViewModel.mensajes.consultarAnexos }}" [matTooltipPosition]="'below'"
+          mat-icon-button>
+          <mat-icon>search</mat-icon>
+        </button>
+        <button *ngIf="accionesViewModel.mostrarConsentimiento" (click)="obtenerConsentimiento()" matTooltip="{{ accionesViewModel.mensajes.consentimiento }}"
+          [matTooltipPosition]="'below'" mat-icon-button>
+          <mat-icon>description</mat-icon>
+        </button>
+        <button *ngIf="accionesViewModel.estadoRemision == 'ADMITIDO' ||
+          accionesViewModel.estadoRemision == 'EMPALME'&& remisionService.tratamientosPlanManejo.length > 0"
+          matTooltip="{{ accionesViewModel.mensajes.imprimir }}" [matTooltipPosition]="'below'" mat-icon-button (click)="imprimirRemision()">
+          <mat-icon>print</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</p-toolbar>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>

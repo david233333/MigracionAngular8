@@ -1,0 +1,17 @@
+@import './../abstracts/variables.scss';
+@import '~@nebular/theme/styles/theming';
+@import '~@nebular/theme/styles/themes/default';
+
+$nb-themes: nb-register-theme((
+
+  color-success: $color-enfasis,
+  color-fg-highlight: $color-enfasis,
+  color-fg: $color-fuente,
+  header-height: $altura-header,
+  layout-padding: 0,
+  layout-medium-padding: 0,
+  layout-small-padding: 0,
+  layout-bg: $fondo-pantalla,
+  sidebar-width: $tamanio-menu,
+
+), default, default);

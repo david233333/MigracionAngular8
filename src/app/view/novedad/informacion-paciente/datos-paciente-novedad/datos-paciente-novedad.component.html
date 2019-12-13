@@ -1,0 +1,217 @@
+<div class="novedad-egreso">
+  <hr class="linea-espacio">
+  <div class="opcion-container">
+    <div class="img-opcion">
+      <img alt="datos-paciente" src="./assets/img/info-paciente.svg">
+    </div>
+    <div class="subtitulo">
+      <strong>{{ datosPacienteViewModel.mensajes.titulos.datosPaciente }}</strong>
+    </div>
+  </div>
+  <hr class="linea-espacio">
+  <div class="separador"></div>
+  <div class="">
+    <form [formGroup]="formularioDatosPaciente">
+
+      <div class="flex-contenedor-atencion">
+
+        <div class="contenedor-item-atencion">
+          <div class="campo flex-item-atencion">
+            <mat-form-field>
+              <mat-select (selectionChange)="emitirCiudad($event.value); limpiarCamposMunicipio()" formControlName="ciudad"
+                          id="ciudad"
+                          placeholder="{{ datosPacienteViewModel.mensajes.campos.ciudadPrincipal }}">
+
+                <mat-option *ngFor="let ciudad of datosPacienteViewModel.respuestaCiudades" [value]="ciudad.idCiudad">
+                  {{ ciudad.nombre }}
+                </mat-option>
+              </mat-select>
+
+              <mat-error *ngIf="!formularioDatosPaciente.controls['ciudad'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.ciudadPrincipalRequerida }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="campo flex-item-atencion">
+            <mat-form-field class="direccion">
+                            <textarea formControlName="direccion" id="direccion"
+                                      matAutosizeMaxRows="5"
+                                      matAutosizeMinRows="1"
+                                      matInput matTextareaAutosize placeholder="{{ datosPacienteViewModel.mensajes.campos.direccion }}"
+                                      required
+                                      value="{{formularioDatosPaciente.controls['direccion'].value}}"></textarea>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['direccion'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.direccionRequerida }}
+              </mat-error>
+            </mat-form-field>
+
+            <button (click)="abrirModalDireccion()"
+                    [matTooltipPosition]="'right'"
+                    mat-icon-button
+                    matTooltip="{{ datosPacienteViewModel.mensajes.campos.agregarDireccion }}">
+              <mat-icon>
+                location_on
+              </mat-icon>
+            </button>
+          </div>
+
+          <div class="campo flex-item-atencion">
+            <mat-form-field>
+              <input formControlName="barrio" id="barrio" matInput
+                     placeholder="{{ datosPacienteViewModel.mensajes.campos.barrio }}" required>
+              <mat-error *ngIf="!formularioDatosPaciente.controls['barrio'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.barrioRequerido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="campo flex-item-atencion">
+            <mat-form-field>
+
+              <mat-select formControlName="municipio" id="municipio"
+                          placeholder="{{ datosPacienteViewModel.mensajes.campos.municipio }}"
+                          required>
+                <mat-option *ngFor="let municipio of datosPacienteViewModel.respuestaMunicipios" [value]="municipio">
+                  {{ municipio.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="contenedor-item-atencion">
+          <div class="campo flex-item-atencion">
+            <mat-form-field>
+              <input [maxlength]="50" formControlName="nombreCuidador" id="nombreCuidador"
+                     matInput
+                     placeholder="{{ datosPacienteViewModel.mensajes.campos.nombreCuidador }}"
+                     required>
+
+              <button (click)="formularioDatosPaciente.controls['nombreCuidador'].setValue('')" *ngIf="formularioDatosPaciente.controls['nombreCuidador'].value" mat-button
+                      mat-icon-button matSuffix>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['nombreCuidador'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.nombreCuidadorRequerido }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['nombreCuidador'].hasError('maxlength')">
+                {{ datosPacienteViewModel.mensajes.errores.nombreCuidadorMaximaLongitud }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="campo flex-item-atencion">
+            <mat-form-field>
+              <input [maxlength]="50" formControlName="nombreResponsable" id="nombreResponsable"
+                     matInput
+                     placeholder="{{ datosPacienteViewModel.mensajes.campos.nombreResponsable }}"
+                     required>
+
+              <button (click)="formularioDatosPaciente.controls['nombreResponsable'].setValue('')" *ngIf="formularioDatosPaciente.controls['nombreResponsable'].value" mat-button
+                      mat-icon-button matSuffix>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['nombreResponsable'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.nombreCuidadorRequerido }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['nombreResponsable'].hasError('maxlength')">
+                {{ datosPacienteViewModel.mensajes.errores.nombreCuidadorMaximaLongitud }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="campo flex-item-atencion">
+            <mat-form-field>
+              <input (keyup)="cambiarTelefono()" [maxlength]="7" formControlName="telefonoPaciente"
+                     id="telefonoPaciente" matInput
+                     placeholder="{{ datosPacienteViewModel.placeholderTelefono }}">
+
+              <button (click)="validacionTelefono()" *ngIf="formularioDatosPaciente.controls['telefonoPaciente'].value" mat-button
+                      mat-icon-button
+                      matSuffix>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['telefonoPaciente'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.telefonoRequerido }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['telefonoPaciente'].hasError('maxlength')">
+                {{ datosPacienteViewModel.mensajes.errores.telefonoMaximaLongitud }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['telefonoPaciente'].hasError('pattern')">
+                {{ datosPacienteViewModel.mensajes.errores.telefonoInvalido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="campo flex-item-atencion">
+            <mat-form-field class="celular">
+              <input (keyup)="cambiarTelefono()" [maxlength]="10" formControlName="celularPaciente"
+                     id="celularPaciente" matInput
+                     placeholder="{{ datosPacienteViewModel.placeholderCelular }}">
+
+              <button (click)="validarCelular()" *ngIf="formularioDatosPaciente.controls['celularPaciente'].value"
+                      mat-button mat-icon-button matSuffix>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['celularPaciente'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.celularRequerido }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['celularPaciente'].hasError('maxlength')">
+                {{ datosPacienteViewModel.mensajes.errores.celularMaximaLongitud }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['celularPaciente'].hasError('pattern')">
+                {{ datosPacienteViewModel.mensajes.errores.celularInvalido }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="celular">
+              <input (keyup)="cambiarTelefono()" [maxlength]="10" formControlName="celularPaciente2"
+                     id="celularPaciente2" matInput
+                     placeholder="{{ datosPacienteViewModel.placeholderCelular2 }}">
+
+              <button (click)="validarCelular()" *ngIf="formularioDatosPaciente.controls['celularPaciente2'].value"
+                      mat-button mat-icon-button matSuffix>
+                <mat-icon>close</mat-icon>
+              </button>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['celularPaciente2'].hasError('required')">
+                {{ datosPacienteViewModel.mensajes.errores.celularRequerido }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['celularPaciente2'].hasError('maxlength')">
+                {{ datosPacienteViewModel.mensajes.errores.celularMaximaLongitud }}
+              </mat-error>
+
+              <mat-error *ngIf="formularioDatosPaciente.controls['celularPaciente2'].hasError('pattern')">
+                {{ datosPacienteViewModel.mensajes.errores.celularInvalido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+      <div class="separador"></div>
+
+      <div class="boton">
+        <button (click)="guardarDatosPaciente()" [disabled]="!formularioDatosPaciente.valid" color="primary" id="guardar"
+                mat-raised-button>
+          {{ datosPacienteViewModel.mensajes.botones.guardar }}
+        </button>
+      </div>
+
+    </form>
+    <div class="separador"></div>
+  </div>
+</div>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>

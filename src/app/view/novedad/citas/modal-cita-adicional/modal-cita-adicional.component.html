@@ -1,0 +1,121 @@
+<section>
+  <div class="container">
+    <div class="titulo-ventana">
+      <h4>{{ modalCitaAdicionalViewModel.tituloVentana }}</h4>
+    </div>
+    <div class="ventana-container">
+      <mat-dialog-content class="dialog-citas">
+        <div>
+          <div class="separador"></div>
+          <form [formGroup]="formulario" class="contenedor-formulario">
+            <div class="campo">
+              <mat-form-field class="campo-control">
+                <mat-select
+                  (selectionChange)="seleccionTipoCambioCita($event.value)"
+                  formControlName="tipoCambioCita"
+                  id="tipoCambioCita"
+                  placeholder="{{
+                    modalCitaAdicionalViewModel.mensajes.campos.tipoCambioCita
+                  }}"
+                  required
+                >
+                  <mat-option
+                    *ngFor="let tipoCambioCita of modalCitaAdicionalViewModel.respuestaTiposCambioCita"
+                    [value]="tipoCambioCita"
+                  >
+                    {{ tipoCambioCita | tipoCambio_Cita }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="
+                    formulario.controls['tipoCambioCita'].hasError('required')
+                  "
+                >
+                  {{
+                  modalCitaAdicionalViewModel.mensajes.errores
+                    .tipoCambioCitaRequerido
+                  }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="campo">
+              <mat-form-field class="campo-control">
+                <mat-select [disabled]="deshabilitarTipoCita" formControlName="tipoCita" id="tipoCita"
+                            placeholder="{{ modalCitaAdicionalViewModel.mensajes.campos.tipoCita }}"
+                            required>
+                  <mat-option *ngFor=" let tipo of modalCitaAdicionalViewModel.respuestaTiposCita"
+                              [value]="tipo.idCita">
+                    {{ tipo.tipoCita }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formulario.controls['tipoCita'].hasError('required')">
+                  {{ modalCitaAdicionalViewModel.mensajes.errores.tipoCitaRequerido }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="separador"></div>
+
+            <div *ngIf="verProfesionalPreferido" class="campo">
+              <mat-form-field class="campo-control">
+                <mat-select  formControlName="recursoPreferido"
+                            id="recursoPreferido"
+                            placeholder="Profesional preferido"
+                            required [disabled]="deshabilitarRecursoPreferidoInput">
+
+                  <mat-option *ngFor="let profesional of profesionalesList" [value]="profesional.idProfesional">
+                    {{ profesional.nombreCompleto }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formulario.controls['recursoPreferido'].hasError('recursoPreferido')">
+                  Recurso preferido
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="campo">
+              <p-calendar
+                [(ngModel)]="fechaCita"
+                [locale]="configEspanolCalendario"
+                [monthNavigator]="true"
+                [readonlyInput]="true"
+                [showIcon]="true"
+                [showTime]="false"
+                [yearNavigator]="true"
+                dateFormat="dd/mm/yy"
+                formControlName="fechaCita"
+                inputStyleClass="input-calendario-citas"
+                panelStyleClass="modal-calendario-adicionar-citas"
+                placeholder="{{ modalCitaAdicionalViewModel.mensajes.campos.fechaCita }}"
+                yearRange="1900:2100"
+              ></p-calendar>
+              <div *ngIf="formulario.controls['fechaCita'].hasError('required')" class="mat-error-clase">
+                {{ modalCitaAdicionalViewModel.mensajes.errores.fechaCitaRequerido }}
+              </div>
+            </div>
+            
+          </form>
+        </div>
+      </mat-dialog-content>
+    </div>
+    <mat-dialog-actions align="end">
+
+      <button (click)="cerrarModal()" id="cancelar" mat-raised-button>
+        {{ modalCitaAdicionalViewModel.mensajes.botones.cancelar }}
+      </button>
+
+      <button (click)="crearCita()"
+
+              *ngIf="!modalCitaAdicionalViewModel.esDetalle"
+              color="primary"
+              id="editar"
+              mat-raised-button
+      >
+        {{ modalCitaAdicionalViewModel.botonAdicionarReprogramar }}
+      </button>
+    </mat-dialog-actions>
+  </div>
+</section>

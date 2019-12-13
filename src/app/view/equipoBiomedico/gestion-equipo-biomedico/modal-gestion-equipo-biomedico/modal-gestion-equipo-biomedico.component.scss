@@ -1,0 +1,162 @@
+
+  .flex-contenedor-busqueda {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+    .contenedor {
+      /*Pantalla pequenia*/
+      @media (max-width: 640px) {
+        width: 100%;
+      }
+      /*Pantalla Mediana*/
+      @media (min-width: 641px) {
+        width: 90%;
+      }
+      /*Pantalla grande*/
+      @media (min-width: 1006px) {
+        width: 90%;
+      }
+    }
+
+      mat-form-field {
+        width: 84%;
+      }
+
+      .contenedor-formulario {
+          width: 100%;
+      }
+}
+
+.titulo-fecha {
+  font-size: 9pt;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.38);
+  font-weight: 600;
+}
+
+.fecha {    
+  display: table-caption;
+  margin-left: 15%;
+}
+
+.dialog-equipos {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+.seccion {
+    width: 100%;
+    display: flex;
+}
+
+.campo {
+    width: 33%;
+    text-align: center;
+}
+
+.campoDireccion {
+  width: 66%;
+  text-align: center;
+
+  mat-form-field {
+    width: 92%;
+  }
+}
+
+.campoNota {
+  width: 66%;
+  text-align: center;
+
+  mat-form-field {
+    width: 90%;
+  }
+}
+
+.alto-campo {
+    height: 6em;
+}
+
+.espacio {
+    height: 1em;    
+}
+
+.estado-proveedor {
+    display: inline;
+}
+
+mat-form-field {
+    width: 33%;
+}
+
+
+@media (max-width: 800px) {
+
+  .flex-contenedor-busqueda {
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+    mat-form-field {
+      width: 100%;
+    }
+    
+    .seccion {    
+      display: inline;  
+      text-align: center;    
+    }
+
+    .contenedor {
+      display: block;
+      width: 100%;
+    }
+    .contenedor-formulario {
+      width: 10%;
+    }
+    .campo-izquierda{
+      width: 100%;
+      margin-right: 0%;
+    }
+    .campo-derecha{
+      width: 100%;
+    }
+    .campo_identificacion{
+      display: block;
+    }
+    .campo {
+      padding-bottom: 5px;
+      display: block;
+      width: 100%;
+    }    
+    
+    .campoNota {   
+      width: 100%;
+
+      mat-form-field {
+        width: 100%;
+      }
+    }
+
+    .fecha {
+      margin-left: 0%; 
+    }
+
+    .fecha-fin {
+      margin-bottom: 5%;
+    }
+
+    .campoDireccion {
+      width: 100%;
+      text-align: center;
+    
+      mat-form-field {
+        width: 100%;
+      }
+    }    
+
+  }

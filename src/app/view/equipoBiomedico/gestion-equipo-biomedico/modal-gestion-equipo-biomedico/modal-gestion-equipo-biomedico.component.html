@@ -1,0 +1,204 @@
+<div class="container">
+  <div class="titulo-ventana">
+    <h4 mat-dialog-title>{{ modalGestionEquipoBiomedicoViewModel.mensajes.titulos.gestionEquipo }}</h4>
+  </div>
+  <div class="flex-contenedor-busqueda">
+    <form [formGroup]="formulario" class="contenedor-formulario">
+      <mat-dialog-content class="dialog-equipos">
+
+        <div class="seccion">
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="remision" id="remision"
+                     matInput
+                     maxLength="15" placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.remision }}">
+            </mat-form-field>
+          </div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="tipoDocumento" id="tipoDocumento"
+                     matInput
+                     maxLength="15"
+                     placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.tipoDocumento }}">
+            </mat-form-field>
+          </div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="numeroDocumento" id="numeroDocumento"
+                     matInput
+                     maxLength="15"
+                     placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.numeroDocumento }}">
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="seccion">
+
+          <div class="campo">
+            <mat-form-field>
+              <input *ngIf="this.data.equipoBiomedico.tipoEquipo.descripcion"
+                     formControlName="equipoBiomedico"
+                     id="tipoEqpBiomedico"
+                     matInput
+                     value="{{this.data.equipoBiomedico.tipoEquipo.descripcion}}"
+              />
+              <mat-select *ngIf="!this.data.equipoBiomedico.tipoEquipo.descripcion"
+                          formControlName="equipoBiomedico"
+                          id="equipoBiomedico"
+                          placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.equipoBiomedico }}"
+                          required>
+                <mat-option *ngFor="let equipo of equiposBiomedicos" [value]="equipo.idEquipoBioMedico">
+                  {{ equipo.descripcion }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="!formulario.controls['equipoBiomedico'].hasError('required')">
+                {{ modalGestionEquipoBiomedicoViewModel.mensajes.errores.tipoEquipoBiomedicoRequerido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="fechaRegistro" id="fechaRegistro"
+                     matInput
+                     maxLength="15"
+                     placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.fechaRegistro }}">
+            </mat-form-field>
+          </div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="nivelIngreso" id="nivelIngreso"
+                     matInput
+                     maxLength="15"
+                     placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.nivelIngreso }}">
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="seccion">
+          <div class="campoDireccion">
+            <mat-form-field>
+              <input formControlName="direccion" id="direccion"
+                     matInput
+                     maxLength="200" placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.direccion }}">
+            </mat-form-field>
+          </div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="telefono" id="telefono"
+                     matInput
+                     maxLength="15" placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.telefono }}">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="seccion">
+
+          <div class="campo">
+            <div class="fecha">
+                            <span class="titulo-fecha">{{
+                                modalGestionEquipoBiomedicoViewModel.mensajes.campos.fechaInicio }}</span>
+              <p-calendar [locale]="configEspanolCalendario" [minDate]="formulario.controls['fechaInicio'].value"
+                          [monthNavigator]="true" [readonlyInput]="true"
+                          [showIcon]="true"
+                          [yearNavigator]="true"
+                          dateFormat="dd/mm/yy" formControlName="fechaInicio"
+                          hourFormat="12"
+                          inputStyleClass="input-calendario-gestion-biomedico"
+                          panelStyleClass="modal-calendario-biomedico"
+                          placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.fechaInicio }}"
+                          yearRange="1900:2100"></p-calendar>
+            </div>
+          </div>
+          <div class="campo">
+            <div class="fecha fecha-fin">
+                            <span class="titulo-fecha">{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.fechaFin
+                              }}</span>
+              <p-calendar [locale]="configEspanolCalendario" [minDate]="formulario.controls['fechaInicio'].value"
+                          [monthNavigator]="true" [readonlyInput]="true"
+                          [showIcon]="true" [yearNavigator]="true"
+                          dateFormat="dd/mm/yy"
+                          formControlName="fechaFin" hourFormat="12"
+                          inputStyleClass="input-calendario-gestion-biomedico"
+                          panelStyleClass="modal-calendario-biomedico"
+                          placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.fechaFin }}"
+                          yearRange="1900:2100"></p-calendar>
+            </div>
+          </div>
+
+          <div class="campo">
+            <mat-form-field>
+              <input formControlName="usuario" id="usuario"
+                     matInput
+                     maxLength="15" placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.usuario }}">
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="seccion">
+
+          <div class="campoNota">
+            <mat-form-field>
+              <textarea #nota class="alto-campo" formControlName="nota" matInput
+                        placeholder="{{  modalGestionEquipoBiomedicoViewModel.mensajes.campos.nota }}"></textarea>
+              <mat-hint align="end">{{ nota.value.length }} / 4000</mat-hint>
+              <mat-error *ngIf="formulario.controls['nota'].hasError('required')">
+                {{ modalGestionEquipoBiomedicoViewModel.mensajes.errores.notaRequerido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="campo estado-proveedor">
+            <mat-form-field>
+              <mat-select (selectionChange)="cambioEstado($event)" formControlName="estado"
+                          id="estado" placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.estado }}"
+                          required>
+                <mat-option *ngFor="let estado of modalGestionEquipoBiomedicoViewModel.respuestaEstados"
+                            [value]="estado.idEstado">
+                  {{ estado.descripcion }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formulario.controls['estado'].hasError('required')">
+                {{ modalGestionEquipoBiomedicoViewModel.mensajes.errores.estadoRequerido }}
+              </mat-error>
+            </mat-form-field>
+            <div class="espacio"></div>
+            <mat-form-field>
+              <mat-select formControlName="proveedor"
+                          id="proveedor"
+                          placeholder="{{ modalGestionEquipoBiomedicoViewModel.mensajes.campos.proveedor }}" required>
+                <mat-option *ngFor="let proveedor of modalGestionEquipoBiomedicoViewModel.respuestaProveedores"
+                            [value]="proveedor.idProveedor">
+                  {{ proveedor.descripcion }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="formulario.controls['proveedor'].hasError('required')">
+                {{ modalGestionEquipoBiomedicoViewModel.mensajes.errores.proveedorRequerido }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+      </mat-dialog-content>
+    </form>
+  </div>
+  <mat-dialog-actions align="end">
+    <button (click)="cerrarModal(true)" id="cancelar" mat-raised-button>
+      {{ modalGestionEquipoBiomedicoViewModel.mensajes.botones.cancelar }}
+    </button>
+
+    <button (click)="guardar()" color="primary" id="guardar" mat-raised-button>
+      {{ modalGestionEquipoBiomedicoViewModel.mensajes.botones.guardar }}
+    </button>
+
+  </mat-dialog-actions>
+</div>

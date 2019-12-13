@@ -1,0 +1,141 @@
+.flex-contenedor-admision {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+  .contenedor {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+ 
+  }
+  .campo {
+    text-align: center;
+    margin-bottom: 1%;
+  }
+  .campo_titulo{
+    font-weight: bold;
+  }
+  .boton {
+    padding: 5px;
+    text-align: center;
+  }
+  .label {
+    mat-form-field {
+      width: 49%;
+    }
+  }
+  .labelFull {
+      width: 100%;
+  }
+ 
+  .separador {
+    height: 15px;
+  }
+  .date {
+    mat-form-field {
+      width: 49%;
+    }
+    input {
+      text-align: center;
+    }
+  }
+ 
+  .boton {
+    padding: 5px;
+    text-align: center;
+  }
+  .botom{
+    padding: 10px;
+    text-align: center;
+  }
+ 
+  mat-form-field {
+    width: 30%;
+  }
+ 
+  .example-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+  }
+}
+ 
+.flex-contenedor-gestion {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  .contenedor {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+ 
+  }
+  .flex-item-atencion {
+    flex-grow: 2;
+    order: 0;
+    text-align: center;
+    width: 33%;
+  }
+ 
+  .flex-item-left {
+    flex-grow: 1;
+    order: 0;
+    align-self: center;
+    width: 33%;
+  }
+ 
+  .flex-item-right {
+    flex-grow: 1;
+    order: 0;
+    align-self: center;
+    width: 33%;
+    padding-left: 5%;
+    span {
+      white-space: initial;
+    }
+  }
+}
+ 
+.campo_fecha{
+ 
+}
+.contenedor_campos{
+  margin-bottom: 1%;
+}
+.contenido_admision{
+  width: 100%;
+  text-align: center;
+}
+ 
+.separador_campo {
+  padding: 7px;
+  width: 100%;
+  text-align: center;
+}
+ 
+.admision_button {
+  margin-top: 2%;
+  text-align: center;
+}

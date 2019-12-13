@@ -1,0 +1,69 @@
+<mat-progress-bar
+  [hidden]="!informeModel.cargando"
+  mode="indeterminate"
+>
+</mat-progress-bar>
+<div class="conetedor" >
+  <form class="formularios" [formGroup]="formulario">
+  <div class="campos">
+
+    <div class="fecha_1" >
+      <p-calendar
+        inputStyleClass="tamano-control-informe-vehicular"
+        formControlName="fechaInicio"
+        [showIcon]="true"
+        [locale]="configEspanolCalendario"
+        placeholder="{{
+              informeModel.mensajes.paliativos.campos.fechaInicio
+            }}"
+        dateFormat="dd/mm/yy"
+        [minDate]="fechaMinimaInforme"
+        [maxDate]="formulario.controls['fechaFin'].value"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1900:2100"
+        [showTime]="true"
+        hourFormat="12"
+        [readonlyInput]="true"
+      ></p-calendar>
+    </div>
+    <div class="fecha_2">
+      <p-calendar
+        inputStyleClass="tamano-control-informe-vehicular"
+        formControlName="fechaFin"
+        [showIcon]="true"
+        [locale]="configEspanolCalendario"
+        placeholder="{{
+              informeModel.mensajes.paliativos.campos.fechaFin
+            }}"
+        dateFormat="dd/mm/yy"
+        [minDate]="formulario.controls['fechaInicio'].value"
+        [maxDate]="fechaMaximaInforme"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1900:2100"
+        [showTime]="true"
+        hourFormat="12"
+        [readonlyInput]="true"
+      ></p-calendar>
+    </div>
+    <br/>
+    <div class="button">
+    <button
+      mat-raised-button
+      id="consultarInforme"
+      color="primary"
+      (click)="descargarInforme()"
+      [disabled]="!formulario.valid"
+    >
+      {{ informeModel.mensajes.botones.descargarInforme }}
+      <mat-icon>
+        cloud_download
+      </mat-icon>
+    </button>
+    </div>
+  </div>
+
+
+  </form>
+</div>

@@ -1,0 +1,134 @@
+.container {
+    margin-top: 2%;
+}
+
+.flex-contenedor-busqueda {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: stretch;
+    margin-top: 5%;
+    .contenedor {
+        /*Pantalla pequenia*/
+        @media (max-width: 640px) {
+            width: 100%;
+        }
+        /*Pantalla Mediana*/
+        @media (min-width: 641px) {
+            width: 50%;
+        }
+        /*Pantalla grande*/
+        @media (min-width: 1006px) {
+            width: 50%;
+        }
+    }
+    .campo {
+        padding-bottom: 5px;
+    }
+    .boton {
+        padding: 5px;
+        text-align: center;
+    } 
+
+    .motivo {
+        width: 72%;
+    }
+    
+    .observacion {
+        width: 72%;
+    }
+}
+
+.campo {
+    text-align: center;
+}
+
+.fecha {
+    margin-right: 5%;
+}
+
+
+
+.texto{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    font-weight: bold;
+}
+
+.linea-espacio {
+    border: 0.5px solid #D5D5D5;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+
+.texto-volver {
+    margin-top: 0.8%;
+    margin-left: 1%;
+    font-size: 12pt;
+    width: 15%;
+    color: #0033a0;
+    cursor: pointer;
+}
+
+.texto-titulo {
+    text-align: center;
+    font-size: 20pt;
+    width: 60%; 
+    margin-top: 0.5%;
+}
+
+.tamano-control-calendario-egreso {
+    width: 20em !important;
+}
+
+.boton {
+    text-align: center;
+}
+
+.separador {
+    height: 1em;;
+}
+
+.alto-campo {
+    height: 6em;
+}
+
+.mat-error-clase {
+    display: block;
+    color: #f44336;
+    font-size: 75%;    
+    font-weight: 400;
+    line-height: 1.125;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin-top: 1%;
+  }
+
+
+
+  @media (max-width: 800px) { 
+
+
+    .texto-volver {
+        font-size: 7pt;
+    }
+
+    .texto-titulo {
+        font-size: 18pt;
+    }
+
+    .img-opcion {
+        width: 7%;        
+    }
+
+    mat-form-field {
+        width: 90%;
+    }
+
+    .fecha {
+        margin-right: 10%;
+    }
+
+  }

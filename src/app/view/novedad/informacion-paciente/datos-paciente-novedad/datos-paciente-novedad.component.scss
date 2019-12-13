@@ -1,0 +1,148 @@
+.container {
+  margin-top: 2%;
+}
+
+.flex-contenedor-busqueda {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  margin-top: 5%;
+
+  .contenedor {
+    /*Pantalla pequenia*/
+    @media (max-width: 640px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 641px) {
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+  }
+
+  .campo {
+    padding-bottom: 5px;
+  }
+
+  .boton {
+    padding: 5px;
+    text-align: center;
+  }
+
+  mat-form-field {
+    width: 90%;
+  }
+}
+
+
+.opcion-container {
+  display: flex;
+  width: 100%;
+}
+
+.img-opcion {
+  width: 5%;
+  cursor: pointer;
+}
+
+
+.subtitulo {
+  margin-left: 1%;
+  font-size: 15pt;
+  width: 20%;
+  color: #0033a0;
+  margin-top: 1.5%;
+}
+
+.texto {
+  margin-top: 2%;
+  margin-bottom: 2%;
+  font-weight: bold;
+}
+
+.linea-espacio {
+  border: 0.5px solid #D5D5D5;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
+}
+
+
+.boton {
+  text-align: center;
+}
+
+.separador {
+  height: 1em;
+}
+
+
+.campo {
+  padding-bottom: 5px;
+}
+
+
+.flex-contenedor-atencion {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  .contenedor-item-atencion {
+    /*Pantalla pequenia*/
+    @media (max-width: 800px) {
+      width: 100%;
+    }
+    /*Pantalla Mediana*/
+    @media (min-width: 801px) {
+      width: 50%;
+    }
+    /*Pantalla grande*/
+    @media (min-width: 1006px) {
+      width: 50%;
+    }
+
+    .flex-item-atencion {
+      width: 100%;
+
+      mat-form-field {
+        width: 80%;
+
+      }
+
+      .direccion {
+        width: 72%;
+      }
+    }
+  }
+}
+
+.celular {
+  width: 37% !important;
+  margin-right: 3rem;
+}
+
+@media (max-width: 800px) {
+
+  .subtitulo {
+    margin-left: 3%;
+    width: 50%;
+  }
+
+  .texto-volver {
+    font-size: 7pt;
+  }
+
+  .texto-titulo {
+    font-size: 18pt;
+  }
+
+  .img-opcion {
+    width: 10%;
+  }
+
+}

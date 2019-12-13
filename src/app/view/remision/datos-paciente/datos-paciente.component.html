@@ -1,0 +1,397 @@
+<div class="flex-contenedor-busqueda">
+  <form [formGroup]="formulario" class="contenedor">
+
+    <div class="campo identificacion">
+      <div class="content-cedula">
+        <mat-form-field class="mat-tipo">
+          <mat-select formControlName="tipoDocumento" id="tipoDocumento"
+                      placeholder="{{ datosPacienteViewModel.mensajes.campos.tipo }}" required>
+
+            <mat-option *ngFor="let tipo of datosPacienteViewModel.respuestaTiposIdentificacion" [value]="tipo.idTipo">
+              {{ tipo.nombre }}
+            </mat-option>
+          </mat-select>
+
+
+          <mat-error *ngIf="!formulario.controls['tipoDocumento'].hasError('required')">
+            {{ datosPacienteViewModel.mensajes.errores.tipoRequerido }}
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <div class="content-numero">
+        <mat-form-field class="mat-cedula">
+          <input formControlName="numeroDocumento" id="numeroDocumento" matInput
+                 maxlength="20" placeholder="{{ datosPacienteViewModel.mensajes.campos.numero }}" required>
+
+
+          <button (click)="formulario.controls['numeroDocumento'].setValue('')"
+                  *ngIf="formulario.controls['numeroDocumento'].value" [disabled]="disableButton" mat-button
+                  mat-icon-button matSuffix>
+            <mat-icon>close</mat-icon>
+          </button>
+
+          <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('required')">
+            {{ datosPacienteViewModel.mensajes.errores.numeroRequerido }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('maxlength')">
+            {{ datosPacienteViewModel.mensajes.errores.numeroMaximaLongitud }}
+          </mat-error>
+
+          <mat-error *ngIf="formulario.controls['numeroDocumento'].hasError('pattern')">
+            {{ datosPacienteViewModel.mensajes.errores.numeroFormatoInvalido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+
+    </div>
+
+    <div class="campo">
+      <mat-form-field>
+        <mat-select (selectionChange)="mostrarCamposPlan($event.value)" formControlName="planSalud"
+                    id="planSalud" placeholder="{{ datosPacienteViewModel.mensajes.campos.planSalud }}"
+                    required>
+
+          <mat-option *ngFor="let plan of datosPacienteViewModel.respuestaPlanesSalud" [value]="plan.idPlan">
+            {{ plan.nombre }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="!formulario.controls['planSalud'].hasError('required')">
+          {{ datosPacienteViewModel.mensajes.errores.planSaludRequerido }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="datosPacienteViewModel.mostrarTipoPlanSalud" class="campo">
+      <mat-form-field>
+        <mat-select (selectionChange)="planParticularSelected($event.value)" formControlName="tipoPlanSalud"
+                    id="tipoPlanSalud"
+                    placeholder="{{ datosPacienteViewModel.mensajes.campos.tipoPlanSalud }}" required>
+
+          <mat-option *ngFor="let tipoPlan of datosPacienteViewModel.respuestaSaludParticular"
+                      [value]="tipoPlan.idTipoPlanParticular">
+            {{ tipoPlan.descripcion }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="!formulario.controls['tipoPlanSalud'].hasError('required')">
+          {{ datosPacienteViewModel.mensajes.errores.tipoPlanSaludRequerido }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="datosPacienteViewModel.mostrarCodigoARL" class="campo">
+      <mat-form-field>
+        <input formControlName="codigoARL" id="codigoARL" matInput
+               placeholder="{{ datosPacienteViewModel.mensajes.campos.codigoAutorizacion }}" required>
+
+        <mat-error *ngIf="!formulario.controls['codigoARL'].hasError('required')">
+          {{ datosPacienteViewModel.mensajes.errores.codigoInvalido }}
+        </mat-error>
+        <mat-error *ngIf="formulario.controls['codigoARL'].hasError('maxLength')">
+          {{ datosPacienteViewModel.mensajes.errores.codigoMaximaLongitud }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="boton">
+      <button (click)="buscar()" [disabled]="disableButton" color="primary" id="buscar" mat-raised-button>
+        <mat-icon>search</mat-icon>
+        {{ datosPacienteViewModel.mensajes.botones.buscar }}
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<div class="panel">
+  <div class="seccion-bebe-canguro">
+    <div *ngIf="datosPacienteViewModel.verBotonBebeCanguro" class="boton-bebe-canguro">
+      <button (click)="verBebeCanguro()" color="primary" id="bebeCanguro" mat-raised-button>
+        <mat-icon>child_care</mat-icon>
+        {{ datosPacienteViewModel.mensajes.bebeCanguro.botones.bebeCanguro }}
+      </button>
+    </div>
+    <div *ngIf="datosPacienteViewModel.verTablaBebeCanguro">
+      <div class="subtitulo-procedimiento">
+        <strong>{{datosPacienteViewModel.mensajes.bebeCanguro.opcionesMenu.bebeCanguro}}</strong>
+      </div>
+      <div class="separador-bebe-canguro"></div>
+      <div class="table">
+        <p-table [columns]="columnasBebeCanguro"  [paginator]="false"
+                 [responsive]="true" [scrollable]="true" [value]="datosPacienteViewModel.bebeCanguro" dataKey="id"
+                 scrollHeight="400px">
+          <ng-template let-columns pTemplate="header">
+            <tr>
+              <th *ngFor="let col of columns" class="texto-tabla">
+                {{col.header}}
+              </th>
+              <th *ngIf="datosPacienteViewModel.verColumnaAccionCanguro" class="texto-tabla">
+                {{ datosPacienteViewModel.mensajes.bebeCanguro.tabla.accion }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template let-columns="columns" let-rowData pTemplate="body">
+            <tr [pSelectableRow]="rowData">
+              <td class="texto-tabla">
+                {{ rowData.fechaNacimiento | date:'dd-MM-yyyy hh:mm a' }}
+              </td>
+              <td class="texto-tabla">
+                {{ rowData.pesoNacimiento }}
+              </td>
+              <td class="texto-tabla">
+                {{ rowData.edadGestacionalSemanas }}
+              </td>
+              <td class="texto-tabla">
+                {{ rowData.edadGestacionalDias }}
+              </td>
+              <td class="texto-tabla">
+                {{ rowData.pesoAlta }}
+              </td>
+              <td *ngIf="datosPacienteViewModel.verColumnaAccionCanguro" class="texto-tabla">
+                <button (click)="editarBebeCanguro(rowData)" mat-button mat-icon-button matSuffix>
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button (click)="eliminarBebeCanguro(rowData)" mat-button mat-icon-button matSuffix>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template class="container" let-columns pTemplate="emptymessage">
+            <tr>
+              <td [attr.colspan]="columnasBebeCanguro.length + 1" class="centro">
+                {{ datosPacienteViewModel.mensajes.bebeCanguro.tabla.noBebeCanguro }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="mostrarTablaPacientes" class="panel">
+    <p-fieldset [toggleable]="false" legend="{{ datosPacienteViewModel.mensajes.informacionPaciente.titulo }}">
+
+      <div class="flex-contenedor-paciente">
+        <div #informacionBasica class="contenedor-item-paciente">
+          <mat-list *ngIf="datosPacienteViewModel.respuestaDatosPaciente" class="flex-item-paciente">
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.nombre &&
+              datosPacienteViewModel.respuestaDatosPaciente.nombre !== '' &&
+              datosPacienteViewModel.respuestaDatosPaciente.apellido &&
+              datosPacienteViewModel.respuestaDatosPaciente.apellido !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.nombre }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.nombre }}
+                {{ datosPacienteViewModel.respuestaDatosPaciente.apellido }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.fechaNacimiento &&
+              datosPacienteViewModel.respuestaDatosPaciente.fechaNacimiento !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.fechaNacimiento }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.fechaNacimiento | fecha:'DD/MM/YYYY' }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.edad &&
+              datosPacienteViewModel.respuestaDatosPaciente.edad !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.edad }}</h4>
+              <p mat-line>
+                {{ datosPacienteViewModel.respuestaDatosPaciente.edad |
+                edad:datosPacienteViewModel.respuestaDatosPaciente.unidadEdad }}
+              </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.sexo &&
+              datosPacienteViewModel.respuestaDatosPaciente.sexo !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.sexo }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.sexo }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.estadoCivil &&
+              datosPacienteViewModel.respuestaDatosPaciente.estadoCivil !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.estadoCivil }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.estadoCivil }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.ocupacion &&
+              datosPacienteViewModel.respuestaDatosPaciente.ocupacion !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.ocupacion }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.ocupacion }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.email &&
+              datosPacienteViewModel.respuestaDatosPaciente.email !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.email }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.email }} </p>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+        <div #informacionAsegurador *ngIf="datosPacienteViewModel.mostrarColumnaAsegurador"
+             class="contenedor-item-paciente">
+          <mat-list *ngIf="datosPacienteViewModel.respuestaDatosPaciente " class="flex-item-paciente">
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.tipoAsegurador &&
+              datosPacienteViewModel.respuestaDatosPaciente.tipoAsegurador !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.tipoAsegurador }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.tipoAsegurador }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.estadoSuspension &&
+              datosPacienteViewModel.respuestaDatosPaciente.estadoSuspension !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.estadoSuspension }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.estadoSuspension }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.coberturaDomiciliaria ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.coberturaDomiciliaria }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.coberturaDomiciliaria | textoBooleano }}
+              </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.fechaLimiteCobertura &&
+              datosPacienteViewModel.respuestaDatosPaciente.fechaLimiteCobertura !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.fechaLimiteCobertura }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.fechaLimiteCobertura | fecha:'DD/MM/YYYY' }}
+              </p>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+        <div #informacionAfiliacion *ngIf="datosPacienteViewModel.mostrarColumnaAfiliacion"
+             class="contenedor-item-paciente">
+          <mat-list *ngIf="datosPacienteViewModel.mostrarColumnaAfiliacion" class="flex-item-paciente">
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.tipoAfiliacion &&
+                         datosPacienteViewModel.respuestaDatosPaciente.tipoAfiliacion !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.tipoAfiliacion }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.tipoAfiliacion.nombre }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.nivelIngreso &&
+                datosPacienteViewModel.respuestaDatosPaciente.nivelIngreso !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.nivelIngreso }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.nivelIngreso }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.ipsBasicaAsignada &&
+                datosPacienteViewModel.respuestaDatosPaciente.ipsBasicaAsignada !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.ipsBasicaAsignada }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.ipsBasicaAsignada }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.lugarAtencion &&
+                datosPacienteViewModel.respuestaDatosPaciente.lugarAtencion !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.lugarAtencion }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.lugarAtencion }} </p>
+            </mat-list-item>
+            <mat-list-item *ngIf="datosPacienteViewModel.respuestaDatosPaciente.codigoARL &&
+                datosPacienteViewModel.respuestaDatosPaciente.codigoARL !== '' ">
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.codigoARL }}</h4>
+              <p mat-line> {{ datosPacienteViewModel.respuestaDatosPaciente.codigoARL }} </p>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+      </div>
+
+    </p-fieldset>
+  </div>
+
+  <div *ngIf="mostrarTablaPacienteManual" class="panel">
+    <p-fieldset [toggleable]="false" legend="{{ datosPacienteViewModel.mensajes.informacionPaciente.titulo }}">
+
+      <div class="flex-contenedor-paciente" [formGroup]="formulario2">
+
+        <div style="padding-right: 1%;">
+
+        </div>
+
+        <div #informacionBasica class="contenedor-item-paciente">
+          <mat-list class="flex-item-paciente">
+            <mat-list-item>
+              <h4 mat-line>Nombres del paciente</h4>
+              <input mat-line placeholder="Ingrese el nombre del paciente*" id="nom" matInput required
+                     formControlName="nombrePacienteManual">
+
+            </mat-list-item>
+            <mat-list-item>
+              <h4 mat-line>Apellidos del Paciente</h4>
+              <input mat-line placeholder="Ingrese los apellidos*" id="ape" matInput required
+                     formControlName="apellidoPacienteManual">
+
+            </mat-list-item>
+            <mat-list-item>
+              <div>
+                <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.fechaNacimiento }}</h4>
+                <div style="justify-content: flex-start;">
+                  <p-calendar inputStyleClass="input-calendario-bebeCanguro"
+                              panelStyleClass="modal-calendario-bebeCanguro"
+                              [showTime]="false" [showIcon]="true" [locale]="configEspanolCalendario"
+                              formControlName="fechaNacimientoPaciente"
+                              placeholder="Fecha de Nacimiento*"
+                              dateFormat="dd/mm/yy" [monthNavigator]="true"
+                              [yearNavigator]="true" yearRange="1900:2100" hourFormat="12"
+                              [readonlyInput]="true">
+                  </p-calendar>
+                </div>
+              </div>
+            </mat-list-item>
+
+            <mat-list-item>
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.sexo }}</h4>
+              <mat-select mat-line placeholder="Elija el sexo del paciente*" required
+                          formControlName="sexoPacienteManual">
+
+                <mat-option *ngFor="let tipo of sexo" [value]="tipo">
+                  {{ tipo }}
+                </mat-option>
+              </mat-select>
+
+            </mat-list-item>
+
+
+          </mat-list>
+        </div>
+
+        <div #informacionAsegurador
+             class="contenedor-item-paciente">
+
+          <mat-list class="flex-item-paciente">
+
+            <mat-list-item>
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.estadoCivil }}</h4>
+              <mat-select mat-line placeholder="Elija el estado civil*" required formControlName="estadoCivilManual">
+
+                <mat-option *ngFor="let tipo of estadoCivil" [value]="tipo">
+                  {{ tipo }}
+                </mat-option>
+              </mat-select>
+
+            </mat-list-item>
+
+            <mat-list-item>
+              <h4 mat-line>{{ datosPacienteViewModel.mensajes.informacionPaciente.email }}</h4>
+              <input mat-line type="email" placeholder="Ingrese el email del paciente*" id="emailPaciente" matInput
+                     required formControlName="emailPacienteManual">
+
+            </mat-list-item>
+
+
+            <mat-list-item>
+              <h4 mat-line>Nombre de la persona que autoriza</h4>
+              <input mat-line placeholder="Quien autoriza*" id="nomAutoriza" matInput required
+                     formControlName="nombreQuienAutoriza">
+
+            </mat-list-item>
+            <mat-list-item>
+
+
+              <button mat-line (click)="crearPacienteManual()" color="primary" mat-raised-button>
+                <mat-icon>save</mat-icon>
+                Crear Paciente
+              </button>
+
+            </mat-list-item>
+
+          </mat-list>
+        </div>
+
+
+      </div>
+
+    </p-fieldset>
+  </div>
+
+</div>
+<ngx-loading [config]="{ backdropBorderRadius: '3px' }" [show]="loading"></ngx-loading>
