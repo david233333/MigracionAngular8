@@ -47,7 +47,7 @@
     "jsonp": "^0.2.1",
     "lodash": "^4.17.10",
     "material-design-icons": "^3.0.1",
-    "moment": "^2.20.1",
+    "moment": "^2.29.2",
     "nebular-icons": "^1.0.6",
     "ng2-page-scroll": "^4.0.0-beta.12",
     "ngx-loading": "^2.0.1",
